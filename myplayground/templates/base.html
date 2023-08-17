@@ -1,0 +1,77 @@
+{% load static wagtailcore_tags wagtailuserbar %}
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark" style="color-scheme: dark">
+<head>
+    <meta charset="utf-8" />
+    <title>
+        {% block title %}
+            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+        {% endblock %}
+        {% block title_suffix %}
+            {% wagtail_site as current_site %}
+            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+        {% endblock %}
+    </title>
+    {% if page.search_description %}
+        <meta name="description" content="{{ page.search_description }}" />
+    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {# Force all links in the live preview panel to be opened in a new tab #}
+    {% if request.in_preview_panel %}
+        <base target="_blank">
+    {% endif %}
+
+    {# TailwindCSS #}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/output.min.css' %}">
+
+    {# Typewriter Caret Effect #}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/typewriter.css' %}">
+
+    {% block extra_css %}
+        {# Override this in templates to add extra stylesheets #}
+    {% endblock %}
+</head>
+
+<body class="antialiased bg-black text-white {% block body_class %}{% endblock %}">
+{% wagtailuserbar %}
+
+<div class="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl">
+    <div class="flex h-screen flex-col justify-between">
+        <header class="flex items-center justify-between py-10">
+            <div>
+                <a aria-label="Mere Musings" href="/myplayground/static">
+                    <div class="text-primary-color-dark flex items-center justify-between text-xl font-semibold">
+                        ~/{% if page.title == 'Home' %}{% else %}{{ page.title }}{% endif %}
+                        <div class="Typewriter" data-testid="typewriter-wrapper">
+                            <span class="Typewriter__wrapper"></span>
+                            <span class="Typewriter__cursor">|</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="flex items-center text-base leading-5">
+                <div class="hidden sm:block">
+                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/static">Home</a>
+                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/blog">Blog</a>
+                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/projects">Projects</a>
+                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/snippets">Snippets</a>
+                </div>
+            </div>
+        </header>
+        <main class="mb-auto">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+{# Global javascript #}
+<script type="text/javascript" src="{% static 'js/core.js' %}"></script>
+
+{% block extra_js %}
+    {# Override this in templates to add extra javascript #}
+{% endblock %}
+</body>
+</html>
