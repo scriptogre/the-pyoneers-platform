@@ -6,6 +6,9 @@ from wagtail.models import Page
 
 
 class SnippetIndexPage(Page):
+    subpage_types = ["SnippetPage"]
+    max_count = 1
+
     intro = models.TextField()
 
     content_panels = Page.content_panels + [
@@ -14,8 +17,11 @@ class SnippetIndexPage(Page):
 
 
 class SnippetPage(Page):
+    parent_page_types = ["SnippetIndexPage"]
+
     code = models.TextField()
     description = models.TextField()
+
     body = StreamField(
         [
             ("description", RichTextBlock()),

@@ -23,6 +23,9 @@
         <base target="_blank">
     {% endif %}
 
+    {# HTMX #}
+    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+
     {# TailwindCSS #}
     <link rel="stylesheet" type="text/css" href="{% static 'css/output.min.css' %}">
 
@@ -41,9 +44,9 @@
     <div class="flex h-screen flex-col justify-between">
         <header class="flex items-center justify-between py-10">
             <div>
-                <a aria-label="Mere Musings" href="/myplayground/static">
+                <a href="{% slugurl 'home' %}" aria-label="Mere Musings">
                     <div class="text-primary-color-dark flex items-center justify-between text-xl font-semibold">
-                        ~/{% if page.title == 'Home' %}{% else %}{{ page.title }}{% endif %}
+                        ~/{% if page.title == 'Home' %}{% else %}{{ page.title|lower }}{% endif %}
                         <div class="Typewriter" data-testid="typewriter-wrapper">
                             <span class="Typewriter__wrapper"></span>
                             <span class="Typewriter__cursor">|</span>
@@ -54,10 +57,18 @@
 
             <div class="flex items-center text-base leading-5">
                 <div class="hidden sm:block">
-                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/static">Home</a>
-                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/blog">Blog</a>
-                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/projects">Projects</a>
-                    <a class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3" href="/myplayground/snippets">Snippets</a>
+                    <a href="{% slugurl 'home' %}" class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3">
+                        Home
+                    </a>
+                    <a href="{% slugurl 'blog' %}" class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3">
+                        Blog
+                    </a>
+                    <a href="{% slugurl 'projects' %}" class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3">
+                        Projects
+                    </a>
+                    <a href="{% slugurl 'snippets' %}" class="link-underline rounded py-1 px-2 text-gray-100 hover:bg-gray-700 sm:py-2 sm:px-3">
+                        Snippets
+                    </a>
                 </div>
             </div>
         </header>

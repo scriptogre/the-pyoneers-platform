@@ -8,6 +8,9 @@ from wagtail.models import Page
 
 
 class ProjectIndexPage(Page):
+    subpage_types = ["ProjectPage"]
+    max_count = 1
+
     intro = models.TextField()
 
     content_panels = Page.content_panels + [
@@ -16,8 +19,9 @@ class ProjectIndexPage(Page):
 
 
 class ProjectPage(Page):
+    parent_page_types = ["ProjectIndexPage"]
+
     description = models.TextField()
-    link = models.URLField()
     body = StreamField(
         [
             ("paragraph", RichTextBlock()),
@@ -28,6 +32,5 @@ class ProjectPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("description"),
-        FieldPanel("link"),
         FieldPanel("body"),
     ]
