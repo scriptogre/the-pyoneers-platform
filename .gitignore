@@ -86,3 +86,5 @@ local_settings.py
 
 .env
 db.sqlite3
+
+./myplayground/static/css/output.min.css

@@ -1,0 +1,12 @@
+{% load static %}
+
+<div id="chat-message-{{ message_id }}" class="chat chat-end">
+    <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+            <img src="{% static 'img/soyjack.png' %}" />
+        </div>
+    </div>
+    <div class="chat-bubble">
+        {{ message_content }}
+    </div>
+</div>

@@ -1,126 +1,134 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% load partials %}
 {% load wagtailcore_tags %}
 
 {% block content %}
-    <div class="mb-12 flex flex-col items-center gap-x-12 xl:flex-row">
-        <div class="pt-6 w-full">
-            <h1 class="pb-6 text-3xl font-extrabold leading-9 tracking-tight text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14 w-full">
-                Hi, I am <span class="text-pink-500">Chris</span>
+    <div class="flex flex-col md:flex-row 2xl:mt-20">
+        {# Hero #}
+        <div class="min-w-[50%] hero-section md:h-auto flex flex-col justify-center items-center text-center p-6 prose">
+            <h1 class="text-6xl text-gray-300 mb-5 2xl:mb-0 font-mono tracking-wider">
+                Become a 10x engineer with
+                <img src="{% static 'img/python-logo.png' %}" alt="Python Logo" class="inline-block w-16 h-16 my-0 mt-3 sm:mt-0 ml-2">
             </h1>
-            <h2 class="prose pt-5 text-lg text-gray-300">
-                {{ page.intro|richtext }}
-            </h2>
+            <p class="text-2xl text-gray-300 mb-5 2xl:mb-3">
+                Want to dominate the tech world? 🚀
+            </p>
+            <p class="text-2xl text-gray-300 mt-0 mb-3 2xl:mb-6">
+                Become a <span class="text-yellow-500 font-bold">full-stack engineer</span> with me.
+                Unleash your potential to craft <span class="text-blue-500 font-bold">insane web applications</span>
+                in just 4 months.<br>
+            </p>
+            <button class="btn btn-outline border-gray-600 btn-lg text-3xl group hover:bg-gray-200 mt-6 2xl:mt-3">
+                <span class="group-hover:hidden">Are you all in? <span id="thinking-emoji">🤔</span></span>
+                <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji">🔥</span></span>
+            </button>
         </div>
 
-        <div class="flex items-center justify-center w-full">
-            <div class="grid grid-cols-1 grid-rows-3 gap-8 py-12">
+        {# Interactive Chat box #}
+        <div id="interactive-container"
+             class="flex flex-col justify-center items-start w-full px-12 py-6"
+             style="opacity: 0"
+             _="init wait 0.5s then transition my opacity to 1
+                then wait 1s then transition #chat-message-1's opacity to 1
+                then wait 1s then transition #chat-message-2's opacity to 1
+                then wait 1s then transition #chat-message-3's opacity to 1
+                then wait 1s then transition #chat-box-inputs's opacity to 1
+                then transition #excuses-container's opacity to 1"
+        >
 
-                <!-- Link to Blog -->
-                <div class="my-2 grid items-start gap-8">
-                    <div class="group relative">
-                        <div class="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                        <!-- Link -->
-                        <a href="{% slugurl 'blog' %}"
-                           class="special-underline-new no-underline hover:text-gray-100">
-                            <span class="relative flex items-center divide-x divide-gray-600 rounded-lg px-7 py-4 leading-none bg-black">
-                                <span class="flex items-center space-x-5">
-                                    <!-- Icon -->
-                                    <svg class="w-6 h-6 text-fuchsia-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 16.5c0-1-8-2.7-9-2V1.8c1-1 9 .707 9 1.706M10 16.5V3.506M10 16.5c0-1 8-2.7 9-2V1.8c-1-1-9 .707-9 1.706"/></svg>
-                                    <!-- Text -->
-                                    <span class="pr-6 text-gray-100">Read my articles</span>
-                                </span>
-                                <!-- Label & Arrow -->
-                                <span class="pl-6 text-fuchsia-600 transition duration-200 group-hover:text-gray-100">Blog →</span>
-                            </span>
-                        </a>
-                    </div>
-                </div>
+            <div id="chat-box-outer-container" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box w-full p-8 2xl:max-h-72 mb-4 overflow-y-hidden">
+                <div id="chat-box-inner-container" class="flex min-h-[6rem] 2xl:max-h-[15rem] min-w-[18rem] max-w-4xl flex-wrap items-center gap-4 w-full overflow-y-scroll"
+                _="init set my scrollTop to 0">
+                    <div id="chat-box" class="w-full">
+                        <div id="chat-message-1" class="chat chat-start" style="opacity:0">
+                            <div class="chat-image avatar">
+                                <div class="w-10 rounded-full">
+                                    <img src="{% static 'img/giga-chad.jpeg' %}"  alt="Giga Chad"/>
+                                </div>
+                            </div>
+                            <div class="chat-bubble chat-bubble-warning">
+                                Hey, I'm Giga Chad. I'm a full-stack engineer and I'm here to help you become a 10x engineer.
+                            </div>
+                        </div>
 
-                <!-- Link to Projects -->
-                <div class="my-2 grid items-start gap-8">
-                    <div class="group relative">
-                        <div class="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r from-fuchsia-600 to-emerald-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                        <!-- Link -->
-                        <a href="{% slugurl 'projects' %}"
-                           class="special-underline-new no-underline hover:text-gray-100">
-                            <span class="relative flex items-center divide-x divide-gray-600 rounded-lg px-7 py-4 leading-none bg-black">
-                                <span class="flex items-center space-x-5">
-                                    <!-- Icon -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -rotate-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                                    <!-- Text -->
-                                    <span class="pr-6 text-gray-100">What I Built</span>
-                                </span>
-                                <!-- Label & Arrow -->
-                                <span class="pl-6 text-emerald-600 transition duration-200 group-hover:text-gray-100">Projects →</span>
-                            </span>
-                        </a>
-                    </div>
-                </div>
+                        <div id="chat-message-2" class="chat chat-end" style="opacity:0">
+                            <div class="chat-image avatar">
+                                <div class="w-10 rounded-full">
+                                    <img src="{% static 'img/soyjack.png' %}"  alt="Soy Jack"/>
+                                </div>
+                            </div>
+                            <div class="chat-bubble">
+                                But... I'm not ready to become a 10x engineer... I'm not even a .5x engineer yet.
+                            </div>
+                        </div>
 
-                <!-- Link to Resume -->
-                <div class="my-2 grid items-start gap-8">
-                    <div class="group relative">
-                        <div class="animate-tilt absolute -inset-0.5 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 opacity-50 blur transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
-                        <!-- Link -->
-                        <a href="{% slugurl 'resume' %}"
-                           class="special-underline-new no-underline hover:text-gray-100">
-                            <span class="relative flex items-center divide-x divide-gray-600 rounded-lg px-7 py-4 leading-none bg-black">
-                                <span class="flex items-center space-x-5">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -rotate-6 text-fuchsia-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="--darkreader-inline-stroke: currentColor;" data-darkreader-inline-stroke=""><path d="M12 14l9-5-9-5-9 5 9 5z"></path><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
-                                  <span class="pr-6 text-gray-100">Hire me!</span>
-                                </span>
-                                <span class="pl-6 text-fuchsia-600 transition duration-200 group-hover:text-gray-100">Resume →</span>
-                            </span>
-                        </a>
+                        <div id="chat-message-3" class="chat chat-start" style="opacity:0">
+                            <div class="chat-image avatar">
+                                <div class="w-10 rounded-full">
+                                    <img src="{% static 'img/giga-chad.jpeg' %}" alt="Giga Chad"/>
+                                </div>
+                            </div>
+                            <div class="chat-bubble chat-bubble-warning">
+                                Don't worry buddy. I'll teach you everything you need to know. What's your excuse not to become a 10x engineer?
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            {# Chat box input #}
+            <div id="chat-box-inputs" class="flex justify-center 2xl:justify-end w-full" style="opacity:0"
+                 _="init set #excuses's excusesNumber to 3 then set global currentMessageId to 4">
+                <button class="btn bg-base-100 me-1"
+                        hx-post="{% url 'chat_response' %}"
+                        hx-trigger="htmxRequest"
+                        hx-target="#chat-box"
+                        hx-swap="beforeend"
+                        hx-vals="js:{message_content: 'I dont have enough time', message_id: currentMessageId}"
+                        _="on click
+                            trigger htmxRequest then
+                            transition my opacity to 0
+                            then increment $currentMessageId
+                            then decrement #excuses's excusesNumber
+                            then if #excuses's excusesNumber == 0 put '📸 🤨 No excuses left' into #excuses then remove #chat-box-inputs
+                            else put `Excuses ` + it + `/3` into #excuses then remove me">
+                    No Time
+                </button>
+                <button class="btn bg-base-100 me-1"
+                        hx-post="{% url 'chat_response' %}"
+                        hx-trigger="htmxRequest"
+                        hx-target="#chat-box"
+                        hx-swap="beforeend"
+                        hx-vals="js:{message_content: 'I dont have any talent', message_id: currentMessageId}"
+                        _="on click
+                            trigger htmxRequest then
+                            transition my opacity to 0
+                            then increment $currentMessageId
+                            then decrement #excuses's excusesNumber
+                            then if #excuses's excusesNumber == 0 put '📸 🤨 No excuses left' into #excuses then remove #chat-box-inputs
+                            else put `Excuses ` + it + `/3` into #excuses then remove me">
+                    No Talent
+                </button>
+                <button class="btn bg-base-100"
+                        hx-post="{% url 'chat_response' %}"
+                        hx-trigger="htmxRequest"
+                        hx-target="#chat-box"
+                        hx-swap="beforeend"
+                        hx-vals="js:{message_content: 'I dont have patience', message_id: currentMessageId}"
+                        _="on click
+                            trigger htmxRequest then
+                            transition my opacity to 0
+                            then increment $currentMessageId
+                            then decrement #excuses's excusesNumber
+                            then if #excuses's excusesNumber == 0 put '📸 🤨 No excuses left' into #excuses then remove #chat-box-inputs
+                            else put `Excuses ` + it + `/3` into #excuses then remove me">
+                    No Patience
+                </button>
+            </div>
+            <div id="excuses-container" class="flex justify-center 2xl:justify-end w-full mt-3" style="opacity:0">
+                <p id="excuses" class="text-2xl text-gray-300">Excuses 3/3</p>
+            </div>
         </div>
     </div>
-    {% if blog_posts %}
-        <h2 class="flex pb-6 text-3xl font-extrabold tracking-tight text-gray-100 sm:text-3xl md:text-5xl">
-            Latest
-        </h2>
-        <hr class="border-gray-700">
-        <ul>
-            {% for post in blog_posts %}
-                <li hx-get="{{ post.url }}" class="group flex bg-transparent bg-opacity-20 py-6 px-2 transition duration-100 hover:scale-105 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
-                    <article>
-                        <div class="space-y-2 bg-transparent bg-opacity-20 p-2 transition duration-200 hover:rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                            <dl>
-                                <dt class="sr-only">Published on</dt>
-                                <dd class="text-sm font-normal leading-6 text-gray-500 dark:text-gray-400">
-                                    <time datetime="{{ post.date }}">{{ post.date }}</time> •
-                                    <span class="mx-1">{{ post.views }}</span>views
-                                </dd>
-                            </dl>
-                            <div class="space-y-5 xl:col-span-4">
-                                <div class="space-y-1">
-                                    <div>
-                                        <h2 class="text-2xl font-bold leading-8 tracking-tight">
-                                            <div class="text-gray-900 transition duration-500 ease-in-out hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-500">
-                                                {{ post.title }}
-                                            </div>
-                                        </h2>
-                                    </div>
-                                    <div class="flex flex-wrap">
-                                        {% for tag in post.tags.all %}
-                                            <a class="mt-2 mr-3 rounded-lg border border-primary-500 py-1 px-3 text-sm font-medium uppercase text-primary-500 transition duration-500 ease-in-out hover:bg-primary-500 hover:text-gray-100 dark:hover:text-gray-900" href="/tags/{{ tag.slug }}">
-                                                {{ tag.name }}
-                                            </a>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="prose max-w-none pt-5 text-gray-500 dark:text-gray-400">
-                                        {{ post.description }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 {% endblock %}

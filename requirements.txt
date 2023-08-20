@@ -1,3 +1,8 @@
-Django>=4.2,<4.3
-wagtail
-django-extensions
+Django>=4.2,<4.3  # https://github.com/django/django
+wagtail  # https://github.com/wagtail/wagtail
+django-extensions  # https://github.com/django-extensions/django-extensions
+django-htmx  # https://github.com/adamchainz/django-htmx
+openai  # https://github.com/openai/openai-python
+channels  # https://github.com/django/channels
+channels-redis  # https://github.com/django/channels_redis/
+python-dotenv  # https://github.com/theskumar/python-dotenv
