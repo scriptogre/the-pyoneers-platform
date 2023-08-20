@@ -26,7 +26,6 @@ APPS_DIR = ROOT_DIR / "myplayground"
 INSTALLED_APPS = [
     "myplayground.blog",
     "myplayground.home",
-    "myplayground.projects",
     "myplayground.snippets",
     "myplayground.search",
     "wagtail.contrib.forms",
