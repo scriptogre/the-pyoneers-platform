@@ -20,5 +20,5 @@ body {
 }
 
 #hell-yea-button:hover {
-    @apply boxshadow bg-[#1c1917] text-[#d6d3d1]
+    @apply boxshadow bg-[#0c0a09] text-[#d6d3d1]
 }
