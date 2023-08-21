@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% load wagtailcore_tags %}
-
 {% block content %}
     <div class="flex flex-col md:flex-row 2xl:mt-20">
         {# Hero #}
@@ -26,51 +24,46 @@
         </div>
 
         {# Interactive Chat box #}
-        <div id="interactive-container"
-             class="flex flex-col justify-center items-start w-full px-12 py-6"
-             style="opacity: 0"
-             _="init wait 0.5s then transition my opacity to 1
-                then wait 1s then transition #chat-message-1's opacity to 1
-                then wait 1s then transition #chat-message-2's opacity to 1
-                then wait 1s then transition #chat-message-3's opacity to 1
-                then wait 1s then transition #chat-box-inputs's opacity to 1
-                then transition #excuses-container's opacity to 1"
+        <div id="interactive-container" class="flex flex-col justify-center items-start w-full px-6 2xl:px-12 py-6"
+             _="on intersection
+              transition #intro-message-1's opacity to 1
+              then transition #intro-message-2's opacity to 1
+              then transition #chat-box-inputs's opacity to 1
+              then transition #excuses-container's opacity to 1"
         >
 
-            <div id="chat-box-outer-container" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box w-full p-8 2xl:max-h-72 mb-4 overflow-y-hidden">
+            <div id="chat-box-outer-container" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box max-md:rounded-r-box w-full p-8 2xl:max-h-72 overflow-y-hidden">
                 <div id="chat-box-inner-container" class="flex min-h-[6rem] 2xl:max-h-[15rem] min-w-[18rem] max-w-4xl flex-wrap items-center gap-4 w-full overflow-y-scroll"
-                _="init set my scrollTop to 0">
-                    <div id="chat-box" class="w-full">
-                        <div id="chat-message-1" class="chat chat-start" style="opacity:0">
+                     _="init set my scrollTop to 0">
+
+                    {# Interactive Chat Box #}
+                    <div id="chat-box" class="w-full"
+                         hx-get="{% url 'receive_gigachad_message' %}"
+                         hx-target="#gigachad-message-to-replace"
+                         hx-trigger="requestMessage"
+                         hx-vals="js:{'message_content': $userMessage}"
+                         hx-swap="outerHTML scroll:#chat-box-inner-container:bottom">
+
+                        {# Chat messages #}
+                        <div id="intro-message-1" class="chat chat-start" style="opacity:0">
                             <div class="chat-image avatar">
                                 <div class="w-10 rounded-full">
                                     <img src="{% static 'img/giga-chad.jpeg' %}"  alt="Giga Chad"/>
                                 </div>
                             </div>
                             <div class="chat-bubble chat-bubble-warning">
-                                Hey, I'm Giga Chad. I'm a full-stack engineer and I'm here to help you become a 10x engineer.
+                                Hey, I'm the Script Ogre. I'm a full-stack engineer and I'm here to help you become a 10x engineer.
                             </div>
                         </div>
 
-                        <div id="chat-message-2" class="chat chat-end" style="opacity:0">
+                        <div id="intro-message-2" class="chat chat-end" style="opacity:0">
                             <div class="chat-image avatar">
                                 <div class="w-10 rounded-full">
                                     <img src="{% static 'img/soyjack.png' %}"  alt="Soy Jack"/>
                                 </div>
                             </div>
                             <div class="chat-bubble">
-                                But... I'm not ready to become a 10x engineer... I'm not even a .5x engineer yet.
-                            </div>
-                        </div>
-
-                        <div id="chat-message-3" class="chat chat-start" style="opacity:0">
-                            <div class="chat-image avatar">
-                                <div class="w-10 rounded-full">
-                                    <img src="{% static 'img/giga-chad.jpeg' %}" alt="Giga Chad"/>
-                                </div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-warning">
-                                Don't worry buddy. I'll teach you everything you need to know. What's your excuse not to become a 10x engineer?
+                                I'm not ready to become a 10x engineer... I barely know how to code. Besides...
                             </div>
                         </div>
                     </div>
@@ -78,56 +71,94 @@
             </div>
 
             {# Chat box input #}
-            <div id="chat-box-inputs" class="flex justify-center 2xl:justify-end w-full" style="opacity:0"
-                 _="init set #excuses's excusesNumber to 3 then set global currentMessageId to 4">
+            <div id="chat-box-inputs" class="flex justify-center 2xl:justify-end w-full mt-3" style="opacity:0">
                 <button class="btn bg-base-100 me-1"
-                        hx-post="{% url 'chat_response' %}"
-                        hx-trigger="htmxRequest"
+                        hx-post="{% url 'send_user_message' %}"
+                        hx-vals="js:{message_content: $userMessage}"
+                        hx-trigger="sendUserMessage"
                         hx-target="#chat-box"
-                        hx-swap="beforeend"
-                        hx-vals="js:{message_content: 'I dont have enough time', message_id: currentMessageId}"
+                        hx-swap="beforeend scroll:#chat-box-inner-container:bottom"
                         _="on click
-                            trigger htmxRequest then
-                            transition my opacity to 0
-                            then increment $currentMessageId
+                            {# Set the global userMessage #}
+                            set $userMessage to 'I dont have enough time'
+                            {# To add the new chat bubble of the user #}
+                            then trigger sendUserMessage
+                            {# To make sure #gigachad-message-to-replace exists before triggering requestMessage #}
+                            then wait for htmx:afterSettle from body
+                            {# To request the response to userMessage from GigaChad (OpenAI call in the backend) #}
+                            then send requestMessage to #chat-box
                             then decrement #excuses's excusesNumber
-                            then if #excuses's excusesNumber == 0 put '📸 🤨 No excuses left' into #excuses then remove #chat-box-inputs
-                            else put `Excuses ` + it + `/3` into #excuses then remove me">
+                            then
+                            if #excuses's excusesNumber == 0
+                                put '📸 🤨 No excuses left' into #excuses
+                            else
+                                put `Excuses ` + it + `/3` into #excuses
+                            end
+                            {# Disable this button >#}
+                            then add @disabled='true' to me">
                     No Time
                 </button>
                 <button class="btn bg-base-100 me-1"
-                        hx-post="{% url 'chat_response' %}"
-                        hx-trigger="htmxRequest"
+                        hx-post="{% url 'send_user_message' %}"
+                        hx-vals="js:{message_content: $userMessage}"
+                        hx-trigger="sendUserMessage"
                         hx-target="#chat-box"
-                        hx-swap="beforeend"
-                        hx-vals="js:{message_content: 'I dont have any talent', message_id: currentMessageId}"
+                        hx-swap="beforeend scroll:#chat-box-inner-container:bottom"
                         _="on click
-                            trigger htmxRequest then
-                            transition my opacity to 0
-                            then increment $currentMessageId
+                            {# Set the global userMessage #}
+                            set $userMessage to 'I dont have any talent'
+                            {# To add the new chat bubble of the user #}
+                            then trigger sendUserMessage
+                            {# To make sure #gigachad-message-to-replace exists before triggering requestMessage #}
+                            then wait for htmx:afterSettle from body
+                            {# To request the response to userMessage from GigaChad (OpenAI call in the backend) #}
+                            then send requestMessage to #chat-box
                             then decrement #excuses's excusesNumber
-                            then if #excuses's excusesNumber == 0 put '📸 🤨 No excuses left' into #excuses then remove #chat-box-inputs
-                            else put `Excuses ` + it + `/3` into #excuses then remove me">
+                            then
+                            if #excuses's excusesNumber == 0
+                                put '📸 🤨 No excuses left' into #excuses
+                            else
+                                put `Excuses ` + it + `/3` into #excuses
+                            end
+                            {# Disable this button >#}
+                            then add @disabled='true' to me">
                     No Talent
                 </button>
                 <button class="btn bg-base-100"
-                        hx-post="{% url 'chat_response' %}"
-                        hx-trigger="htmxRequest"
+                        hx-post="{% url 'send_user_message' %}"
+                        hx-vals="js:{message_content: $userMessage}"
+                        hx-trigger="sendUserMessage"
                         hx-target="#chat-box"
-                        hx-swap="beforeend"
-                        hx-vals="js:{message_content: 'I dont have patience', message_id: currentMessageId}"
+                        hx-swap="beforeend scroll:#chat-box-inner-container:bottom"
                         _="on click
-                            trigger htmxRequest then
-                            transition my opacity to 0
-                            then increment $currentMessageId
+                            {# Set the global userMessage #}
+                            set $userMessage to 'I dont have patience'
+                            {# To add the new chat bubble of the user #}
+                            then trigger sendUserMessage
+                            {# To make sure #gigachad-message-to-replace exists before triggering requestMessage #}
+                            then wait for htmx:afterSettle from body
+                            {# To request the response to userMessage from GigaChad (OpenAI call in the backend) #}
+                            then send requestMessage to #chat-box
                             then decrement #excuses's excusesNumber
-                            then if #excuses's excusesNumber == 0 put '📸 🤨 No excuses left' into #excuses then remove #chat-box-inputs
-                            else put `Excuses ` + it + `/3` into #excuses then remove me">
+                            then
+                            if #excuses's excusesNumber == 0
+                                put '📸 🤨 No excuses left' into #excuses
+                            else
+                                put `Excuses ` + it + `/3` into #excuses
+                            end
+                            {# Disable this button >#}
+                            then add @disabled='true' to me">
                     No Patience
                 </button>
             </div>
+
+            {# Excuses #}
             <div id="excuses-container" class="flex justify-center 2xl:justify-end w-full mt-3" style="opacity:0">
-                <p id="excuses" class="text-2xl text-gray-300">Excuses 3/3</p>
+                <p id="excuses"
+                   class="text-2xl text-gray-300"
+                   _="init set my excusesNumber to 3">
+                    Excuses 3/3
+                </p>
             </div>
         </div>
     </div>

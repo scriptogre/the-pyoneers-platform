@@ -1,6 +1,6 @@
 {% load static %}
 
-<div id="chat-message-{{ message_id }}" class="chat chat-end">
+<div class="chat chat-end">
     <div class="chat-image avatar">
         <div class="w-10 rounded-full">
             <img src="{% static 'img/soyjack.png' %}" />
@@ -8,5 +8,19 @@
     </div>
     <div class="chat-bubble">
         {{ message_content }}
+    </div>
+</div>
+
+<div id="gigachad-message-to-replace" class="chat chat-start hidden"
+     _="init
+     wait 0.5s then remove .hidden
+     then set #chat-box-inner-container's scrollTop to #chat-box-inner-container's scrollHeight">
+    <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+            <img src="{% static 'img/giga-chad.jpeg' %}" />
+        </div>
+    </div>
+    <div class="chat-bubble chat-bubble-warning flex justify-center items-center">
+        <span class="loading loading-dots loading-sm"></span>
     </div>
 </div>

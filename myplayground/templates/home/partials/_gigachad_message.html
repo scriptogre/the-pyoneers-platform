@@ -1,0 +1,12 @@
+{% load static %}
+
+<div class="chat chat-start">
+    <div class="chat-image avatar">
+        <div class="w-10 rounded-full">
+            <img src="{% static 'img/giga-chad.jpeg' %}" />
+        </div>
+    </div>
+    <div class="chat-bubble chat-bubble-warning">
+        {{ message_content }}
+    </div>
+</div>
