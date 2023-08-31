@@ -28,10 +28,9 @@ load_dotenv(os.path.join(ROOT_DIR, ".env"))
 # Application definition
 
 INSTALLED_APPS = [
-    "myplayground.blog",
     "myplayground.home",
-    "myplayground.snippets",
-    "myplayground.search",
+    "myplayground.course",
+    "myplayground.blog",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",

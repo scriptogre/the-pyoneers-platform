@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SearchConfig(AppConfig):
+class CourseConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "myplayground.search"
+    name = "myplayground.course"
