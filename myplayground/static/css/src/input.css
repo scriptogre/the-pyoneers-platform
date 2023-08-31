@@ -19,6 +19,6 @@ body {
     0 0 100px
 }
 
-#hell-yea-button:hover {
-    @apply boxshadow bg-[#0c0a09] text-[#d6d3d1]
+#cta-button:hover {
+    @apply boxshadow bg-amber-100 bg-opacity-90 text-black
 }
