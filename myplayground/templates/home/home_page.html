@@ -4,31 +4,29 @@
 {% block content %}
     <div class="flex flex-col justify-center items-center lg:flex-row lg:mt-12 xl:mt-16 2xl:mt-20">
         <div class="flex flex-col justify-center items-center text-center min-w-[50%] flex-grow lg:h-auto p-6 prose">
-            <h1 class="text-6xl text-gray-300 mb-2 2xl:mb-0 font-mono tracking-wider">
+            <h1 class="text-6xl text-gray-300 mb-2 font-mono tracking-wider">
                 <img src="{% static 'img/python-logo.png' %}" alt="Python Logo" class="inline-block w-16 h-16 my-0 mt-3 sm:mt-0 ml-2">
                 Pyoneers
             </h1>
-            <h1 class="text-xl font-['Barlow'] mt-2 mb-6">for the ambitious, by the ambitious</h1>
+            <span>For the ambitious, by the ambitious</span>
 
-            <p class="text-2xl text-gray-300 mt-0 mb-3 2xl:mb-6">
+            <p class="text-2xl text-gray-300 2xl:my-6">
                 Learn Full-Stack Python & Django the way I wish I had.
-                <br>
-                <span class="text-right">You won't get these tips from ChatGPT.</span>
             </p>
 
-            <button id="cta-button" class="btn bg-gray-800 btn-lg group hover:border-transparent mt-6 2xl:mt-3">
+            <span class="mb-2">You won't get these tips from ChatGPT.</span>
+            <button id="cta-button" class="btn bg-gray-800 btn-lg group hover:border-transparent mb-3">
                 <span class="group-hover:hidden">Are You All In? <span id="thinking-emoji" class="ml-1.5">🤔</span></span>
                 <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji" class="ml-1.5">🔥</span></span>
             </button>
         </div>
 
-        <div id="chat-section" class="flex flex-col justify-center items-start w-full px-6 2xl:px-12 py-6"
+        <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6"
              _="on intersection
               transition #initial-message-giga-chad's opacity to 1
               then transition #initial-message-soyjack's opacity to 1
               then transition #chat-response-buttons's opacity to 1
-              then transition #excuses-container's opacity to 1"
-        >
+              then transition #excuses-container's opacity to 1">
 
             <div id="chat-window" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box max-lg:rounded-r-box w-full p-8 2xl:max-h-72 overflow-y-hidden mb-3 lg:mt-12 xl:mt-16 2xl:mt-20">
                 <div id="chat-messages-container" class="flex min-h-[6rem] 2xl:max-h-[15rem] min-w-[18rem] max-w-4xl flex-wrap items-center gap-4 w-full overflow-y-scroll"
@@ -69,7 +67,7 @@
             </div>
 
             {# Chat box input #}
-            <div id="chat-response-buttons" class="flex justify-center lg:justify-end w-full" style="opacity:0"
+            <div id="chat-response-buttons" class="flex w-full justify-center lg:justify-end" style="opacity:0"
                  _="on htmx:afterSettle(detail) from #chat-interaction
                     if detail.pathInfo.requestPath contains '{% url 'receive_gigachad_message' %}'
                         for button in my children remove @disabled from button">
@@ -108,7 +106,8 @@
                       end
                     end
                 </script>
-                <button class="btn bg-base-100 me-1"
+                <div>
+                <button class="btn bg-base-100 md:me-1"
                         hx-post="{% url 'send_user_message' %}"
                         hx-vals="js:{message_content: $userMessage}"
                         hx-trigger="sendUserResponse"
@@ -117,7 +116,8 @@
                         _="install processResponseBehavior(userMessageValue:'I dont have any money')">
                     No Money
                 </button>
-                <button class="btn bg-base-100 me-1"
+                    </div>
+                <button class="btn bg-base-100 md:me-1"
                         hx-post="{% url 'send_user_message' %}"
                         hx-vals="js:{message_content: $userMessage}"
                         hx-trigger="sendUserResponse"
@@ -126,7 +126,7 @@
                         _="install processResponseBehavior(userMessageValue:'I dont have any time')">
                     No Time
                 </button>
-                <button class="btn bg-base-100 me-1"
+                <button class="btn bg-base-100 md:me-1"
                         hx-post="{% url 'send_user_message' %}"
                         hx-vals="js:{message_content: $userMessage}"
                         hx-trigger="sendUserResponse"
