@@ -12,9 +12,7 @@
 </div>
 
 <div id="gigachad-message-to-replace" class="chat chat-start hidden"
-     _="init
-     wait 0.5s then remove .hidden
-     then set #chat-box-inner-container's scrollTop to #chat-box-inner-container's scrollHeight">
+     _="init wait 0.5s then remove .hidden then set #chat-messages-container's scrollTop to #chat-messages-container's scrollHeight">
     <div class="chat-image avatar">
         <div class="w-10 rounded-full">
             <img src="{% static 'img/giga-chad.jpeg' %}" />
