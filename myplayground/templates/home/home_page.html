@@ -2,21 +2,23 @@
 {% load static %}
 
 {% block content %}
-    <div class="flex flex-col md:flex-row mt-20">
-        {# Hero #}
-        <div class="min-w-[50%] md:h-auto flex flex-col justify-center items-center text-center p-6 prose">
+    <div class="flex flex-col justify-center items-center lg:flex-row lg:mt-12 xl:mt-16 2xl:mt-20">
+        <div class="flex flex-col justify-center items-center text-center min-w-[50%] flex-grow lg:h-auto p-6 prose">
             <h1 class="text-6xl text-gray-300 mb-2 2xl:mb-0 font-mono tracking-wider">
                 <img src="{% static 'img/python-logo.png' %}" alt="Python Logo" class="inline-block w-16 h-16 my-0 mt-3 sm:mt-0 ml-2">
-                SelfPyoneers
+                Pyoneers
             </h1>
-            <h1 class="text-2xl text-gray-500 mb-6">For the ambitious, by the ambitious</h1>
+            <h1 class="text-xl font-['Barlow'] mt-2 mb-6">for the ambitious, by the ambitious</h1>
 
             <p class="text-2xl text-gray-300 mt-0 mb-3 2xl:mb-6">
-                Learn full-stack Python & Django the way I wish I had, with tips you won't get from ChatGPT.
+                Learn Full-Stack Python & Django the way I wish I had.
+                <br>
+                <span class="text-right">You won't get these tips from ChatGPT.</span>
             </p>
+
             <button id="cta-button" class="btn bg-gray-800 btn-lg group hover:border-transparent mt-6 2xl:mt-3">
-                <span class="group-hover:hidden">Are You All In? <span id="thinking-emoji">🤔</span></span>
-                <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji">🔥</span></span>
+                <span class="group-hover:hidden">Are You All In? <span id="thinking-emoji" class="ml-1.5">🤔</span></span>
+                <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji" class="ml-1.5">🔥</span></span>
             </button>
         </div>
 
@@ -28,7 +30,7 @@
               then transition #excuses-container's opacity to 1"
         >
 
-            <div id="chat-window" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box max-md:rounded-r-box w-full p-8 2xl:max-h-72 overflow-y-hidden mb-3 mt-20">
+            <div id="chat-window" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box max-lg:rounded-r-box w-full p-8 2xl:max-h-72 overflow-y-hidden mb-3 lg:mt-12 xl:mt-16 2xl:mt-20">
                 <div id="chat-messages-container" class="flex min-h-[6rem] 2xl:max-h-[15rem] min-w-[18rem] max-w-4xl flex-wrap items-center gap-4 w-full overflow-y-scroll"
                      _="init set my scrollTop to 0 end">
 
@@ -48,7 +50,7 @@
                                 </div>
                             </div>
                             <div class="chat-bubble chat-bubble-warning">
-                                Hey, I'm the Script Ogre. I'm a full-stack engineer and I'm here to help you become a 10x engineer.
+                                Hey chief. I'm here to help you become a 10x engineer.
                             </div>
                         </div>
 
@@ -59,7 +61,7 @@
                                 </div>
                             </div>
                             <div class="chat-bubble">
-                                I'm not ready to become a 10x engineer... I barely know how to code. Besides...
+                                I'm not ready to become a 10x engineer...
                             </div>
                         </div>
                     </div>
@@ -67,7 +69,7 @@
             </div>
 
             {# Chat box input #}
-            <div id="chat-response-buttons" class="flex justify-center md:justify-end w-full" style="opacity:0"
+            <div id="chat-response-buttons" class="flex justify-center lg:justify-end w-full" style="opacity:0"
                  _="on htmx:afterSettle(detail) from #chat-interaction
                     if detail.pathInfo.requestPath contains '{% url 'receive_gigachad_message' %}'
                         for button in my children remove @disabled from button">
@@ -145,7 +147,7 @@
             </div>
 
             {# Excuses #}
-            <div id="excuses-container" class="flex justify-center md:justify-end w-full mt-3" style="opacity:0">
+            <div id="excuses-container" class="flex justify-center lg:justify-end w-full mt-3" style="opacity:0">
                 <p id="excuses"
                    class="text-2xl text-gray-300"
                    _="init set $remainingExcuses to 4">
