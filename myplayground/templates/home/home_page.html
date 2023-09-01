@@ -131,16 +131,16 @@
                     end
                 </script>
                 <div>
-                <button class="btn bg-base-100 md:me-1"
-                        hx-post="{% url 'send_user_message' %}"
-                        hx-vals="js:{message_content: $userMessage}"
-                        hx-trigger="sendUserResponse"
-                        hx-target="#chat-interaction"
-                        hx-swap="beforeend scroll:#chat-messages-container:bottom"
-                        _="install processResponseBehavior(userMessageValue:'I dont have any money')">
-                    No Money
-                </button>
-                    </div>
+                    <button class="btn bg-base-100 md:me-1"
+                            hx-post="{% url 'send_user_message' %}"
+                            hx-vals="js:{message_content: $userMessage}"
+                            hx-trigger="sendUserResponse"
+                            hx-target="#chat-interaction"
+                            hx-swap="beforeend scroll:#chat-messages-container:bottom"
+                            _="install processResponseBehavior(userMessageValue:'I dont have any money')">
+                        No Money
+                    </button>
+                </div>
                 <button class="btn bg-base-100 md:me-1"
                         hx-post="{% url 'send_user_message' %}"
                         hx-vals="js:{message_content: $userMessage}"
