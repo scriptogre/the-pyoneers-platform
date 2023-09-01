@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="flex flex-col justify-center items-center lg:flex-row lg:mt-12 xl:mt-16 2xl:mt-20">
-        <div class="flex flex-col justify-center items-center text-center min-w-[50%] flex-grow lg:h-auto p-6 prose">
+        <div class="flex flex-col justify-center items-center text-center min-w-[50%] flex-grow lg:h-auto p-6 prose mb-5">
             <h1 class="text-6xl text-gray-300 mb-2 font-mono tracking-wider">
                 <img src="{% static 'img/python-logo.png' %}" alt="Python Logo" class="inline-block w-16 h-16 my-0 mt-3 sm:mt-0 ml-2">
                 Pyoneers
@@ -15,10 +15,34 @@
             </p>
 
             <span class="mb-2">You won't get these tips from ChatGPT.</span>
-            <button id="cta-button" class="btn bg-gray-800 btn-lg group hover:border-transparent mb-3">
-                <span class="group-hover:hidden">Are You All In? <span id="thinking-emoji" class="ml-1.5">🤔</span></span>
+            <button id="cta-button" class="btn btn-warning text-black btn-wide btn-lg group hover:border-transparent mb-3">
+                <span class="group-hover:hidden">Are You All In? <span id="mortar-board-emoji" class="ml-1.5">🎓</span></span>
                 <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji" class="ml-1.5">🔥</span></span>
             </button>
+            <div class="avatar-group -space-x-6">
+                <div class="avatar">
+                    <div class="w-12">
+                        <img class="m-0" src="{% static 'img/burghel.jpg' %}" />
+                    </div>
+                </div>
+                <div class="avatar">
+                    <div class="w-12">
+                        <img class="m-0" src="{% static 'img/elias.jpg' %}" />
+                    </div>
+                </div>
+                <div class="avatar">
+                    <div class="w-12">
+                        <img class="m-0" src="{% static 'img/pisicut.jpg' %}" />
+                    </div>
+                </div>
+                <div class="avatar placeholder">
+                    <div class="w-12 bg-neutral-focus text-neutral-content">
+                        {% with number_of_registered_users=12 %}
+                        <span class="font-semibold">+{{ number_of_registered_users|add:-3 }}</span>
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6"

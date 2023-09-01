@@ -1,3 +1,4 @@
+{% load socialaccount %}
 <div class="modal-box">
     <h3 id="login-title"
         class="font-bold text-xl">
@@ -52,13 +53,14 @@
 
         <div class="divider">OR</div>
 
-        <button id="google-login-button"
-                class="btn btn-ghost w-full border border-slate-200">
+        <a id="google-login-button"
+           href="{% provider_login_url 'google' %}"
+           class="btn btn-ghost w-full border border-slate-200">
             <img class="w-6 h-6"
                  src="https://www.svgrepo.com/show/475656/google-color.svg"
                  loading="lazy"
                  alt="google logo">
             <span>Login with Google</span>
-        </button>
+        </a>
     </form>
 </div>

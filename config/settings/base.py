@@ -50,6 +50,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "django_extensions",
     "template_partials",
     "django_htmx",
@@ -177,3 +181,16 @@ WAGTAILSEARCH_BACKENDS = {
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
+
+# django-allauth
+# https://django-allauth.readthedocs.io/en/latest/socialaccount/configuration.html
+SITE_ID = 1
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+LOGIN_REDIRECT_URL = "/"  # After login, redirect to home page
+ACCOUNT_LOGOUT_ON_GET = True  # Skip confirmation page
+SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip confirmation page
