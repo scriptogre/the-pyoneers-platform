@@ -4,3 +4,5 @@ django-extensions  # https://github.com/django-extensions/django-extensions
 django-htmx  # https://github.com/adamchainz/django-htmx
 openai  # https://github.com/openai/openai-python
 python-dotenv  # https://github.com/theskumar/python-dotenv
+django-allauth  # https://github.com/pennersr/django-allauth
+django-allauth[oauth2]
