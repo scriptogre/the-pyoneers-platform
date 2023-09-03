@@ -73,15 +73,18 @@
     <div id="nav-links"
          class="flex justify-center items-center">
         {% if user.is_authenticated %}
-            <div class="dropdown dropdown-bottom dropdown-end dropdown-hover">
+            <div class="dropdown dropdown-bottom dropdown-end">
                 <div tabindex="0" class="avatar online">
                     <div class="rounded-full w-12">
-                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
+                        <img class="hover:cursor-pointer" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" />
                     </div>
                 </div>
                 <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                     <li>
-                        <a href="{% url 'account_logout' %}" class="btn btn-outline">
+                        <a class="font-bold" href="{% url 'account_logout' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                            </svg>
                             Logout
                         </a>
                     </li>
