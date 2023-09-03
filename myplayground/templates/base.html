@@ -93,6 +93,8 @@
 
         {% else %}
             <button id="login-modal-button"
+                    hx-get="{% url 'login' %}"
+                    hx-target="#modal-content"
                     class="btn btn-outline border-0"
                     onclick="modal_dialog.showModal()">
 
@@ -113,8 +115,9 @@
 </div>
 
 <dialog id="modal_dialog" class="modal">
-    {% include 'login_form.html' %}
-
+    <div id="modal-content" class="modal-box">
+        {# HTMX content goes here #}
+    </div>
     <!-- To close when pressing outside the dialog -->
     <form method="dialog" class="modal-backdrop">
         <button>Close modal</button>

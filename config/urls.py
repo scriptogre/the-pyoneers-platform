@@ -7,10 +7,12 @@ from wagtail import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from myplayground.home import urls as home_urls
+from myplayground.users import urls as user_urls
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
+    path("", include(user_urls)),
     path("documents/", include(wagtaildocs_urls)),
     path("", include("allauth.urls")),
     path("", include(home_urls)),
