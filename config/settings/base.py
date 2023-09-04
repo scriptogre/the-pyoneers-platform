@@ -55,9 +55,11 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.discord",
     "django_extensions",
     "template_partials",
     "django_htmx",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -183,15 +185,28 @@ WAGTAILSEARCH_BACKENDS = {
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
 
-# django-allauth
-# https://django-allauth.readthedocs.io/en/latest/socialaccount/configuration.html
-SITE_ID = 1
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
+
 LOGIN_REDIRECT_URL = "/"  # After login, redirect to home page
+
+# django-allauth
+# https://django-allauth.readthedocs.io/en/latest/socialaccount/configuration.html
+SITE_ID = 1
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGOUT_ON_GET = True  # Skip confirmation page
+
+SOCIALACCOUNT_PROVIDERS = {
+    "discord": {
+        "SCOPE": ["identify", "email"],
+    }
+}
+SOCIALACCOUNT_AUTO_CONNECT = True
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip confirmation page

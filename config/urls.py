@@ -9,8 +9,8 @@ from wagtail.documents import urls as wagtaildocs_urls
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
-    path("", include(user_urls)),
     path("documents/", include(wagtaildocs_urls)),
+    path("users/", include("myplayground.users.urls", namespace="users")),
     path("", include("myplayground.home.urls")),
     path("", include("allauth.urls")),
 ]

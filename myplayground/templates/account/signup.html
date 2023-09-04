@@ -1,0 +1,55 @@
+{% load widget_tweaks %}
+
+<h3 id="signup-title"
+    class="font-bold text-xl">
+    Create your account
+</h3>
+
+<form id="signup-form"
+      class="space pt-6 pb-4"
+      hx-post="{% url 'account_signup' %}?next={% url 'home' %}"
+      hx-target="#modal-content">
+
+    {% csrf_token %}
+
+    {% with WIDGET_ERROR_CLASS='input-error' %}
+        {% render_field form.email class+="input input-bordered w-full mb-3" placeholder="Email here" %}
+        {% render_field form.password1 class+="input input-bordered w-full mb-3" placeholder="Password here" %}
+        {% render_field form.password2 class+="input input-bordered w-full mb-3" placeholder="Confirm Password" %}
+    {% endwith %}
+
+    <div class="flex justify-between align-middle mb-5">
+        <a id="already-have-account-link"
+           hx-get="{% url 'account_login' %}"
+           hx-target="#modal-content"
+           class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
+            Already have an account?
+        </a>
+    </div>
+
+    <button id="signup-button"
+            type="submit"
+            class="btn btn-warning w-full mb-5">
+        Sign Up
+    </button>
+
+    <p class="text-sm font-light text-primary-600 dark:text-primary-500">
+        By signing up, you agree to our
+        <a id="terms-link"
+           href="#"
+           class="font-medium text-primary-content hover:underline">
+            Terms
+        </a> and
+        <a id="privacy-policy-link"
+           href="#"
+           class="font-medium text-primary-content hover:underline">
+            Privacy Policy
+        </a>.
+    </p>
+
+    <div class="divider">OR</div>
+
+    {% include 'account/partials/_google_button.html' %}
+
+    {% include 'account/partials/_discord_button.html' %}
+</form>
