@@ -1,9 +1,18 @@
-from pprint import pprint
-
 import openai
 
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
+from django.views.generic import TemplateView
+
+
+class HomeView(TemplateView):
+    template_name = "home/home_page.html"
+
+    def get(self, request, *args, **kwargs):
+        if "conversation" in request.session:
+            del request.session["conversation"]
+
+        return super().get(request, *args, **kwargs)
 
 
 def send_user_message(request):
