@@ -1,0 +1,77 @@
+{# ===================== Field Rendering Macros ===================== #}
+{#
+    Macro for rendering form fields with additional attributes.
+    This is the equivalent of django-widget-tweaks' `render_field` tag but as a jinja macro.
+    :param field: The form field to render
+    :param class: The CSS class to add
+    :param placeholder: The placeholder text
+    :param type: The input type (e.g., 'text', 'password')
+    :param required: Whether the field is required
+    :param error_class: The CSS class to add if the field has errors
+    :param required_class: The CSS class to add if the field is required
+#}
+{% macro render_field(field, class=None, placeholder=None, type=None, required=False, error_class=None, required_class=None) %}
+    {% if field is defined and field.field.widget is defined %}
+        {# Get the field's attributes #}
+        {% set field_attrs = field.field.widget.attrs %}
+
+        {# Handle the default class attribute #}
+        {% if class %}
+            {% set _ = field_attrs.update({"class": class}) %}
+        {% endif %}
+
+        {# Append the error_class if the field has errors #}
+        {% if field.errors and error_class %}
+            {% set _ = field_attrs.update({"class": field_attrs.class ~ ' ' ~ error_class}) %}
+        {% endif %}
+
+        {# Append the required_class if the field is required #}
+        {% if field.field.required and required_class %}
+            {% set _ = field_attrs.update({"class": field_attrs.class ~ ' ' ~ required_class}) %}
+        {% endif %}
+
+        {# Handle other attributes #}
+        {% if placeholder %}
+            {% set _ = field_attrs.update({"placeholder": placeholder}) %}
+        {% endif %}
+        {% if type %}
+            {% set _ = field_attrs.update({"type": type}) %}
+        {% endif %}
+        {% if required %}
+            {% set _ = field_attrs.update({"required": "required"}) %}
+        {% endif %}
+
+        {{ field }}
+    {% else %}
+        <!-- Log an error or render the field as is -->
+        {{ field }}
+    {% endif %}
+{% endmacro %}
+
+{# ===================== Form Error Rendering Macro ===================== #}
+{#
+    Macro for rendering form errors.
+    :param form: The Django form instance
+#}
+{% macro render_form_errors(form) %}
+    {% if form.errors %}
+        <div class="flex mb-3">
+            <div class="text-error">
+                <ul role="list" class="list-disc pl-5 space-y-1">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if form.non_field_errors() %}
+                        {% for error in form.non_field_errors() %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}

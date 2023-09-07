@@ -1,112 +1,58 @@
-{% load static %}
+{% if user.is_authenticated and get_social_accounts(user) %}
+    {% set social_account = get_social_accounts(user)|first %}
+{% endif %}
 
-{% with profile_picture=user.socialaccount_set.all.0.get_avatar_url extra_data=user.socialaccount_set.all.0.extra_data %}
-
-    <h3 id="profile-title"
-        class="font-bold text-xl">
-        Your profile
-    </h3>
-
-    <div class="space-y-6 pt-6 pb-4">
-
-        <div class="flex flex-col justify-center items-center text-center space-y-1">
-            <div class="avatar">
-                <div class="w-24 h-24 mb-3">
-                    <img id="user-avatar"
-                         src="{% if profile_picture %}{{ profile_picture }}{% else %}{% static 'img/giga-chad.jpeg' %}{% endif %}"
-                         alt="User's Avatar"
-                         class="rounded-full border border-white">
-                </div>
+<h3 id="profile-title"
+    class="font-bold text-xl">
+    Your profile
+</h3>
+<div class="space-y-6 pt-6 pb-4">
+    <div class="flex flex-col justify-center items-center text-center space-y-1">
+        <div class="avatar">
+            <div class="w-24 h-24 mb-3">
+                <img id="user-avatar"
+                        {% from 'macros/user_macros.jinja' import avatar %}
+                     src="{{ avatar(user) }}"
+                     alt="User's Avatar"
+                     class="rounded-full border border-white">
             </div>
-
-            <h1 id="user-name"
-                class="text-2xl text-gray-300 font-mono tracking-wider">
-                {% if extra_data.given_name %}
-                    {{ extra_data.given_name }}
-                {% elif extra_data.name %}
-                    {{ extra_data.name }}
-                {% elif extra_data.username %}
-                    {{ extra_data.username }}
-                {% else %}
-                    {{ user.email }}
-                {% endif %}
-            </h1>
-
-            <span id="join-date">
-                Joined: {{ user.date_joined|date:"F d, Y" }}
-            </span>
         </div>
 
-        {% for socialaccount in user.socialaccount_set.all %}
-            <div class="flex">
+        <h1 id="user-name"
+            class="text-2xl text-gray-300 font-mono tracking-wider">
+            Logged in as {% if social_account is defined %}{{ social_account }}{% else %}{{ user }}{% endif %}
+        </h1>
 
-                {% if socialaccount.provider == "google" %}
-                    <div id="google-connected-alert"
-                         class="alert bg-white justify-between grid-flow-col flex-nowrap">
-                        <img id="google-icon"
-                             class="w-6 h-6"
-                             src="https://www.svgrepo.com/show/475656/google-color.svg"
-                             loading="lazy"
-                             alt="google logo">
-                        <p id="google-connected-text"
-                           class="text-sm text-black font-medium ml-3">
-                            Connected as <b>{{ socialaccount.extra_data.name }}</b> using Google
-                        </p>
-                        <svg id="google-connected-check"
-                             xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke-width="1.5"
-                             stroke="black"
-                             class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                {% endif %}
-
-                {% if socialaccount.provider == "discord" %}
-                    <div id="discord-connected-alert"
-                         class="alert bg-[#4752C5] justify-between grid-flow-col flex-nowrap">
-                        <img id="discord-icon"
-                             class="w-8 h-8"
-                             src="{% static 'img/discord-icon.svg' %}"
-                             loading="lazy"
-                             alt="discord logo">
-                        <p id="discord-connected-text"
-                           class="text-sm text-slate-100 font-medium ml-3">
-                            Connected as <b>{{ socialaccount.extra_data.username }}</b> using Discord
-                        </p>
-                        <svg id="discord-connected-check"
-                             xmlns="http://www.w3.org/2000/svg"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke-width="1.5"
-                             stroke="white"
-                             class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                {% endif %}
-            </div>
-
-        {% endfor %}
+        <span id="join-date">
+            Joined: {{ user.date_joined.strftime('%B %d, %Y') }}
+        </span>
     </div>
 
-    <div class="flex justify-center">
-        <a id="logout-button"
-           href="{% url 'account_logout' %}"
-           class="btn btn-outline border-none">
-            <svg id="logout-icon"
-                 xmlns="http://www.w3.org/2000/svg"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke-width="1.5"
-                 stroke="currentColor"
-                 class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-            Logout
-        </a>
+    <div class="flex">
+        {% if social_account is defined %}
+            {% if social_account.provider == "google" %}
+                {% include 'users/partials/_google_connected_alert.html' %}
+            {% endif %}
+            {% if social_account.provider == "discord" %}
+                {% include 'users/partials/_discord_connected_alert.html' %}
+            {% endif %}
+        {% endif %}
     </div>
+</div>
 
-{% endwith %}
+<div class="flex justify-center">
+    <a id="logout-button"
+       href="{{ url('account_logout') }}"
+       class="btn btn-outline border-none">
+        <svg id="logout-icon"
+             xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke-width="1.5"
+             stroke="currentColor"
+             class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+        </svg>
+        Logout
+    </a>
+</div>

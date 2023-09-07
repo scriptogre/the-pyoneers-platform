@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 
 
 class HomeView(TemplateView):
-    template_name = "home/home_page.html"
+    template_name = "home_page.html"
 
     def get(self, request, *args, **kwargs):
         if "conversation" in request.session:
@@ -20,7 +20,7 @@ def send_user_message(request):
         message_content = request.POST.get("message_content")
         return render(
             request,
-            "home/partials/_user_message.html",
+            "home/htmx_partials/_user_message.html",
             {
                 "message_content": message_content,
             },
@@ -74,7 +74,7 @@ def receive_gigachad_message(request):
         messages_to_send = [system_message] + request.session["conversation"]
 
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=messages_to_send,
             temperature=1,
         )
@@ -91,7 +91,7 @@ def receive_gigachad_message(request):
 
         return render(
             request,
-            "home/partials/_gigachad_message.html",
+            "home/htmx_partials/_gigachad_message.html",
             {"message_content": bot_response_text},
         )
 

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from pathlib import Path
+
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 from dotenv import load_dotenv
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -57,9 +59,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.discord",
     "django_extensions",
-    "template_partials",
     "django_htmx",
     "widget_tweaks",
+    "django_jinja",
 ]
 
 MIDDLEWARE = [
@@ -81,19 +83,45 @@ default_loaders = [
     "django.template.loaders.app_directories.Loader",
 ]
 cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
-partial_loaders = [("template_partials.loader.Loader", cached_loaders)]
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "BACKEND": "django_jinja.backend.Jinja2",
         "DIRS": [str(APPS_DIR / "templates")],
+        "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.contrib.auth.context_processors.auth",
                 "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+            ],
+            "extensions": DEFAULT_EXTENSIONS
+            + [
+                "wagtail.jinja2tags.core",
+                "wagtail.admin.jinja2tags.userbar",
+                "wagtail.images.jinja2tags.images",
+                "config.jinja2_extensions.AllAuthExtension",
+            ],
+            "globals": {
+                "django_htmx_script": "django_htmx.jinja.django_htmx_script",
+            },
+            "match_extension": ".html",
+            # Exclude admin and wagtail templates from being rendered by Jinja
+            "match_regex": r"^(?!admin/|wagtailadmin/|wagtaildocs/|debug_toolbar/).*",
+        },
+    },
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
-            "loaders": partial_loaders,
         },
     },
 ]

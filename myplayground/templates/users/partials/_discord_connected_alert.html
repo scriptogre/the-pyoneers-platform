@@ -1,0 +1,21 @@
+<div id="discord-connected-alert"
+     class="alert bg-[#4752C5] justify-between grid-flow-col flex-nowrap">
+    <img id="discord-icon"
+         class="w-8 h-8"
+         src="{{ static('img/discord-icon.svg') }}"
+         loading="lazy"
+         alt="discord logo">
+    <p id="discord-connected-text"
+       class="text-sm text-slate-100 font-medium ml-3">
+        Connected as <b>{{ social_account }}</b> using Discord
+    </p>
+    <svg id="discord-connected-check"
+         xmlns="http://www.w3.org/2000/svg"
+         fill="none"
+         viewBox="0 0 24 24"
+         stroke-width="1.5"
+         stroke="white"
+         class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+</div>

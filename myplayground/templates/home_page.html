@@ -1,20 +1,24 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
-    <div class="flex flex-col justify-center items-center lg:flex-row lg:mt-12 xl:mt-16 2xl:mt-20">
-        <div class="flex flex-col justify-center items-center text-center min-w-[50%] flex-grow lg:h-auto p-6 prose mb-5">
-            <h1 class="text-5xl text-gray-300 mb-2 font-mono tracking-wider">
-                <img src="{% static 'img/python-logo.png' %}" alt="Python Logo" class="inline-block w-16 h-16 my-0 mt-3 sm:mt-0 me-2">
-                The Pyoneer Project
-            </h1>
-            <span>For the ambitious, by the ambitious</span>
+    <div class="flex flex-col lg:flex-row items-center justify-center lg:mt-12">
+        <div class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto p-6 text-center prose mb-5 sm:mb-0">
+            <div class="flex flex-col items-center sm:flex-row sm:mb-3">
+                <img src="{{ static('img/python-logo.png') }}" alt="Python Logo" class="w-16 h-16 mb-3 sm:mb-0 my-0 me-4">
+
+                <div class="flex flex-col justify-start">
+                    <h1 class="text-5xl text-gray-300 font-mono tracking-wider mb-0">
+                        The Pyoneer Project
+                    </h1>
+                    <span class="text-xl text-center sm:text-start">For the ambitious, by the ambitious</span>
+                </div>
+            </div>
 
             <p class="text-2xl text-gray-300 2xl:my-6">
                 Learn Full-Stack Python & Django the way I wish I had.
             </p>
 
-            <span class="mb-2">You won't get these tips from ChatGPT.</span>
+            <span class="sm:mt-3 mb-3">You won't get these tips from ChatGPT</span>
             <button class="btn btn-warning btn-wide btn-lg text-black hover:border-transparent hover:bg-amber-100 hover:bg-opacity-90 hover:shadow-custom-golden group mb-3">
                 <span class="group-hover:hidden">Are You All In?</span>
                 <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji" class="ml-1.5">🔥</span></span>
@@ -22,24 +26,23 @@
             <div class="avatar-group -space-x-6">
                 <div class="avatar">
                     <div class="w-12">
-                        <img class="m-0" src="{% static 'img/burghel.jpg' %}" />
+                        <img class="m-0" src="{{ static('img/burghel.jpg') }}" />
                     </div>
                 </div>
                 <div class="avatar">
                     <div class="w-12">
-                        <img class="m-0" src="{% static 'img/elias.jpg' %}" />
+                        <img class="m-0" src="{{ static('img/elias.jpg') }}" />
                     </div>
                 </div>
                 <div class="avatar">
                     <div class="w-12">
-                        <img class="m-0" src="{% static 'img/pisicut.jpg' %}" />
+                        <img class="m-0" src="{{ static('img/pisicut.jpg') }}" />
                     </div>
                 </div>
                 <div class="avatar placeholder">
                     <div class="w-12 bg-neutral-focus text-neutral-content">
-                        {% with number_of_registered_users=12 %}
-                        <span class="font-semibold">+{{ number_of_registered_users|add:-3 }}</span>
-                        {% endwith %}
+                        {% set number_of_registered_users = 12 %}
+                        <span class="font-semibold">+{{ number_of_registered_users - 3 }}</span>
                     </div>
                 </div>
             </div>
@@ -48,27 +51,25 @@
         <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6"
              _="on intersection
               transition #initial-message-giga-chad's opacity to 1
-              then transition #initial-message-soyjack's opacity to 1
+              then transition #initial-message-user's opacity to 1
               then transition #chat-response-buttons's opacity to 1
               then transition #excuses-container's opacity to 1">
 
-            <div id="chat-window" class="border border-gray-600 bg-base-100 relative rounded-l-box rounded-tr-box max-lg:rounded-r-box w-full p-8 2xl:max-h-72 overflow-y-hidden mb-3 lg:mt-12 xl:mt-16 2xl:mt-20">
-                <div id="chat-messages-container" class="flex min-h-[6rem] 2xl:max-h-[15rem] min-w-[18rem] max-w-4xl flex-wrap items-center gap-4 w-full overflow-y-scroll"
-                     _="init set my scrollTop to 0 end">
-
+            <div id="chat-container" class="flex flex-wrap items-start justify-start w-full max-lg:min-h-[20rem] max-lg:max-h-[35rem] lg:h-[20rem] p-8 mb-3 lg:mt-12 gap-4 overflow-y-auto rounded-l-box rounded-tr-box max-lg:rounded-r-box bg-base-100 border border-gray-600 relative"
+                _="init set my scrollTop to 0">
                     {# Interactive Chat Box #}
                     <div id="chat-interaction" class="w-full"
-                         hx-get="{% url 'receive_gigachad_message' %}"
+                         hx-get="{{ url('receive_gigachad_message') }}"
                          hx-target="#gigachad-message-to-replace"
                          hx-trigger="requestGigaChadResponse"
                          hx-vals="js:{'message_content': $userMessage}"
-                         hx-swap="outerHTML scroll:#chat-messages-container:bottom">
+                         hx-swap="outerHTML scroll:#chat-container:bottom">
 
                         {# Chat messages #}
                         <div id="initial-message-giga-chad" class="chat chat-start" style="opacity:0">
                             <div class="chat-image avatar">
                                 <div class="w-10 rounded-full">
-                                    <img src="{% static 'img/giga-chad.jpeg' %}"  alt="Giga Chad"/>
+                                    <img src="{{ static('img/giga-chad.jpeg') }}"  alt="Giga Chad"/>
                                 </div>
                             </div>
                             <div class="chat-bubble chat-bubble-warning">
@@ -76,10 +77,11 @@
                             </div>
                         </div>
 
-                        <div id="initial-message-soyjack" class="chat chat-end" style="opacity:0">
+                        <div id="initial-message-user" class="chat chat-end" style="opacity:0">
                             <div class="chat-image avatar">
                                 <div class="w-10 rounded-full">
-                                    <img src="{% static 'img/soyjack.png' %}"  alt="Soy Jack"/>
+                                    {% from 'macros/user_macros.jinja' import avatar %}
+                                    <img src="{{ avatar(user) }}"  alt="User Avatar"/>
                                 </div>
                             </div>
                             <div class="chat-bubble">
@@ -87,13 +89,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
 
             {# Chat box input #}
             <div id="chat-response-buttons" class="flex w-full justify-center lg:justify-end" style="opacity:0"
                  _="on htmx:afterSettle(detail) from #chat-interaction
-                    if detail.pathInfo.requestPath contains '{% url 'receive_gigachad_message' %}'
+                    if detail.pathInfo.requestPath contains '{{ url('receive_gigachad_message') }}'
                         for button in my children remove @disabled from button">
 
                 {# Behavior to process user's response #}
@@ -130,48 +131,46 @@
                       end
                     end
                 </script>
-                <div>
-                    <button class="btn bg-base-100 md:me-1"
-                            hx-post="{% url 'send_user_message' %}"
-                            hx-vals="js:{message_content: $userMessage}"
-                            hx-trigger="sendUserResponse"
-                            hx-target="#chat-interaction"
-                            hx-swap="beforeend scroll:#chat-messages-container:bottom"
-                            _="install processResponseBehavior(userMessageValue:'I dont have any money')">
-                        No Money
-                    </button>
-                </div>
                 <button class="btn bg-base-100 md:me-1"
-                        hx-post="{% url 'send_user_message' %}"
+                        hx-post="{{ url('send_user_message') }}"
                         hx-vals="js:{message_content: $userMessage}"
                         hx-trigger="sendUserResponse"
                         hx-target="#chat-interaction"
-                        hx-swap="beforeend scroll:#chat-messages-container:bottom"
+                        hx-swap="beforeend scroll:#chat-container:bottom"
+                        _="install processResponseBehavior(userMessageValue:'I dont have any money')">
+                    No Money
+                </button>
+                <button class="btn bg-base-100 md:me-1"
+                        hx-post="{{ url('send_user_message') }}"
+                        hx-vals="js:{message_content: $userMessage}"
+                        hx-trigger="sendUserResponse"
+                        hx-target="#chat-interaction"
+                        hx-swap="beforeend scroll:#chat-container:bottom"
                         _="install processResponseBehavior(userMessageValue:'I dont have any time')">
                     No Time
                 </button>
                 <button class="btn bg-base-100 md:me-1"
-                        hx-post="{% url 'send_user_message' %}"
+                        hx-post="{{ url('send_user_message') }}"
                         hx-vals="js:{message_content: $userMessage}"
                         hx-trigger="sendUserResponse"
                         hx-target="#chat-interaction"
-                        hx-swap="beforeend scroll:#chat-messages-container:bottom"
+                        hx-swap="beforeend scroll:#chat-container:bottom"
                         _="install processResponseBehavior(userMessageValue:'I dont have any talent')">
                     No Talent
                 </button>
                 <button class="btn bg-base-100"
-                        hx-post="{% url 'send_user_message' %}"
+                        hx-post="{{ url('send_user_message') }}"
                         hx-vals="js:{message_content: $userMessage}"
                         hx-trigger="sendUserResponse"
                         hx-target="#chat-interaction"
-                        hx-swap="beforeend scroll:#chat-messages-container:bottom"
+                        hx-swap="beforeend scroll:#chat-container:bottom"
                         _="install processResponseBehavior(userMessageValue:'I dont have patience')">
                     No Patience
                 </button>
             </div>
 
             {# Excuses #}
-            <div id="excuses-container" class="flex justify-center lg:justify-end w-full mt-3" style="opacity:0">
+            <div id="excuses-container" class="flex w-full mt-3 justify-center lg:justify-end" style="opacity:0">
                 <p id="excuses"
                    class="text-2xl text-gray-300"
                    _="init set $remainingExcuses to 4">

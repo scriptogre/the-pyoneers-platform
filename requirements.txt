@@ -6,4 +6,5 @@ openai  # https://github.com/openai/openai-python
 python-dotenv  # https://github.com/theskumar/python-dotenv
 django-allauth  # https://github.com/pennersr/django-allauth
 django-allauth[oauth2]
-django-widget-tweaks  # https://github.com/jazzband/django-widget-tweaks
+jinja2  # https://github.com/pallets/jinja
+django-jinja  # https://github.com/niwinz/django-jinja

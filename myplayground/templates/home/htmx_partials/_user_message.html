@@ -1,9 +1,8 @@
-{% load static %}
-
 <div class="chat chat-end">
     <div class="chat-image avatar">
         <div class="w-10 rounded-full">
-            <img src="{% static 'img/soyjack.png' %}" />
+            {% from 'macros/user_macros.jinja' import avatar %}
+            <img src="{{ avatar(user) }}"  alt="User Avatar"/>
         </div>
     </div>
     <div class="chat-bubble">
@@ -12,10 +11,10 @@
 </div>
 
 <div id="gigachad-message-to-replace" class="chat chat-start hidden"
-     _="init wait 0.5s then remove .hidden then set #chat-messages-container's scrollTop to #chat-messages-container's scrollHeight">
+     _="init wait 0.5s then remove .hidden then set #chat-container's scrollTop to #chat-container's scrollHeight">
     <div class="chat-image avatar">
         <div class="w-10 rounded-full">
-            <img src="{% static 'img/giga-chad.jpeg' %}" />
+            <img src="{{ static('img/giga-chad.jpeg') }}" />
         </div>
     </div>
     <div class="chat-bubble chat-bubble-warning flex justify-center items-center">

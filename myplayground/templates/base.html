@@ -1,5 +1,8 @@
-{% load static wagtailcore_tags wagtailuserbar %}
-{% load django_htmx %}
+{% if user.is_authenticated and get_social_accounts(user) %}
+    {% set social_account = get_social_accounts(user)|first %}
+{% endif %}
+
+{% from 'macros/user_macros.jinja' import avatar %}
 
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth dark" style="color-scheme: dark">
@@ -7,14 +10,15 @@
     <meta charset="utf-8" />
     <title>
         {% block title %}
-            {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+            {% if page %}
+                {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+            {% endif %}
         {% endblock %}
         {% block title_suffix %}
-            {% wagtail_site as current_site %}
-            {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
+            {% if wagtail_site() and wagtail_site().site_name %}- {{ wagtail_site().site_name }}{% endif %}
         {% endblock %}
     </title>
-    {% if page.search_description %}
+    {% if page and page.search_description %}
         <meta name="description" content="{{ page.search_description }}" />
     {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,16 +30,18 @@
 
     {# HTMX #}
     <script defer src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
-    {% django_htmx_script %}
+
+    {# Django HTMX #}
+    {{ django_htmx_script() }}
 
     {# Hyperscript #}
     <script defer src="https://unpkg.com/hyperscript.org@0.9.11"></script>
 
     {# TailwindCSS #}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/output.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{{ static('css/output.min.css') }}">
 
     {# Typewriter Caret Effect #}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/typewriter.css' %}">
+    <link rel="stylesheet" type="text/css" href="{{ static('css/output.min.css') }}">
 
     {# Google Fonts #}
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
@@ -49,7 +55,7 @@
 <body class="antialiased h-bg-gradient-to-bl from-slate-950 via-purple-950 to-slate-950 {% block body_class %}{% endblock %}" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
 {# Bottom right Wagtail userbar #}
-{% wagtailuserbar %}
+{{ wagtailuserbar() }}
 
 {# Site navigation #}
 <nav id="site-nav"
@@ -60,8 +66,8 @@
 
         <a id="logo"
            class="flex justify-center items-center cursor-pointer"
-           href="{% url 'home' %}">
-            {{ "~/pyoneers"|add:request.path }}
+           href="{{ url('home') }}">
+            {{ "~/pyoneers" ~ request.path }}
 
             <div class="Typewriter" data-testid="typewriter-wrapper">
                 <span class="Typewriter__wrapper"></span>
@@ -73,35 +79,28 @@
     <div id="nav-links" class="flex flex-col justify-center items-center">
         {% if user.is_authenticated %}
             <div tabindex="0" class="avatar online block mb-1">
-                <div class="rounded-full w-12 md:w-16 lg:w-20">
+                <div class="rounded-full w-12">
                     <img id="avatar"
-                         hx-get="{% url 'users:detail' user.pk %}"
+                         hx-get="{{ url('users:detail', pk=user.pk) }}"
                          hx-target="#modal-content"
                          onclick="modal_dialog.showModal()"
                          class="hover:cursor-pointer"
-                         src="{{ user.socialaccount_set.all.0.get_avatar_url }}"/>
+                         src="{{ avatar(user) }}"/>
                 </div>
             </div>
 
-            {% with extra_data=user.socialaccount_set.all.0.extra_data provider=user.socialaccount_set.all.0.provider %}
-                <span class="hidden md:block">
-                    {% if extra_data.username %}
-                        Logged in as {{ extra_data.username }}
-                    {% elif extra_data.name %}
-                        Logged in as {{ extra_data.name }}
-                    {% else %}
-                        Logged in as {{ user.email }}
-                    {% endif %}
-                </span>
+            <span class="hidden md:block">
+                {% if social_account is defined %}{{ social_account|title }}{% else %}{{ user|title }}{% endif %}
+            </span>
+            {% if social_account is defined %}
                 <span class="text-xs text-gray-400 hidden md:block">
-                    Using {{ provider|title }}
+                    Using {{ social_account.provider|title }} account
                 </span>
-            {% endwith %}
-
+            {% endif %}
         {% else %}
             {# Login button #}
             <button id="login-modal-button"
-                    hx-get="{% url 'account_login' %}"
+                    hx-get="{{ url('account_login') }}"
                     hx-target="#modal-content"
                     class="btn btn-outline border-0"
                     onclick="modal_dialog.showModal()">
@@ -155,9 +154,5 @@
         Copyright ©  2023 Scriptogre LLC <br>
     </div>
 </footer>
-
-{% block extra_js %}
-    {# Override this in templates to add extra javascript #}
-{% endblock %}
 </body>
 </html>
