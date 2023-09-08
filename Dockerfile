@@ -1,8 +1,8 @@
 # Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.8.1-slim-buster
+FROM python:3.11.0-slim-buster
 
 # Add user that will be used in the container.
-RUN useradd wagtail
+RUN useradd webuser
 
 # Port used by this container to serve HTTP.
 EXPOSE 8000
@@ -34,16 +34,14 @@ RUN pip install -r /requirements.txt
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 
-# Set this directory to be owned by the "wagtail" user. This Wagtail project
-# uses SQLite, the folder needs to be owned by the user that
-# will be writing to the database file.
-RUN chown wagtail:wagtail /app
+# Set this directory to be owned by the "webuser" user.
+RUN chown webuser:webuser /app
 
 # Copy the source code of the project into the container.
-COPY --chown=wagtail:wagtail . .
+COPY --chown=webuser:webuser . .
 
-# Use user "wagtail" to run the build commands below and the server itself.
-USER wagtail
+# Use user "webuser" to run the build commands below and the server itself.
+USER webuser
 
 # Collect static files.
 RUN python manage.py collectstatic --noinput --clear
@@ -51,10 +49,13 @@ RUN python manage.py collectstatic --noinput --clear
 # Runtime command that executes when "docker run" is called, it does the
 # following:
 #   1. Migrate the database.
-#   2. Start the application server.
+#   2. Run the custom management command.
+#   3. Start the application server.
 # WARNING:
 #   Migrating database at the same time as starting the server IS NOT THE BEST
 #   PRACTICE. The database should be migrated manually or using the release
-#   phase facilities of your hosting pyoneers_platform. This is used only so the
-#   Wagtail instance can be started with a simple "docker run" command.
-CMD set -xe; python manage.py migrate --noinput; gunicorn core.wsgi:application
+#   phase facilities of your hosting platform.
+CMD set -xe; \
+    python manage.py migrate --noinput; \
+    python manage.py setup_social_apps; \
+    gunicorn config.wsgi:application
