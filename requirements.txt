@@ -8,4 +8,3 @@ django-jinja  # https://github.com/niwinz/django-jinja
 wagtail  # https://github.com/wagtail/wagtail
 django-htmx  # https://github.com/adamchainz/django-htmx
 openai  # https://github.com/openai/openai-python
-gunicorn  # https://gunicorn.org
