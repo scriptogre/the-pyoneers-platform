@@ -1,0 +1,42 @@
+{% for id, avatar in latest_members_with_avatars %}
+    <div class="avatar" opacity="0">
+        <div class="w-12">
+            <img class="m-0" src="https://cdn.discordapp.com/avatars/{{ id }}/{{ avatar }}.png" />
+        </div>
+    </div>
+{% endfor %}
+
+<div class="avatar placeholder">
+    <div class="w-12 bg-neutral-focus text-neutral-content">
+        <span id="counter" class="font-semibold"></span>
+        <script>
+            function easeInOutQuad(x) {
+                return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+            }
+
+            let startTime;
+            const duration = 2000;  // 2 seconds
+            const startValue = 0;
+            const endValue = {{ number_of_members - 3 }};
+            let currentValue = startValue;
+
+            function animate(time) {
+                if (!startTime) startTime = time;
+
+                const timeElapsed = time - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+                const easedProgress = easeInOutQuad(progress);
+
+                currentValue = Math.floor(startValue + easedProgress * (endValue - startValue));
+
+                document.getElementById('counter').innerText = `+${currentValue}`;
+
+                if (currentValue < endValue) {
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        </script>
+    </div>
+</div>

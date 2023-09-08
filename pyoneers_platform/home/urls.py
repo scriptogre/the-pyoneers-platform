@@ -4,6 +4,7 @@ from pyoneers_platform.home.views import (
     send_user_message,
     receive_gigachad_message,
     HomeView,
+    get_latest_discord_members,
 )
 
 urlpatterns = [
@@ -13,5 +14,8 @@ urlpatterns = [
         "receive_gigachad_message/",
         receive_gigachad_message,
         name="receive_gigachad_message",
+    ),
+    path(
+        "get_discord_members/", get_latest_discord_members, name="get_discord_members"
     ),
 ]

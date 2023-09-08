@@ -1,8 +1,14 @@
+from datetime import datetime
+
 import openai
+import requests
 
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.generic import TemplateView
+
+
+from config.settings.base import DISCORD_BOT_TOKEN, DISCORD_GUILD_ID
 
 
 class HomeView(TemplateView):
@@ -96,3 +102,35 @@ def receive_gigachad_message(request):
         )
 
     return HttpResponseBadRequest()
+
+
+def get_latest_discord_members(request):
+    if not request.htmx:
+        return HttpResponseBadRequest()
+
+    url = f"https://discord.com/api/v10/guilds/{DISCORD_GUILD_ID}/members?limit=1000"
+    headers = {"Authorization": f"Bot {DISCORD_BOT_TOKEN}"}
+    response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        return HttpResponseBadRequest()
+
+    guild_members = response.json()
+
+    def parse_datetime(member):
+        return datetime.strptime(member["joined_at"], "%Y-%m-%dT%H:%M:%S.%f000+00:00")
+
+    sorted_members = sorted(guild_members, key=parse_datetime, reverse=True)
+
+    latest_members_with_avatars = [
+        (m["user"]["id"], m["user"]["avatar"])
+        for m in sorted_members
+        if m["user"].get("avatar") and not m["user"].get("bot")
+    ][:4]
+
+    context = {
+        "number_of_members": len(guild_members),
+        "latest_members_with_avatars": latest_members_with_avatars,
+    }
+
+    return render(request, "home/htmx_partials/_latest_discord_members.html", context)

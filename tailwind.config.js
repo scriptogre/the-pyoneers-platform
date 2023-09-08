@@ -10,7 +10,7 @@ module.exports = {
     },
     extend: {
       boxShadow: {
-        'custom-golden': '0 0 5px #FBBD23, 0 0 25px #FBBD23, 0 0 50px #FBBD23, 0 0 100px',
+        'custom-discord': '0 0 5px #4752C5, 0 0 25px #4752C5, 0 0 50px #4752C5, 0 0 100px',
       },
       typography: {
         DEFAULT: {

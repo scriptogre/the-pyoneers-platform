@@ -252,3 +252,8 @@ SOCIAL_APPS_CONFIG = {
         "secret": env("DISCORD_CLIENT_SECRET"),
     },
 }
+
+# discord.py settings
+
+DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
+DISCORD_GUILD_ID = env("DISCORD_GUILD_ID")

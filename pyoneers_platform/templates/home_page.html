@@ -19,35 +19,30 @@
             </p>
 
             <span class="sm:mt-3 mb-3">You won't get these tips from ChatGPT</span>
-            <button class="btn btn-warning btn-wide btn-lg text-black hover:border-transparent hover:bg-amber-100 hover:bg-opacity-90 hover:shadow-custom-golden group mb-3">
-                <span class="group-hover:hidden">Are You All In?</span>
-                <span class="hidden group-hover:block">Hell yea!!! <span id="fire-emoji" class="ml-1.5">🔥</span></span>
-            </button>
-            <div class="avatar-group -space-x-6">
-                <div class="avatar">
-                    <div class="w-12">
-                        <img class="m-0" src="{{ static('img/avatar-1.webp') }}" />
-                    </div>
-                </div>
-                <div class="avatar">
-                    <div class="w-12">
-                        <img class="m-0" src="{{ static('img/avatar-2.webp') }}" />
-                    </div>
-                </div>
-                <div class="avatar">
-                    <div class="w-12">
-                        <img class="m-0" src="{{ static('img/avatar-3.webp') }}" />
-                    </div>
-                </div>
+            <a id="discord-invite"
+               class="btn btn-wide btn-lg bg-[#4752C5] hover:bg-[#3a45b7] text-slate-100 mb-3"
+               href="https://discord.gg/AbYEw9R6"
+               target="_blank">
+                <span class="flex justify-center items-center flex-nowrap discord-logo-container">
+                    Join Discord?
+                    {% include 'home/partials/_animated_discord_svg.html' %}
+                </span>
+            </a>
+
+            <div id="discord-members-group"
+                 class="avatar-group -space-x-6"
+                 hx-get="{{ url('get_discord_members') }}"
+                 hx-swap="innerHTML"
+                 hx-trigger="load"
+                 style="opacity:0"
+                 _="init transition my opacity to 1">
                 <div class="avatar placeholder">
+                    {# This section is automatically populated by `home/htmx_partials/latest_discord_members.html` #}
                     <div class="w-12 bg-neutral-focus text-neutral-content">
-                        {% set number_of_registered_users = 12 %}
-                        <span class="font-semibold">+{{ number_of_registered_users - 3 }}</span>
                     </div>
                 </div>
             </div>
         </div>
-
         <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6"
              _="on intersection
               transition #initial-message-giga-chad's opacity to 1
@@ -56,39 +51,39 @@
               then transition #excuses-container's opacity to 1">
 
             <div id="chat-container" class="flex flex-wrap items-start justify-start w-full max-lg:min-h-[20rem] max-lg:max-h-[35rem] lg:h-[20rem] p-8 mb-3 lg:mt-12 gap-4 overflow-y-auto rounded-l-box rounded-tr-box max-lg:rounded-r-box bg-base-100 border border-gray-600 relative"
-                _="init set my scrollTop to 0">
-                    {# Interactive Chat Box #}
-                    <div id="chat-interaction" class="w-full"
-                         hx-get="{{ url('receive_gigachad_message') }}"
-                         hx-target="#gigachad-message-to-replace"
-                         hx-trigger="requestGigaChadResponse"
-                         hx-vals="js:{'message_content': $userMessage}"
-                         hx-swap="outerHTML scroll:#chat-container:bottom">
+                 _="init set my scrollTop to 0">
+                {# Interactive Chat Box #}
+                <div id="chat-interaction" class="w-full"
+                     hx-get="{{ url('receive_gigachad_message') }}"
+                     hx-target="#gigachad-message-to-replace"
+                     hx-trigger="requestGigaChadResponse"
+                     hx-vals="js:{'message_content': $userMessage}"
+                     hx-swap="outerHTML scroll:#chat-container:bottom">
 
-                        {# Chat messages #}
-                        <div id="initial-message-giga-chad" class="chat chat-start" style="opacity:0">
-                            <div class="chat-image avatar">
-                                <div class="w-10 rounded-full">
-                                    <img src="{{ static('img/avatar-10x-giga-chad.webp') }}"  alt="Giga Chad"/>
-                                </div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-warning">
-                                Hey chief. I'm here to help you become a 10x engineer.
+                    {# Chat messages #}
+                    <div id="initial-message-giga-chad" class="chat chat-start" style="opacity:0">
+                        <div class="chat-image avatar">
+                            <div class="w-10 rounded-full">
+                                <img src="{{ static('img/avatar-10x-giga-chad.webp') }}"  alt="Giga Chad"/>
                             </div>
                         </div>
-
-                        <div id="initial-message-user" class="chat chat-end" style="opacity:0">
-                            <div class="chat-image avatar">
-                                <div class="w-10 rounded-full">
-                                    {% from 'macros/user_macros.jinja' import avatar %}
-                                    <img src="{{ avatar(user) }}"  alt="User Avatar"/>
-                                </div>
-                            </div>
-                            <div class="chat-bubble">
-                                I'm not ready to become a 10x engineer...
-                            </div>
+                        <div class="chat-bubble chat-bubble-warning">
+                            Hey chief. I'm here to help you become a 10x engineer.
                         </div>
                     </div>
+
+                    <div id="initial-message-user" class="chat chat-end" style="opacity:0">
+                        <div class="chat-image avatar">
+                            <div class="w-10 rounded-full">
+                                {% from 'macros/user_macros.jinja' import avatar %}
+                                <img src="{{ avatar(user) }}"  alt="User Avatar"/>
+                            </div>
+                        </div>
+                        <div class="chat-bubble">
+                            I'm not ready to become a 10x engineer...
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {# Chat box input #}
@@ -126,7 +121,7 @@
                           if $remainingExcuses == 0
                               put '📸 🤨 No excuses left' into #excuses
                           else
-                              put `Excuses ` + it + `/4` into #excuses
+                              put `Excuses ` + it + `/3` into #excuses
                           end then
                       end
                     end
@@ -139,6 +134,7 @@
                         hx-swap="beforeend scroll:#chat-container:bottom"
                         _="install processResponseBehavior(userMessageValue:'I dont have any money')">
                     No Money
+                    <span id="money-emoji">💰</span>
                 </button>
                 <button class="btn bg-base-100 md:me-1"
                         hx-post="{{ url('send_user_message') }}"
@@ -148,6 +144,7 @@
                         hx-swap="beforeend scroll:#chat-container:bottom"
                         _="install processResponseBehavior(userMessageValue:'I dont have any time')">
                     No Time
+                    <span id="clock-emoji">🕐</span>
                 </button>
                 <button class="btn bg-base-100 md:me-1"
                         hx-post="{{ url('send_user_message') }}"
@@ -157,15 +154,7 @@
                         hx-swap="beforeend scroll:#chat-container:bottom"
                         _="install processResponseBehavior(userMessageValue:'I dont have any talent')">
                     No Talent
-                </button>
-                <button class="btn bg-base-100"
-                        hx-post="{{ url('send_user_message') }}"
-                        hx-vals="js:{message_content: $userMessage}"
-                        hx-trigger="sendUserResponse"
-                        hx-target="#chat-interaction"
-                        hx-swap="beforeend scroll:#chat-container:bottom"
-                        _="install processResponseBehavior(userMessageValue:'I dont have patience')">
-                    No Patience
+                    <span id="toilet-emoji">🚽</span>
                 </button>
             </div>
 
@@ -173,8 +162,8 @@
             <div id="excuses-container" class="flex w-full mt-3 justify-center lg:justify-end" style="opacity:0">
                 <p id="excuses"
                    class="text-2xl text-gray-300"
-                   _="init set $remainingExcuses to 4">
-                    Excuses 4/4
+                   _="init set $remainingExcuses to 3">
+                    Excuses 3/3
                 </p>
             </div>
         </div>
