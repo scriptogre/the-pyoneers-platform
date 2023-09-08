@@ -1,10 +1,10 @@
 Django>=4.2,<4.3  # https://github.com/django/django
-wagtail  # https://github.com/wagtail/wagtail
-django-extensions  # https://github.com/django-extensions/django-extensions
-django-htmx  # https://github.com/adamchainz/django-htmx
-openai  # https://github.com/openai/openai-python
-python-dotenv  # https://github.com/theskumar/python-dotenv
-django-allauth  # https://github.com/pennersr/django-allauth
+django-environ  # https://github.com/joke2k/django-environ
+django-allauth==0.55.0  # https://github.com/pennersr/django-allauth
 django-allauth[oauth2]
+django-extensions  # https://github.com/django-extensions/django-extensions
 jinja2  # https://github.com/pallets/jinja
 django-jinja  # https://github.com/niwinz/django-jinja
+wagtail  # https://github.com/wagtail/wagtail
+django-htmx  # https://github.com/adamchainz/django-htmx
+openai  # https://github.com/openai/openai-python
