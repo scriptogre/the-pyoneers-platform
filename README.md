@@ -28,7 +28,7 @@ The live platform is accessible at [pyoneers.dev](https://pyoneers.dev).
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-org/the-pyoneer-platform.git
+    git clone https://github.com/scriptogre/the-pyoneers-platform.git
     ```
 
 2. Navigate to the project directory:
@@ -50,8 +50,13 @@ The live platform is accessible at [pyoneers.dev](https://pyoneers.dev).
     ```bash
     python manage.py createsuperuser
     ```
-
-6. Run the server:
+   
+6. Set up the social apps for Google and Discord authentication:
+   ```bash
+   python manage.py setup_social_apps
+   ``` 
+   
+7. Run the server:
     ```bash
     python manage.py runserver
     ```
