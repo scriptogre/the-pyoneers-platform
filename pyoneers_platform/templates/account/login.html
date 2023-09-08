@@ -5,7 +5,7 @@
 
 <form id="login-form"
       class="space pt-6 pb-4"
-      {#    This setup allows for two behaviors:
+        {#    This setup allows for two behaviors:
       1. If the login form has errors, HTMX will render them inline within the hx-target.
       2. If login is successful, a full-page refresh occurs.
 
@@ -15,7 +15,7 @@
       We listen to the htmx:afterOnLoad event.
       If the response path matches next_url, a full-page reload is triggered using hyperscript,
       avoiding the need to override the login view. #}
-      {% set next_url = url('home') %}
+        {% set next_url = url('home') %}
       hx-post="{{ url('account_login') }}?next={{ next_url }}"
       hx-target="#modal-content"
       _="on htmx:afterOnLoad if event.detail.pathInfo.responsePath is '{{ next_url }}' set the location of the window to '{{ next_url }}'">

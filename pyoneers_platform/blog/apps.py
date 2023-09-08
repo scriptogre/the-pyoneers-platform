@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CourseConfig(AppConfig):
+class BlogConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "myplayground.course"
+    name = "pyoneers_platform.blog"

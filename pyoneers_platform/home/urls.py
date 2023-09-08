@@ -1,6 +1,6 @@
 from django.urls import path
 
-from myplayground.home.views import (
+from pyoneers_platform.home.views import (
     send_user_message,
     receive_gigachad_message,
     HomeView,

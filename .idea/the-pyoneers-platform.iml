@@ -14,21 +14,16 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/core/static" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/myplayground/home/static" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/.idea/dataSources" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="myplayground" jdkType="Python SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="htmx.org" level="application" />
-    <orderEntry type="library" name="hyperscript.org" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/myplayground/templates" />
+        <option value="$MODULE_DIR$/platform/templates" />
       </list>
     </option>
   </component>

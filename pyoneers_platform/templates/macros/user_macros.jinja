@@ -10,9 +10,9 @@
         {% if social_account is defined and social_account.get_avatar_url() %}
             {{ social_account.get_avatar_url() }}
         {% else %}
-            {{ static('img/aspiring-giga-chad.jpeg') }}
+            {{ static('img/default-avatar.jpeg') }}
         {% endif %}
     {% else %}
-        {{ static('img/aspiring-giga-chad.jpeg') }}
+        {{ static('img/default-avatar.jpeg') }}
     {% endif %}
 {% endmacro %}

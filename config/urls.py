@@ -10,8 +10,8 @@ urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
-    path("users/", include("myplayground.users.urls", namespace="users")),
-    path("", include("myplayground.home.urls")),
+    path("users/", include("pyoneers_platform.users.urls", namespace="users")),
+    path("", include("pyoneers_platform.home.urls")),
     path("", include("allauth.urls")),
 ]
 

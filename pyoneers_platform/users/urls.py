@@ -1,6 +1,6 @@
 from django.urls import path
 
-from myplayground.users.views import UserDetailView
+from pyoneers_platform.users.views import UserDetailView
 
 app_name = "users"
 

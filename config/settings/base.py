@@ -18,7 +18,7 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 from dotenv import load_dotenv
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-APPS_DIR = ROOT_DIR / "myplayground"
+APPS_DIR = ROOT_DIR / "pyoneers_platform"
 
 # Load .env file
 load_dotenv(os.path.join(ROOT_DIR, ".env"))
@@ -30,10 +30,10 @@ load_dotenv(os.path.join(ROOT_DIR, ".env"))
 # Application definition
 
 INSTALLED_APPS = [
-    "myplayground.home",
-    "myplayground.course",
-    "myplayground.blog",
-    "myplayground.users",
+    "pyoneers_platform.home",
+    "pyoneers_platform.course",
+    "pyoneers_platform.blog",
+    "pyoneers_platform.users",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -199,7 +199,7 @@ MEDIA_URL = "/media/"
 
 # Wagtail settings
 
-WAGTAIL_SITE_NAME = "myplayground"
+WAGTAIL_SITE_NAME = "pyoneers_platform"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
