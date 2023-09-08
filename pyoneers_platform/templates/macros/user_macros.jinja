@@ -9,8 +9,10 @@
 
     {% if user.is_authenticated %}
         {% set social_account = get_social_accounts(user)|first %}
-        {% if social_account is defined and social_account.get_avatar_url() %}
-            {{ social_account.get_avatar_url() }}
+        {% set avatar_url = social_account.get_avatar_url() if 'None' not in social_account.get_avatar_url() %}
+
+        {% if social_account is defined and avatar_url is defined %}
+            {{ avatar_url }}
         {% else %}
             {{ default_avatar }}
         {% endif %}

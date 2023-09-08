@@ -17,7 +17,7 @@
             let startTime;
             const duration = 2000;  // 2 seconds
             const startValue = 0;
-            const endValue = {{ number_of_members - 3 }};
+            const endValue = {{ number_of_members - latest_members_with_avatars|length }};
             let currentValue = startValue;
 
             function animate(time) {
