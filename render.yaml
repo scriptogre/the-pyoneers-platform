@@ -6,17 +6,19 @@ services:
     branch: master
     region: frankfurt  # Closest region to me
     plan: starter  # 7$/month
+    domains:
+      - pyoneers.dev
+      - www.pyoneers.dev
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings.production
+      - key: DJANGO_ALLOWED_HOSTS
+        value: pyoneers.dev,www.pyoneers.dev
       - key: DATABASE_URL
         fromDatabase:
           name: db
           property: connectionString
       - fromGroup: all-environment-variables
-    domains:
-      - pyoneers.dev
-      - www.pyoneers.dev
 
 databases:
   - name: db

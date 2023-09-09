@@ -13,6 +13,8 @@ APPS_DIR = ROOT_DIR / "pyoneers_platform"
 # Load .env file
 environ.Env.read_env(os.path.join(ROOT_DIR, ".env"))
 
+DATABASES = {"default": env.db("DATABASE_URL")}
+
 # Application definition
 DJANGO_APPS = [
     "django.contrib.sites",
