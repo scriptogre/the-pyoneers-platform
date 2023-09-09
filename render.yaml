@@ -6,9 +6,6 @@ services:
     branch: master
     region: frankfurt  # Closest region to me
     plan: starter  # 7$/month
-    domains:
-      - pyoneers.dev
-      - www.pyoneers.dev
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings.production
