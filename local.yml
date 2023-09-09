@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: local_db
+      POSTGRES_USER: local_user
+      POSTGRES_PASSWORD: local_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py setup_social_apps && gunicorn config.wsgi:application"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

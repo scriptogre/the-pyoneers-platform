@@ -1,4 +1,5 @@
 Django>=4.2,<4.3  # https://github.com/django/django
+psycopg2  # https://github.com/psycopg/psycopg2
 django-environ  # https://github.com/joke2k/django-environ
 django-allauth==0.55.0  # https://github.com/pennersr/django-allauth
 django-allauth[oauth2]
