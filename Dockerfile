@@ -43,9 +43,6 @@ COPY --chown=webuser:webuser . .
 # Use user "webuser" to run the build commands below and the server itself.
 USER webuser
 
-# Collect static files.
-RUN python manage.py collectstatic --noinput --clear
-
 # Runtime command that executes when "docker run" is called, it does the
 # following:
 #   1. Migrate the database.
@@ -56,6 +53,7 @@ RUN python manage.py collectstatic --noinput --clear
 #   PRACTICE. The database should be migrated manually or using the release
 #   phase facilities of your hosting platform.
 CMD set -xe; \
+    python manage.py collectstatic --noinput --clear; \
     python manage.py migrate --noinput; \
     python manage.py setup_social_apps; \
     gunicorn config.wsgi:application
