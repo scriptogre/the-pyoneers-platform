@@ -1,6 +1,26 @@
 services:
   - type: web
-    name: the-pyoneers-platform-service
-    runtime: python
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    name: web-service
+    runtime: docker
+    repo: https://github.com/scriptogre/the-pyoneers-platform.git
+    branch: master
+    region: frankfurt  # Closest region to me
+    plan: starter  # 7$/month
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: db
+          property: connectionString
+      - fromGroup: all-environment-variables
+    domains:
+      - pyoneers.dev
+      - www.pyoneers.dev
+
+databases:
+  - name: db
+    plan: free
+    databaseName: the_pyoneers_platform_db
+    region: frankfurt
+    user: chris
