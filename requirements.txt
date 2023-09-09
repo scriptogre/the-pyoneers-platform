@@ -11,6 +11,7 @@ django-environ  # https://github.com/joke2k/django-environ
 django-redis  # https://github.com/jazzband/django-redis
 django-allauth==0.55.0  # https://github.com/pennersr/django-allauth
 django-jinja  # https://github.com/niwinz/django-jinja
+django-extensions  # https://github.com/django-extensions/django-extensions
 
 # Custom
 # ------------------------------------------------------------------------------
