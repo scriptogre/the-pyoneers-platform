@@ -23,3 +23,8 @@ ALLOWED_HOSTS = [
     "pyoneers.dev",  # Your custom domain
     "www.pyoneers.dev",  # Optional: if you also want to allow www subdomain
 ]
+
+
+# This is to ensure that Django uses https:// instead of http:// in URLs
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = True
