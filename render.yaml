@@ -18,7 +18,19 @@ services:
         fromDatabase:
           name: db
           property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
       - fromGroup: all-environment-variables
+
+  - type: redis
+    name: redis
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: Allow all IP addresses
+    plan: free
 
 databases:
   - name: db
