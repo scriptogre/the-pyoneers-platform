@@ -27,6 +27,7 @@ services:
     ipAllowList:
       - source: 0.0.0.0/0
         description: Allow all IP addresses
+    region: frankfurt
     plan: free
 
 databases:
