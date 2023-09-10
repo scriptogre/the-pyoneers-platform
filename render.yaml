@@ -3,7 +3,7 @@ services:
     name: web-service
     runtime: docker
     repo: https://github.com/scriptogre/the-pyoneers-platform.git
-    branch: master
+    branch: stable
     region: frankfurt  # Closest region to me
     plan: starter  # 7$/month
     envVars:
