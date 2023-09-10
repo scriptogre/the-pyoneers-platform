@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+python manage.py migrate
+python manage.py setup_social_apps
+# Temporarily turn off 'errexit' for the createsuperuser command
+set +o errexit
+python manage.py createsuperuser --noinput || echo "Warning: Superuser could not be created. It may already exist."
+set -o errexit
+
+exec python manage.py runserver_plus 0.0.0.0:8000

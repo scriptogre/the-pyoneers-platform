@@ -1,0 +1,27 @@
+whitenoise  # https://github.com/evansd/whitenoise
+redis  # https://github.com/redis/redis-py
+hiredis  # https://github.com/redis/hiredis-py
+argon2-cffi  # https://github.com/hynek/argon2_cffi
+gunicorn  # https://github.com/benoitc/gunicorn
+psycopg2  # https://github.com/psycopg/psycopg2
+celery  # https://github.com/celery/celery
+django-celery-beat  # https://github.com/celery/django-celery-beat
+flower  # https://github.com/mher/flower
+
+# Django
+# ------------------------------------------------------------------------------
+django==4.2.5  # https://www.djangoproject.com/
+django-environ  # https://github.com/joke2k/django-environ
+django-model-utils  # https://github.com/jazzband/django-model-utils
+django-allauth  # https://github.com/pennersr/django-allauth
+django-compressor  # https://github.com/django-compressor/django-compressor
+django-redis  # https://github.com/jazzband/django-redis
+django-jinja  # https://github.com/niwinz/django-jinja
+django-extensions  # https://github.com/django-extensions/django-extensions
+
+# Custom
+# ------------------------------------------------------------------------------
+jinja2  # https://github.com/pallets/jinja
+wagtail  # https://github.com/wagtail/wagtail
+django-htmx  # https://github.com/adamchainz/django-htmx
+openai  # https://github.com/openai/openai-python

@@ -1,37 +1,115 @@
 services:
   - type: web
-    name: web-service
+    name: django
     runtime: docker
     repo: https://github.com/scriptogre/the-pyoneers-platform.git
-    branch: master
-    region: frankfurt  # Closest region to me
-    plan: starter  # 7$/month
+    dockerfilePath: ./deployment/production/django/Dockerfile
+    dockerCommand: /start
     envVars:
+      - fromGroup: env-group
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings.production
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
       - key: DJANGO_ALLOWED_HOSTS
-        value: pyoneers.dev,www.pyoneers.dev
+        sync: false
       - key: DATABASE_URL
         fromDatabase:
-          name: db
+          name: postgres
           property: connectionString
       - key: REDIS_URL
         fromService:
           type: redis
           name: redis
           property: connectionString
-      - fromGroup: all-environment-variables
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+    region: frankfurt
+    plan: starter
+
+  - type: worker
+    name: celery-worker
+    runtime: docker
+    dockerfilePath: ./deployment/production/django/Dockerfile
+    dockerCommand: /start-celeryworker
+    autoDeploy: false
+    envVars:
+      - fromGroup: env-group
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postgres
+          property: connectionString
+    region: frankfurt
+    plan: starter
+
+  - type: web
+    name: celery-flower
+    runtime: docker
+    dockerfilePath: ./deployment/production/django/Dockerfile
+    dockerCommand: /start-flower
+    autoDeploy: false
+    envVars:
+      - fromGroup: env-group
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postgres
+          property: connectionString
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+      - key: CELERY_FLOWER_USER
+        sync: false
+      - key: CELERY_FLOWER_PASSWORD
+        sync: false
+    region: frankfurt
+    plan: free
+
+  - type: worker
+    name: celery-beat
+    runtime: docker
+    dockerfilePath: ./deployment/production/django/Dockerfile
+    dockerCommand: /start-celerybeat
+    autoDeploy: false
+    envVars:
+      - fromGroup: env-group
+      - key: DATABASE_URL
+        fromDatabase:
+          name: postgres
+          property: connectionString
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: redis
+          property: connectionString
+    region: frankfurt
+    plan: starter
 
   - type: redis
     name: redis
     ipAllowList:
       - source: 0.0.0.0/0
         description: Allow all IP addresses
-    plan: free
+    maxmemoryPolicy: noeviction
+    region: frankfurt
+    plan: starter
 
 databases:
-  - name: db
-    plan: free
+  - name: postgres
     databaseName: the_pyoneers_platform_db
-    region: frankfurt
     user: chris
+    region: frankfurt
+    plan: starter

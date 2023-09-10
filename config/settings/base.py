@@ -1,21 +1,53 @@
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+"""
+Base settings to build other settings files upon.
+"""
 from pathlib import Path
+
 import environ
 
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
-env = environ.Env()
-
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+# pyoneers_platform/
 APPS_DIR = ROOT_DIR / "pyoneers_platform"
 
-# Load .env file
-environ.Env.read_env(os.path.join(ROOT_DIR, ".env"))
+env = environ.Env()
 
+# GENERAL
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#debug
+DEBUG = env.bool("DJANGO_DEBUG", False)
+# Local time zone. Choices are
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# though not all of them may be available with every OS.
+# In Windows, this must be set to your system time zone.
+TIME_ZONE = "Europe/Bucharest"
+# https://docs.djangoproject.com/en/dev/ref/settings/#site-id
+SITE_ID = 1
+# https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
+USE_I18N = False
+# https://docs.djangoproject.com/en/dev/ref/settings/#use-l10n
+USE_L10N = False
+# https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
+USE_TZ = True
+
+# DATABASES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Application definition
+# URLS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
+ROOT_URLCONF = "config.urls"
+# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
+WSGI_APPLICATION = "config.wsgi.application"
+
+# APPS
+# ------------------------------------------------------------------------------
 DJANGO_APPS = [
     "django.contrib.sites",
     "django.contrib.admin",
@@ -44,9 +76,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.discord",
-    "django_extensions",
+    "django_celery_beat",
     "django_htmx",
-    "django_jinja",
 ]
 LOCAL_APPS = [
     "pyoneers_platform",
@@ -58,6 +89,44 @@ LOCAL_APPS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+# AUTHENTICATION
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
+AUTHENTICATION_BACKENDS = (
+    # Needed to log in by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+# TODO: Uncomment when custom user model is implemented
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
+# AUTH_USER_MODEL = "users.User"
+# https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
+LOGIN_REDIRECT_URL = "/"  # After login, redirect to home page
+# https://docs.djangoproject.com/en/dev/ref/settings/#login-url
+LOGIN_URL = "account_login"
+
+# PASSWORDS
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
+PASSWORD_HASHERS = [
+    # https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+]
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+
+# MIDDLEWARE
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -71,28 +140,51 @@ MIDDLEWARE = [
     "django_htmx.middleware.HtmxMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
-
-default_loaders = [
-    "django.template.loaders.filesystem.Loader",
-    "django.template.loaders.app_directories.Loader",
+# STATIC
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR / "staticfiles")
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = "/static/"
+# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [
+    str(APPS_DIR / "static"),
 ]
-cached_loaders = [("django.template.loaders.cached.Loader", default_loaders)]
+# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+]
+
+# MEDIA
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-root
+MEDIA_ROOT = str(APPS_DIR / "media")
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+MEDIA_URL = "/media/"
+
+# TEMPLATES
+# ------------------------------------------------------------------------------
+# This project uses Jinja2 with django-jinja's custom backend which provides most useful context variables
+# (e.g. `url` or `static`) that are available by default in Django Templating Engine.
+# https://niwi.nz/django-jinja/latest/#_differences_with_django_template_engine
+# https://niwi.nz/django-jinja/latest/#_quick_start
+INSTALLED_APPS += ("django_jinja",)
 TEMPLATES = [
     {
+        # https://niwi.nz/django-jinja/latest/#_complete_example
         "BACKEND": "django_jinja.backend.Jinja2",
         "DIRS": [str(APPS_DIR / "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
+            # https://niwi.nz/django-jinja/latest/#_context_processors_support
             "context_processors": [
+                # Necessary to access `user` variable in templates
                 "django.contrib.auth.context_processors.auth",
-                "django.template.context_processors.debug",
-                "django.template.context_processors.i18n",
-                "django.template.context_processors.media",
-                "django.template.context_processors.static",
-                "django.template.context_processors.tz",
+                # Necessary to access `messages` variable in templates
                 "django.contrib.messages.context_processors.messages",
             ],
+            # https://niwi.nz/django-jinja/latest/#_add_additional_extensions
             "extensions": DEFAULT_EXTENSIONS
             + [
                 "wagtail.jinja2tags.core",
@@ -103,11 +195,12 @@ TEMPLATES = [
             "globals": {
                 "django_htmx_script": "django_htmx.jinja.django_htmx_script",
             },
+            # https://niwi.nz/django-jinja/latest/#_advanced_template_pattern_matching
             "match_extension": ".html",
-            # Exclude third-party templates from being rendered by Jinja
             "match_regex": r"^(?!admin/|wagtailadmin/|wagtaildocs/|debug_toolbar/|socialaccount/).*",
         },
     },
+    # Including Django's default backend is still necessary for admin templates which still use the DTE.
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "APP_DIRS": True,
@@ -121,103 +214,110 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
+# https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
+FORM_RENDERER = "django.forms.renderers.Jinja2"
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+# SECURITY
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
+SESSION_COOKIE_HTTPONLY = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
+CSRF_COOKIE_HTTPONLY = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
+X_FRAME_OPTIONS = "DENY"
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
+# EMAIL
+# ------------------------------------------------------------------------------
+# TODO: Implement email backend
+# # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# EMAIL_BACKEND = env(
+#     "DJANGO_EMAIL_BACKEND",
+#     default="django.core.mail.backends.smtp.EmailBackend",
+# )
+# # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+# EMAIL_TIMEOUT = 5
 
+# ADMIN
+# ------------------------------------------------------------------------------
+# Django Admin URL.
+ADMIN_URL = "admin/"
+# https://docs.djangoproject.com/en/dev/ref/settings/#admins
+ADMINS = [("""example""", "example@example.com")]
+# https://docs.djangoproject.com/en/dev/ref/settings/#managers
+MANAGERS = ADMINS
+# https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
+# Force the `admin` sign in process to go through the `django-allauth` workflow
+DJANGO_ADMIN_FORCE_ALLAUTH = env.bool("DJANGO_ADMIN_FORCE_ALLAUTH", default=False)
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+# LOGGING
+# ------------------------------------------------------------------------------
+# TODO: Implement logging with loguru
+# # https://docs.djangoproject.com/en/dev/ref/settings/#logging
+# # See https://docs.djangoproject.com/en/dev/topics/logging for
+# # more details on how to customize your logging configuration.
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "verbose": {
+#             "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+#         },
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "DEBUG",
+#             "class": "logging.StreamHandler",
+#             "formatter": "verbose",
+#         }
+#     },
+#     "root": {"level": "INFO", "handlers": ["console"]},
+# }
 
-LANGUAGE_CODE = "en-us"
+# Celery
+# ------------------------------------------------------------------------------
+if USE_TZ:
+    # https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-timezone
+    CELERY_TIMEZONE = TIME_ZONE
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-broker_url
+CELERY_BROKER_URL = env("CELERY_BROKER_URL")
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-result_backend
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-extended
+CELERY_RESULT_EXTENDED = True
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-backend-always-retry
+# https://github.com/celery/celery/pull/6122
+CELERY_RESULT_BACKEND_ALWAYS_RETRY = True
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#result-backend-max-retries
+CELERY_RESULT_BACKEND_MAX_RETRIES = 10
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-accept_content
+CELERY_ACCEPT_CONTENT = ["json"]
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-task_serializer
+CELERY_TASK_SERIALIZER = "json"
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#std:setting-result_serializer
+CELERY_RESULT_SERIALIZER = "json"
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-time-limit
+# TODO: set to whatever value is adequate in your circumstances
+CELERY_TASK_TIME_LIMIT = 5 * 60
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-soft-time-limit
+# TODO: set to whatever value is adequate in your circumstances
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#beat-scheduler
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#worker-send-task-events
+CELERY_WORKER_SEND_TASK_EVENTS = True
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#std-setting-task_send_sent_event
+CELERY_TASK_SEND_SENT_EVENT = True
 
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATICFILES_FINDERS = [
-    "django.contrib.staticfiles.finders.FileSystemFinder",
-    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-]
-
-STATICFILES_DIRS = [
-    os.path.join(APPS_DIR, "static"),
-]
-
-# ManifestStaticFilesStorage is recommended in production, to prevent outdated
-# JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
-# See https://docs.djangoproject.com/en/4.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
-STATICFILES_STORAGE = "whitenoise.storage.ManifestStaticFilesStorage"
-
-STATIC_ROOT = os.path.join(ROOT_DIR, "staticfiles")
-STATIC_URL = "/static/"
-
-MEDIA_ROOT = os.path.join(ROOT_DIR, "media")
-MEDIA_URL = "/media/"
-
-
-# Wagtail settings
-
-WAGTAIL_SITE_NAME = "pyoneers_platform"
-
-# Search
-# https://docs.wagtail.org/en/stable/topics/search/backends.html
-WAGTAILSEARCH_BACKENDS = {
-    "default": {
-        "BACKEND": "wagtail.search.backends.database",
-    }
-}
-
-# Base URL to use when referring to full URLs within the Wagtail admin backend -
-# e.g. in notification emails. Don't include '/admin' or a trailing slash
-WAGTAILADMIN_BASE_URL = "http://example.com"
-
-AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
-    "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
-)
-
-LOGIN_REDIRECT_URL = "/"  # After login, redirect to home page
-
-# django-allauth settings
-
-# https://django-allauth.readthedocs.io/en/latest/socialaccount/configuration.html
-SITE_ID = 1
+# django-allauth
+# ------------------------------------------------------------------------------
+# https://django-allauth.readthedocs.io/en/latest/installation/quickstart.html
+MIDDLEWARE += ["allauth.account.middleware.AccountMiddleware"]
+# https://django-allauth.readthedocs.io/en/latest/account/configuration.html
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_LOGOUT_ON_GET = True  # Skip confirmation page
-
-SOCIALACCOUNT_AUTO_CONNECT = (
-    True  # Automatically connect social accounts with the local user account
-)
 SOCIALACCOUNT_AUTO_SIGNUP = True  # Automatically create a user account
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Skip confirmation page
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
@@ -226,11 +326,8 @@ SOCIALACCOUNT_PROVIDERS = {
         "SCOPE": ["identify", "email"],  # Add additional scopes required
     }
 }
-"""
-I don't like configuring social apps in the Django admin interface.
-This is a configuration, in conjunction with the `setup_social_apps` custom management command 
-help create/update social apps dynamically.
-"""
+# I don't like configuring social apps manually in admin interface.
+# This, in conjunction with `setup_social_apps` management command, will do it automatically.
 SOCIAL_APPS_CONFIG = {
     "google": {
         "name": "Google Social Login",
@@ -244,7 +341,20 @@ SOCIAL_APPS_CONFIG = {
     },
 }
 
-# discord.py settings
+# wagtail
+# ------------------------------------------------------------------------------
+# https://docs.wagtail.org/en/latest/reference/settings.html#wagtail-site-name
+WAGTAIL_SITE_NAME = "pyoneers_platform"
 
+# django-compressor
+# ------------------------------------------------------------------------------
+# https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
+INSTALLED_APPS += ["compressor"]
+STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
+
+# THIRD-PARTY APPS
+# ------------------------------------------------------------------------------
+# https://discord.com/developers/docs/getting-started#configuring-a-bot
 DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
+# https://discord.com/developers/docs/resources/guild
 DISCORD_GUILD_ID = env("DISCORD_GUILD_ID")
