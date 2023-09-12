@@ -25,11 +25,10 @@ CACHES = {
 
 # EMAIL
 # ------------------------------------------------------------------------------
-# TODO: Implement email sending
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-# EMAIL_HOST = env("EMAIL_HOST", default="mailpit")
+EMAIL_HOST = env("EMAIL_HOST", default="mailpit")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-# EMAIL_PORT = 1025
+EMAIL_PORT = 1025
 
 
 # WhiteNoise
