@@ -1,0 +1,39 @@
+<div class="flex flex-col items-center sm:flex-row sm:mb-3">
+  <img src="{{ static('img/python-logo.webp') }}" alt="Python Logo" class="w-16 h-16 mb-3 m-0 sm:mb-0 sm:me-4">
+
+  <div class="flex flex-col justify-start">
+    <h1 class="text-5xl text-gray-300 font-mono tracking-wider mb-0">
+      The Pyoneer Project
+    </h1>
+    <span class="text-xl text-center sm:text-start">For the ambitious, by the ambitious</span>
+  </div>
+</div>
+
+<p class="text-2xl text-gray-300 2xl:my-6">
+  Learn Full-Stack Python & Django the way I wish I had.
+</p>
+
+<span class="sm:mt-3 mb-3">You won't get these tips from ChatGPT</span>
+<a id="discord-invite"
+   class="btn btn-wide btn-lg bg-[#4752C5] hover:bg-[#3a45b7] text-slate-100 mb-3 discord-logo-container"
+   href="https://discord.gg/bXxa6nHd"
+   target="_blank">
+  <span class="flex justify-center items-center flex-nowrap">
+    Join Discord?
+    {% include 'home/partials/_animated_discord_svg.html' %}
+  </span>
+</a>
+
+<div id="discord-members-group"
+     class="avatar-group -space-x-6"
+     hx-get="{{ url('get_discord_members') }}"
+     hx-swap="innerHTML"
+     hx-trigger="load"
+     style="opacity:0"
+     _="init transition my opacity to 1">
+  <div class="avatar placeholder">
+    {# This section is automatically populated by `home/htmx_partials/latest_discord_members.html` #}
+    <div class="w-12 bg-neutral-focus text-neutral-content">
+    </div>
+  </div>
+</div>

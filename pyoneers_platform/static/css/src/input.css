@@ -8,6 +8,10 @@ body {
     background: linear-gradient(176deg, rgb(18, 24, 27) 50%, rgb(32, 39, 55) 100%) fixed;
 }
 
-.hero-section {
-    height: calc(100vh - 80px)
+#main {
+  transition: box-shadow 0.5s ease-in-out;
+}
+
+.inner-golden-shadow {
+  box-shadow: inset -100px 0 100px -100px #ca8a04, inset 100px 0 100px -100px #ca8a04;
 }
