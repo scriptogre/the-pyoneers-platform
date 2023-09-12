@@ -1,0 +1,9 @@
+-r base.txt
+
+gunicorn  # https://github.com/benoitc/gunicorn
+psycopg[c]  # https://github.com/psycopg/psycopg
+sentry-sdk  # https://github.com/getsentry/sentry-python
+
+# Django
+# ------------------------------------------------------------------------------
+django-anymail[mailgun]  # https://github.com/anymail/django-anymail
