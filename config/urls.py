@@ -38,11 +38,10 @@ if settings.DEBUG:
         ),
         path("500/", default_views.server_error),
     ]
-    # TODO: Implement django-debug-toolbar
-    # if "debug_toolbar" in settings.INSTALLED_APPS:
-    #     import debug_toolbar
-    #
-    #     urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+    if "debug_toolbar" in settings.INSTALLED_APPS:
+        import debug_toolbar
+
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 
     # TODO: Implement django-browser-reload
     # if "django_browser_reload" in settings.INSTALLED_APPS:
