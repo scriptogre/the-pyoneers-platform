@@ -197,7 +197,7 @@ TEMPLATES = [
             },
             # https://niwi.nz/django-jinja/latest/#_advanced_template_pattern_matching
             "match_extension": ".html",
-            "match_regex": r"^(?!admin/|wagtailadmin/|wagtaildocs/|debug_toolbar/|socialaccount/).*",
+            "match_regex": r"^(?!admin/|wagtailadmin/|wagtaildocs/|wagtailimages/|debug_toolbar/|socialaccount/).*",
         },
     },
     # Including Django's default backend is still necessary for admin templates which still use the DTE.
