@@ -83,7 +83,6 @@ LOCAL_APPS = [
     "pyoneers_platform",
     "pyoneers_platform.home",
     "pyoneers_platform.course",
-    "pyoneers_platform.blog",
     "pyoneers_platform.users",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
