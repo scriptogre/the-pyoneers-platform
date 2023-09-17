@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <main class="container flex flex-col-reverse md:flex-row">
+    <navbar-toggle>
+
+
+      <ul class="sticky top-0 h-screen overflow-auto scrollbar mr-4 pb-10 pr-4 min-w-[300px]" id="sidebar">
+    <li class="flex py-2 mt-4 px-1 mr-5 border-b-2 border-gray6">
+        <i class="mr-2 not-italic">💪</i>
+        <h3 id="chapters" class="text-gray3">Key Concepts</h3>
+    </li>
+
+    <li>
+        <a class="text-gray4 hover:text-gray1 active-chapter" href="">
+            <div class="p-1 my-1 flex items-center">
+                <complete-icon free="true" route="/courses/sveltekit/basics-svelte-100s/"></complete-icon>
+                <span class="mr-auto text-lg pr-2">
+                    Svelte in 100 Seconds
+                </span>
+                <div id="activeChapter" class="ml-5">🔥</div>
+            </div>
+        </a>
+    </li>
+
+    <!-- Add other sub-items under "Key Concepts" here -->
+
+</ul>
+
+    </navbar-toggle>
+
+  </main>
+{% endblock %}

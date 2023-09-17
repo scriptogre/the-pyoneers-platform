@@ -1,18 +1,42 @@
-from django.db import models
-from modelcluster.models import ClusterableModel
+from wagtail import blocks
 from wagtail.admin.panels import FieldPanel
+from wagtail.fields import StreamField
 from wagtail.models import Page
+from wagtailmarkdown.blocks import MarkdownBlock
+from wagtailmarkdown.fields import MarkdownField
 
 
-class Module(Page):
-    show_in_menus_default = True
+class ModuleIndex(Page):
+    description = MarkdownField(blank=True, null=True)
 
-    description = models.TextField()
-
-    panels = [
-        FieldPanel("title"),
+    content_panels = Page.content_panels + [
         FieldPanel("description"),
     ]
 
-    def __str__(self):
-        return self.title
+
+class ChapterBlock(blocks.StructBlock):
+    title = blocks.CharBlock()
+    icon = blocks.CharBlock(default="list-ul")
+    content = MarkdownBlock(icon="code")
+
+    class Meta:
+        icon = "list-ul"
+        label = "Chapter"
+
+
+class Module(Page):
+    description = MarkdownField(blank=True, null=True)
+
+    body = StreamField(
+        [
+            ("chapter", ChapterBlock()),
+        ],
+        null=True,
+        blank=True,
+        use_json_field=True,
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel("description"),
+        FieldPanel("body"),
+    ]

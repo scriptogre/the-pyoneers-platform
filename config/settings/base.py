@@ -69,6 +69,7 @@ THIRD_PARTY_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail",
+    "wagtailmarkdown",
     "modelcluster",
     "taggit",
     "allauth",
@@ -78,6 +79,7 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.discord",
     "django_celery_beat",
     "django_htmx",
+    "fontawesomefree",
 ]
 LOCAL_APPS = [
     "pyoneers_platform",
@@ -196,7 +198,7 @@ TEMPLATES = [
             },
             # https://niwi.nz/django-jinja/latest/#_advanced_template_pattern_matching
             "match_extension": ".html",
-            "match_regex": r"^(?!admin/|wagtailadmin/|wagtaildocs/|wagtailimages/|debug_toolbar/|socialaccount/).*",
+            "match_regex": r"^(?!.*wagtail|admin/|debug_toolbar/|socialaccount/).*",
         },
     },
     # Including Django's default backend is still necessary for admin templates which still use the DTE.
@@ -212,9 +214,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
-FORM_RENDERER = "django.forms.renderers.Jinja2"
 
 # SECURITY
 # ------------------------------------------------------------------------------
@@ -344,6 +343,21 @@ SOCIAL_APPS_CONFIG = {
 # ------------------------------------------------------------------------------
 # https://docs.wagtail.org/en/latest/reference/settings.html#wagtail-site-name
 WAGTAIL_SITE_NAME = "pyoneers_platform"
+
+# wagtail-markdown
+# ------------------------------------------------------------------------------
+# https://github.com/torchbox/wagtail-markdown#configuration
+# WAGTAILMARKDOWN = {
+# "autodownload_fontawesome": False,
+# "allowed_tags": [],  # optional. a list of HTML tags. e.g. ['div', 'p', 'a']
+# "allowed_styles": [],  # optional. a list of styles
+# "allowed_attributes": {},  # optional. a dict with HTML tag as key and a list of attributes as value
+# "allowed_settings_mode": "extend",  # optional. Possible values: "extend" or "override". Defaults to "extend".
+# "extensions": [],  # optional. a list of python-markdown supported extensions
+# "extension_configs": {},  # optional. a dictionary with the extension name as key, and its configuration as value
+# "extensions_settings_mode": "extend",  # optional. Possible values: "extend" or "override". Defaults to "extend".
+# }
+
 
 # django-compressor
 # ------------------------------------------------------------------------------
