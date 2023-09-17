@@ -67,7 +67,7 @@
         <a id="logo"
            class="flex justify-center items-center cursor-pointer"
            href="{{ url('home') }}">
-            {{ "~/pyoneers" ~ request.path }}
+            {{ "~" ~ request.path }}
 
             <div class="Typewriter" data-testid="typewriter-wrapper">
                 <span class="Typewriter__wrapper"></span>
@@ -116,10 +116,8 @@
 </nav>
 
 <div id="main" class="min-w-full">
-    <main class="container mx-auto">
         {% block content %}
         {% endblock %}
-    </main>
 </div>
 
 <dialog id="modal_dialog" class="modal">
