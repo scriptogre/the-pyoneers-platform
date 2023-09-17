@@ -63,7 +63,7 @@ RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
   && rm -rf /wheels/
 
 # Copy scripts to the container, remove windows line endings and make them executable
-COPY ./deployment/local/django/entrypoint /entrypoint
+COPY ./deployment/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
