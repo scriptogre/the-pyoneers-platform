@@ -20,7 +20,8 @@
    target="_blank">
   <span class="flex justify-center items-center flex-nowrap">
     Join Discord?
-    {% include 'home/partials/_animated_discord_svg.html' %}
+    {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
+    {{ discord_animated_svg(size=50) }}
   </span>
 </a>
 

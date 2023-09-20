@@ -191,10 +191,14 @@ TEMPLATES = [
                 "wagtail.jinja2tags.core",
                 "wagtail.admin.jinja2tags.userbar",
                 "wagtail.images.jinja2tags.images",
-                "config.jinja2_extensions.AllAuthExtension",
+                "config.jinja2.AllAuthExtension",
             ],
             "globals": {
                 "django_htmx_script": "django_htmx.jinja.django_htmx_script",
+                "get_module_chapters": "pyoneers_platform.course.utils.get_module_chapters",
+            },
+            "filters": {
+                "markdown": "wagtailmarkdown.templatetags.wagtailmarkdown.markdown",
             },
             # https://niwi.nz/django-jinja/latest/#_advanced_template_pattern_matching
             "match_extension": ".html",

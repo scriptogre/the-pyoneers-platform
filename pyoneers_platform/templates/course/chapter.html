@@ -1,0 +1,64 @@
+{% extends 'course/module.html' %}
+
+{% set current_chapter = page.specific %}
+
+{% block section_header %}
+  <div id="chapter-breadcrumbs" class="text-sm breadcrumbs">
+    <ul class="ps-0">
+      <li>{{ current_module.title }}</li>
+      <li>{{ current_chapter.title }}</li>
+    </ul>
+  </div>
+  <ul id="chapter-progress" class="steps ps-0">
+    {% for section in current_chapter.sections %}
+      <li data-content="" class="step {% if section.number <= current_section.number %} step-neutral{% endif %}"></li>
+    {% endfor %}
+  </ul>
+  <div id="mobile-navigation" class="btm-nav z-50 lg:hidden">
+    <a id="previous-page"
+      {% if current_section.has_previous %}
+       href="{{ current_section.previous_section_url }}"
+      {% else %}
+       disabled
+      {% endif %}
+       class="btn-ghost">
+      <span class="btm-nav-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </span>
+    </a>
+
+    {# TODO: Fix icon not swapping #}
+    <label for="drawer" class="btm-nav-label btn-ghost swap swap-rotate">
+      <input type="checkbox" />
+      <!-- hamburger icon -->
+      <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
+      <!-- close icon -->
+      <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>
+    </label>
+
+    <a id="next-page"
+      {% if current_section.has_next %}
+       href="{{ current_section.next_section_url }}"
+      {% else %}
+       disabled
+      {% endif %}
+       class="btn-ghost">
+      <span class="btm-nav-label">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </span>
+    </a>
+  </div>
+{% endblock %}
+
+{% block section_content  %}
+  {{ current_section.content|markdown }}
+{% endblock %}
+
+{% block chapters_menu %}
+  {% include 'course/partials/_chapters_menu.html' %}
+{% endblock %}
+

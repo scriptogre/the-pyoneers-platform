@@ -1,12 +1,12 @@
+{% macro discord_animated_svg(size=50) %}
 <svg
         color="#FFFFFF"
         fill="#7288D900"
-        width="50"
-        height="50"
+        width="{{ size }}"
+        height="{{ size }}"
         viewBox="0 0 48 48"
-        class="previewbox ml-2"
->
-    <rect width="100%" height="100%" fill="currentfill"></rect> <!---->
+        class="previewbox ml-2">
+    <rect width="100%" height="100%" fill="currentfill"></rect>
     <defs>
         <g>
             <defs>
@@ -87,7 +87,7 @@
     <!----> <!---->
 </svg>
 
-<style type="text/css">
+<style>
     .discord-logo {
         transform: scale(0.7);
         transform-origin: 24px 24px;
@@ -146,3 +146,4 @@
         }
     });
 </script>
+{% endmacro %}

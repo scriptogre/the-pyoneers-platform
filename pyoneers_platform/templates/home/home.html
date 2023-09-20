@@ -1,19 +1,23 @@
 {% extends "base.html" %}
 
+{% block navigation_items %}
+  {% include '_logo.html' %}
+  {% include '_announcement.html' %}
+  {% include '_user_or_login_button.html' %}
+{% endblock %}
+
 {% block content %}
-  <main class="container mx-auto">
-    <div class="flex flex-col lg:flex-row items-center justify-center lg:mt-12">
-      <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto p-6 text-center prose mb-5 sm:mb-0">
-        {% include 'home/partials/_hero_section.html' %}
-      </div>
-
-      <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6">
-        {% include 'home/partials/_chat_section.html' %}
-      </div>
+  <div class="flex flex-col lg:flex-row items-center justify-center lg:mt-24">
+    <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto p-6 text-center prose mb-5 sm:mb-0">
+      {% include 'home/partials/_hero_section.html' %}
     </div>
 
-    <div id="modules-section" class="flex flex-col justify-center items-center px-6 2xl:px-12 py-6">
-      {% include 'home/partials/_modules_section.html' %}
+    <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6">
+      {% include 'home/partials/_chat_section.html' %}
     </div>
-  </main>
+  </div>
+
+  <div id="modules-section" class="flex flex-col justify-center items-center px-6 2xl:px-12 py-6">
+    {% include 'home/partials/_modules_section.html' %}
+  </div>
 {% endblock %}

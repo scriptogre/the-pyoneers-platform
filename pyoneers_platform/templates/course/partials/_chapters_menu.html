@@ -1,0 +1,41 @@
+{% set current_url = request.get_full_path() %}
+{# current_module is set in the context #}
+{% set chapters = get_module_chapters(current_module) %}
+
+<ul id="chapters-menu" class="menu responsive-menu mt-16 lg:mt-8">
+  {% for chapter in chapters %}
+    <li>
+      <span id="item-chapter-{{ chapter.slug }}"
+            class="item-chapter menu-dropdown-toggle{% if chapter.url in current_url %} menu-dropdown-show{% endif %}"
+            _="on click toggle .menu-dropdown-show on me then toggle .menu-dropdown-show on the next <ul/>"
+      >
+        <div class="flex justify-between">
+          <span class="font-bold tracking-wider">
+            {{ chapter.title }}
+          </span>
+          <span class="ms-2">
+            {{ chapter.icon }}
+          </span>
+        </div>
+      </span>
+      <ul class="menu-dropdown{% if chapter.url in current_url %} menu-dropdown-show{% endif %}">
+        {% set outer_loop = loop %}
+        {% for section in chapter.sections %}
+          <li
+            id="item-section-{{ section.slug }}"
+            class="item-section">
+            <a href="{{ section.url }}"
+              {% if section.url in current_url or ("page=" not in current_url and section.number == 1 and outer_loop.index == 1) %}
+               class="active"
+              {% endif %}
+               preload="mouseover">
+              <span>
+                {{ section.number }}. {{ section.name }}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  {% endfor %}
+</ul>

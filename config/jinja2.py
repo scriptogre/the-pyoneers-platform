@@ -6,6 +6,10 @@ from allauth.socialaccount.templatetags.socialaccount import (
     get_adapter,
 )
 from allauth.utils import get_request_param
+from markdown import Markdown
+from wagtailmarkdown.utils import _get_markdown_kwargs
+
+from pyoneers_platform.course.models import Chapter, Module
 
 
 class AllAuthExtension(Extension):

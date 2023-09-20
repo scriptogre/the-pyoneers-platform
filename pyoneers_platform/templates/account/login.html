@@ -15,11 +15,12 @@
       We listen to the htmx:afterOnLoad event.
       If the response path matches next_url, a full-page reload is triggered using hyperscript,
       avoiding the need to override the login view. #}
-        {% set next_url = url('home') %}
-      hx-post="{{ url('account_login') }}?next={{ next_url }}"
+      {% set next_url = url('home') %}
+      href="{{ url('account_login') }}?next={{ next_url }}"
+      method="POST"
       hx-target="#modal-content"
       _="on htmx:afterOnLoad if event.detail.pathInfo.responsePath is '{{ next_url }}' set the location of the window to '{{ next_url }}'">
-
+    {% csrf_token %}
     {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
     {{ render_form_errors(form) }}
     {{ render_field(form['login'], class='input input-bordered w-full mb-3', error_class='input-error') }}
@@ -36,7 +37,7 @@
         </label>
 
         <a id="forgot-password-link"
-           hx-get="{{ url('account_reset_password') }}"
+           href="{{ url('account_reset_password') }}"
            hx-target="#modal-content"
            class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
             Forgot password?
@@ -50,7 +51,7 @@
     <p class="text-sm font-light text-primary-600 dark:text-primary-500">
         Don’t have an account yet?
         <a id="sign-up-link"
-           hx-get="{{ url('account_signup') }}"
+           href="{{ url('account_signup') }}"
            hx-target="#modal-content"
            class="font-medium text-primary-content hover:underline hover:cursor-pointer">
             Sign up

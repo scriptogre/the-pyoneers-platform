@@ -92,9 +92,7 @@ def receive_gigachad_message(request):
         bot_response_text = response.choices[0].message.content
 
         # Append the new bot response
-        request.session["conversation"].append(
-            {"role": "assistant", "content": bot_response_text}
-        )
+        request.session["conversation"].append({"role": "assistant", "content": bot_response_text})
 
         # Save the session
         request.session.modified = True

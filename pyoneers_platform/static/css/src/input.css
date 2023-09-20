@@ -2,16 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-
-body {
-    min-height: 100vh;
-    background: linear-gradient(176deg, rgb(18, 24, 27) 50%, rgb(32, 39, 55) 100%) fixed;
-}
-
-#main {
-  transition: box-shadow 0.5s ease-in-out;
-}
-
 .inner-golden-shadow {
   box-shadow: inset -100px 0 100px -100px #ca8a04, inset 100px 0 100px -100px #ca8a04;
+}
+
+.sticky-navbar {
+  @apply sticky navbar container mx-auto px-8 lg:px-12 top-0 z-30 border-b border-base-100 bg-custom-gradient bg-opacity-90 bg-fixed backdrop-blur min-w-full
+}
+
+main {
+  @apply container mx-auto px-12 mt-2 md:mt-4 lg:mt-6
+}
+
+.responsive-menu {
+  @apply h-screen w-full bg-base-100/60 text-base-content border backdrop-blur border-base-100 lg:h-auto lg:bg-base-100/40 lg:w-80 lg:card
+}
+
+.item-section {
+  @apply text-lg py-0.5 xl:py-1
+}
+
+.item-chapter {
+  @apply text-xl py-1 xl:py-2
+}
+
+.steps .step {
+  @apply min-w-[2rem] lg:min-w-[3rem]
+}
+
+.steps .step::after {
+  @apply w-4 h-4
 }
