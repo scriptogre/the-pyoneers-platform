@@ -14,7 +14,7 @@
       <li data-content="" class="step {% if section.number <= current_section.number %} step-neutral{% endif %}"></li>
     {% endfor %}
   </ul>
-  <div id="mobile-navigation" class="btm-nav z-50 lg:hidden">
+  <div id="mobile-navigation" class="btm-nav btm-nav-sm z-50 lg:hidden">
     <a id="previous-page"
       {% if current_section.has_previous %}
        href="{{ current_section.previous_section_url }}"
