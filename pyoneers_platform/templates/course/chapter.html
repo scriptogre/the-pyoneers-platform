@@ -18,6 +18,7 @@
     <a id="previous-page"
       {% if current_section.has_previous %}
        href="{{ current_section.previous_section_url }}"
+       preload
       {% else %}
        disabled
       {% endif %}
@@ -41,6 +42,7 @@
     <a id="next-page"
       {% if current_section.has_next %}
        href="{{ current_section.next_section_url }}"
+       preload
       {% else %}
        disabled
       {% endif %}
