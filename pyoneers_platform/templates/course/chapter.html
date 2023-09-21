@@ -9,7 +9,7 @@
       <li>{{ current_chapter.title }}</li>
     </ul>
   </div>
-  <ul id="chapter-progress" class="steps ps-0">
+  <ul id="chapter-progress" class="steps ps-0 hidden lg:block">
     {% for section in current_chapter.sections %}
       <li data-content="" class="step {% if section.number <= current_section.number %} step-neutral{% endif %}"></li>
     {% endfor %}
