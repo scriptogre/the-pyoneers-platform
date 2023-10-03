@@ -1,11 +1,11 @@
-<h3 id="login-title"
-    class="font-bold text-xl">
-    Sign in to your account
+<h3 id="login-title" class="font-bold text-xl">
+  Sign in to your account
 </h3>
 
 <form id="login-form"
       class="space pt-6 pb-4"
-        {#    This setup allows for two behaviors:
+      {#
+      This setup allows for two behaviors:
       1. If the login form has errors, HTMX will render them inline within the hx-target.
       2. If login is successful, a full-page refresh occurs.
 
@@ -14,53 +14,53 @@
 
       We listen to the htmx:afterOnLoad event.
       If the response path matches next_url, a full-page reload is triggered using hyperscript,
-      avoiding the need to override the login view. #}
+      avoiding the need to override the login view.
+      #}
       {% set next_url = url('home') %}
-      href="{{ url('account_login') }}?next={{ next_url }}"
-      method="POST"
+      hx-post="{{ url("account_login") }}?next={{ next_url }}"
       hx-target="#modal-content"
-      _="on htmx:afterOnLoad if event.detail.pathInfo.responsePath is '{{ next_url }}' set the location of the window to '{{ next_url }}'">
-    {% csrf_token %}
-    {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
-    {{ render_form_errors(form) }}
-    {{ render_field(form['login'], class='input input-bordered w-full mb-3', error_class='input-error') }}
-    {{ render_field(form['password'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+      _="on htmx:beforeSwap from body
+             if event.detail.pathInfo.responsePath is '{{ next_url }}'
+                 set event.detail.shouldSwap to false
+                 set the location of the window to '{{ next_url }}'
+             end">
+  {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
+  {# Include the form errors at the top of the form. #}
+  {{ render_form_errors(form) }}
+  {# Render the form fields. #}
+  {{ render_field(form['login'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+  {{ render_field(form['password'], class='input input-bordered w-full mb-3', error_class='input-error') }}
 
-    <div class="flex justify-between align-middle mb-5">
-        <label id="remember-me-label"
-               class="cursor-pointer flex label-text">
-            <input id="remember-me-input"
-                   class="checkbox me-2"
-                   type="checkbox"
-                   checked="checked" />
-            Remember me
-        </label>
+  <div class="flex justify-between align-middle mt-2 mb-5">
+    <label id="remember-me-label" class="cursor-pointer flex label-text">
+      <input id="remember-me-input"
+             class="checkbox me-2"
+             type="checkbox"
+             checked="checked" />
+      Remember me
+    </label>
+    <a id="forgot-password-link"
+       hx-get="{{ url("account_reset_password") }}"
+       hx-target="#modal-content"
+       class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
+      Forgot password?
+    </a>
+  </div>
+  <button id="login-button" class="btn btn-warning w-full mb-5">
+    Login
+  </button>
+  <p class="text-sm font-light text-warning-600 dark:text-primary-500">
+    Don’t have an account yet?
+    <a id="sign-up-link"
+       hx-get="{{ url("account_signup") }}"
+       hx-target="#modal-content"
+       class="font-medium text-primary-content hover:underline hover:cursor-pointer">
+      Sign up
+    </a>
+  </p>
+  <div class="divider">OR</div>
 
-        <a id="forgot-password-link"
-           href="{{ url('account_reset_password') }}"
-           hx-target="#modal-content"
-           class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
-            Forgot password?
-        </a>
-    </div>
-
-    <button id="login-button" class="btn btn-warning w-full mb-5">
-        Login
-    </button>
-
-    <p class="text-sm font-light text-primary-600 dark:text-primary-500">
-        Don’t have an account yet?
-        <a id="sign-up-link"
-           href="{{ url('account_signup') }}"
-           hx-target="#modal-content"
-           class="font-medium text-primary-content hover:underline hover:cursor-pointer">
-            Sign up
-        </a>
-    </p>
-
-    <div class="divider">OR</div>
-
-    {% include 'users/partials/_continue_with_google_button.html' %}
-
-    {% include 'users/partials/_continue_with_discord_button.html' %}
+  {# Include the social login buttons. #}
+  {% include 'users/partials/_continue_with_google_button.html' %}
+  {% include 'users/partials/_continue_with_discord_button.html' %}
 </form>

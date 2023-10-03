@@ -1,0 +1,8 @@
+<a id="login-button"
+   hx-get="{{ url("account_login") }}"
+   hx-target="#modal-content"
+   class="btn btn-ghost max-lg:btn-circle"
+   _="on click wait for htmx:afterSettle from body then call modal_dialog.showModal()">
+  {{ svg('login', css_classes='w-5 h-5 lg:me-3') }}
+  <span class="hidden lg:inline-block">Login</span>
+</a>

@@ -44,12 +44,6 @@ repos:
     hooks:
       - id: flake8
 
-  - repo: https://github.com/Riverside-Healthcare/djLint
-    rev: v1.32.1
-    hooks:
-      - id: djlint-reformat-django
-      - id: djlint-django
-
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:
   autoupdate_schedule: weekly

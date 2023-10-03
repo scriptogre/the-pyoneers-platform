@@ -1,3 +1,8 @@
+import os
+
+from bs4 import BeautifulSoup
+from django.conf import settings
+from django.contrib.staticfiles import finders
 from jinja2 import pass_context
 from jinja2.ext import Extension
 from allauth.socialaccount.models import SocialAccount
@@ -6,10 +11,7 @@ from allauth.socialaccount.templatetags.socialaccount import (
     get_adapter,
 )
 from allauth.utils import get_request_param
-from markdown import Markdown
-from wagtailmarkdown.utils import _get_markdown_kwargs
-
-from pyoneers_platform.course.models import Chapter, Module
+from markupsafe import Markup
 
 
 class AllAuthExtension(Extension):
@@ -56,3 +58,52 @@ class AllAuthExtension(Extension):
 
     def get_providers(self):
         return providers.registry.get_class_list()
+
+
+def svg(filename, css_classes=None):
+    """
+    Retrieve an SVG file from the specified path and optionally add a CSS class to it.
+
+    Parameters:
+    filename (str): The name of the SVG file without the file extension.
+    css_classes (str, optional): A CSS class to add to the SVG. Defaults to None.
+
+    Returns:
+    jinja2.Markup: The SVG content marked as safe HTML, or an empty string if the file is not found.
+
+    Raises:
+    Exception: If the SVG file is not found and settings.DEBUG is True.
+    """
+
+    path = finders.find(os.path.join("svg", "{filename}.svg".format(filename=filename)), all=True)
+
+    if not path:
+        message = "SVG '{filename}.svg' not found".format(filename=filename)
+
+        # Raise exception if DEBUG is True
+        if settings.DEBUG:
+            raise Exception(message)  # Exception name adjusted
+        else:
+            return ""
+
+    # Sometimes path can be a list/tuple if there's more than one file found
+    if isinstance(path, (list, tuple)):
+        path = path[0]
+
+    with open(path) as svg_file:
+        svg_content = svg_file.read()
+
+    if css_classes:
+        soup = BeautifulSoup(svg_content, "html.parser")
+        svg_tag = soup.find("svg")
+        if svg_tag:
+            existing_classes = svg_tag.get("class", [])
+            # Ensure existing_classes is a list
+            if not isinstance(existing_classes, list):
+                existing_classes = [existing_classes]
+            # Append the new class
+            existing_classes.append(css_classes)
+            svg_tag["class"] = " ".join(existing_classes)
+            svg_content = str(soup)
+
+    return Markup(svg_content)

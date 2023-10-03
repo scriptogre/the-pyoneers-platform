@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="drawer lg:drawer-open">
+    <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+    <div id="drawer-content" class="drawer-content mx-auto lg:ps-12 xl:ps-0">
+      {% block sidebar_content %}{% endblock %}
+    </div>
+    <div id="drawer-side" class="drawer-side lg:top-20 z-20">
+      <label for="drawer-input" class="drawer-overlay"></label>
+      {% block sidebar %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

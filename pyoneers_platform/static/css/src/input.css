@@ -2,34 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-.inner-golden-shadow {
-  box-shadow: inset -100px 0 100px -100px #ca8a04, inset 100px 0 100px -100px #ca8a04;
+@layer base {
+  main {
+    @apply container mx-auto px-12 mt-2 md:mt-4 lg:mt-6
+  }
 }
 
-.sticky-navbar {
-  @apply sticky navbar container mx-auto px-8 lg:px-12 top-0 z-30 border-b border-base-100 bg-custom-gradient bg-opacity-90 bg-fixed backdrop-blur min-w-full
+@layer components {
+  .sticky-navbar {
+    @apply sticky navbar container mx-auto px-8 lg:px-12 top-0 z-30 min-w-full
+  }
+  .steps .step {
+    @apply min-w-[2rem] lg:min-w-[3rem]
+  }
+  .steps .step::after {
+    @apply w-4 h-4
+  }
 }
 
-main {
-  @apply container mx-auto px-12 mt-2 md:mt-4 lg:mt-6
-}
-
-.responsive-menu {
-  @apply h-screen w-full bg-base-100/60 text-base-content border backdrop-blur border-base-100 lg:h-auto lg:bg-base-100/40 lg:w-80 lg:card
-}
-
-.item-section {
-  @apply text-lg py-0.5 xl:py-1
-}
-
-.item-chapter {
-  @apply text-xl py-1 xl:py-2
-}
-
-.steps .step {
-  @apply min-w-[2rem] lg:min-w-[3rem]
-}
-
-.steps .step::after {
-  @apply w-4 h-4
+@layer utilities {
+  .bg-custom-gradient {
+    background-image: linear-gradient(176deg, rgb(18, 24, 27) 50%, rgb(32, 39, 55) 100%);
+  }
+  .shadow-golden {
+    box-shadow: 0 0 5px #FBBD23, 0 0 25px #FBBD23, 0 0 50px #FBBD23, 0 0 100px;
+  }
+  .shadow-inner-golden {
+    box-shadow: inset -100px 0 100px -100px #FBBD23, inset 100px 0 100px -100px #FBBD23;
+  }
+  .border-section-progress {
+    @apply border-b border-gray-700 border-opacity-80 absolute bottom-[-1px] left-0 right-0 z-10 ;
+  }
 }

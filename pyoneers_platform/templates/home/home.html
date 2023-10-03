@@ -1,23 +1,24 @@
 {% extends "base.html" %}
 
-{% block navigation_items %}
-  {% include '_logo.html' %}
-  {% include '_announcement.html' %}
-  {% include '_user_or_login_button.html' %}
-{% endblock %}
-
 {% block content %}
   <div class="flex flex-col lg:flex-row items-center justify-center lg:mt-24">
-    <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto p-6 text-center prose mb-5 sm:mb-0">
-      {% include 'home/partials/_hero_section.html' %}
+    <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto mb-6 sm:mb-0 p-6 text-center prose">
+      {% include 'home/sections/_hero_section.html' %}
     </div>
 
-    <div id="chat-section" class="flex flex-col justify-center items-start px-6 2xl:px-12 py-6">
-      {% include 'home/partials/_chat_section.html' %}
+    <div id="chat-section" class="flex flex-col justify-center items-start p-6">
+      {% include 'home/sections/_chat_section.html' %}
     </div>
   </div>
 
-  <div id="modules-section" class="flex flex-col justify-center items-center px-6 2xl:px-12 py-6">
-    {% include 'home/partials/_modules_section.html' %}
+  <a href="#news-section" class="flex flex-col justify-center items-center mt-8 animate-bounce">
+    <h2 class="text-2xl md:text-3xl mb-6 md:mb-8">
+      Huge news! 🙏
+    </h2>
+    {{ svg('double_chevron_down', css_classes='w-5 h-5 md:w-8 md:h-8') }}
+  </a>
+
+  <div id="news-section" class="h-screen grid place-content-center text-center py-6">
+    {% include 'home/sections/_news_section.html' %}
   </div>
 {% endblock %}

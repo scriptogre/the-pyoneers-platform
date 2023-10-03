@@ -39,6 +39,7 @@ services:
       - .env
     ports:
       - "8000:8000"
+    tty: true
     command: /start
 
   postgres:
@@ -47,6 +48,8 @@ services:
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
     environment: *postgres-variables
+    ports:
+      - "5432:5432"
 
   mailpit:
     image: axllent/mailpit:v1.8

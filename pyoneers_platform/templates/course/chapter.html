@@ -1,66 +1,98 @@
-{% extends 'course/module.html' %}
+{% extends 'course/base.html' %}
 
-{% set current_chapter = page.specific %}
+{% block top_navbar %}
+  {# Hamburger Button (Mobile) #}
+  <label for="my-drawer"
+         class="btn btn-circle btn-ghost swap swap-rotate lg:hidden"
+         _="on change from #my-drawer toggle .swap-active">
+    {{ svg('hamburger', css_classes="swap-off") }}
+    {{ svg('close', css_classes="swap-on") }}
+  </label>
 
-{% block section_header %}
-  <div id="chapter-breadcrumbs" class="text-sm breadcrumbs">
-    <ul class="ps-0">
-      <li>{{ current_module.title }}</li>
-      <li>{{ current_chapter.title }}</li>
-    </ul>
-  </div>
-  <ul id="chapter-progress" class="steps ps-0 hidden lg:block">
-    {% for section in current_chapter.sections %}
-      <li data-content="" class="step {% if section.number <= current_section.number %} step-neutral{% endif %}"></li>
-    {% endfor %}
-  </ul>
-  <div id="mobile-navigation" class="btm-nav btm-nav-sm z-50 lg:hidden">
-    <a id="previous-page"
-      {% if current_section.has_previous %}
-       href="{{ current_section.previous_section_url }}"
-       preload
-      {% else %}
-       disabled
-      {% endif %}
-       class="btn-ghost">
-      <span class="btm-nav-label">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-        </svg>
-      </span>
-    </a>
+  {{ super() }}
 
-    {# TODO: Fix icon not swapping #}
-    <label for="drawer" class="btm-nav-label btn-ghost swap swap-rotate">
-      <input type="checkbox" />
-      <!-- hamburger icon -->
-      <svg class="swap-off fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"/></svg>
-      <!-- close icon -->
-      <svg class="swap-on fill-current" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512"><polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"/></svg>
-    </label>
+  {% block progress_bar %}
+    {% set progress = ((current_section.order - 1) * 100) / (current_chapter.sections.count() - 1) %}
 
-    <a id="next-page"
-      {% if current_section.has_next %}
-       href="{{ current_section.next_section_url }}"
-       preload
-      {% else %}
-       disabled
-      {% endif %}
-       class="btn-ghost">
-      <span class="btm-nav-label">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-        </svg>
-      </span>
-    </a>
-  </div>
+    <div id="progress-bar" class="border-section-progress"
+         style="width: {{ progress|int }}%"></div>
+  {% endblock progress_bar %}
 {% endblock %}
 
-{% block section_content  %}
-  {{ current_section.content|markdown }}
-{% endblock %}
-
-{% block chapters_menu %}
+{% block sidebar %}
+  <!-- Sidebar Menu -->
   {% include 'course/partials/_chapters_menu.html' %}
 {% endblock %}
 
+{% block sidebar_content %}
+  <article id="section" class="prose prose-sm lg:prose-lg lg:min-w-[580px]">
+    <div id="section-header" class="flex flex-col justify-between items-center w-full">
+      <div class="flex justify-between align-center w-full mt-4 lg:mt-8">
+        <div>
+          <!-- Breadcrumbs (Mobile) -->
+          <div id="breadcrumbs" class="breadcrumbs text-sm w-full not-prose mb-1 md:mb-2 lg:mb-3">
+            <ul>
+              <li>{{ current_module.title }}</li>
+              <li>{{ current_chapter.title }}</li>
+              <li></li>
+            </ul>
+          </div>
+
+          <!-- Section Title -->
+          <span id="section-title" class="text-4xl text-base-content">{{ current_section.title }}</span>
+        </div>
+
+        <!-- Top Navigation (Desktop) -->
+        <div id="top-navigation-desktop" class="max-lg:hidden flex justify-between items-end gap-2">
+          {% with classes="btn btn-ghost btn-circle" %}
+            {% include 'course/partials/_nav_arrows.html' %}
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Markdown Content -->
+    <div id="section-content" class="text-base-content/80">
+      {{ current_section.content|markdown }}
+    </div>
+
+    <!-- Bottom Navigation (Desktop) -->
+    <div id="bottom-navigation-desktop"
+         class="max-lg:hidden flex justify-between items-center gap-2 mt-6">
+      {% with classes="btn btn-ghost", include_labels=True %}
+        {% include 'course/partials/_nav_arrows.html' %}
+      {% endwith %}
+    </div>
+  </article>
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top"
+          class="btn btn-ghost btn-circle !fixed bottom-20 right-4 md:right-12 xl:right-24 2xl:right-48 animate-fade-up animate-once animate-ease-in-out animate-duration-500 hidden"
+          _="init
+                 set :lastScrollTop to window.scrollY
+             end
+             on load or scroll from window
+                 if :lastScrollTop > window.scrollY and window.scrollY > window.innerHeight
+                     remove .hidden
+                 else
+                     add .hidden
+                 end
+                 set :lastScrollTop to window.scrollY
+             end
+             on click
+                 add .hidden then go to the top of the window
+             end">
+    {{ svg("chevron_up") }}
+  </button>
+
+  <!-- Bottom Navigation (Mobile) -->
+  <div id="bottom-navigation-mobile"
+       class="lg:hidden btm-nav btm-nav-sm bg-custom-gradient bg-opacity-50 bg-fixed border-t border-base-100 z-50">
+    {% with classes="btn-ghost" %}
+      {% include 'course/partials/_nav_arrows.html' %}
+    {% endwith %}
+  </div>
+{% endblock %}
+
+{# Offset to compensate for the bottom navigation on mobiles #}
+{% block body_class %}max-lg:mb-12{% endblock %}

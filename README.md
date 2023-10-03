@@ -50,12 +50,12 @@ The live platform is accessible at [pyoneers.dev](https://pyoneers.dev).
     ```bash
     python manage.py createsuperuser
     ```
-   
+
 6. Set up the social apps for Google and Discord authentication:
    ```bash
    python manage.py setup_social_apps
-   ``` 
-   
+   ```
+
 7. Run the server:
     ```bash
     python manage.py runserver
@@ -68,7 +68,7 @@ Now, navigate to `http://localhost:8000` in your web browser.
 We use TailwindCSS CLI for building the CSS. The command below compiles and watches for changes in files set as `content` from within `tailwind.config.js` file and minifies it to `output.min.css` which the `base.html` template looks for:
 
 ```bash
-npx tailwindcss -i pyoneers_platform/static/css/src/input.css -o pyoneers_platform/static/css/output.min.css --watch --minify
+npx tailwindcss -i pyoneers_platform/static/css/src/input.css -o pyoneers_platform/static/css/output.css --watch --minify
 ```
 
 

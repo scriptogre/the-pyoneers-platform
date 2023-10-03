@@ -14,27 +14,27 @@
 </p>
 
 <span class="sm:mt-3 mb-3">You won't get these tips from ChatGPT</span>
-<a id="discord-invite"
-   class="btn btn-wide btn-lg bg-[#4752C5] hover:bg-[#3a45b7] text-slate-100 mb-3 discord-logo-container"
-   href="https://discord.gg/bXxa6nHd"
-   target="_blank">
-  <span class="flex justify-center items-center flex-nowrap">
-    Join Discord?
-    {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
-    {{ discord_animated_svg(size=50) }}
+<a id="cta-button"
+   class="btn btn-warning btn-wide btn-lg text-black hover:border-transparent hover:bg-amber-100 hover:bg-opacity-90 hover:shadow-golden group mb-6"
+   href="#news-section">
+  <span class="group-hover:hidden">
+    Are You All In?
   </span>
+  <span class="hidden group-hover:block">
+    Hell yea!!! <span id="fire-emoji">🔥</span>
+  </span>
+</a>
 </a>
 
 <div id="discord-members-group"
      class="avatar-group -space-x-6"
-     hx-get="{{ url('get_discord_members') }}"
+     hx-get="{{ url("get_discord_members") }}"
      hx-swap="innerHTML"
      hx-trigger="load"
      style="opacity:0"
      _="init transition my opacity to 1">
   <div class="avatar placeholder">
-    {# This section is automatically populated by `home/htmx_partials/latest_discord_members.html` #}
-    <div class="w-12 bg-neutral-focus text-neutral-content">
-    </div>
+{#     This section is automatically populated by `home/htmx_partials/latest_discord_members.html`#}
+    <div class="w-12 bg-neutral-focus text-neutral-content"></div>
   </div>
 </div>

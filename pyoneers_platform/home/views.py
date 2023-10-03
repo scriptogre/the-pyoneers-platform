@@ -2,17 +2,21 @@ from datetime import datetime
 
 import openai
 import requests
-
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-
 from config.settings.base import DISCORD_BOT_TOKEN, DISCORD_GUILD_ID
+from pyoneers_platform.course.models import Module
 
 
 class HomeView(TemplateView):
     template_name = "home/home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["first_chapter_url"] = Module.objects.first().chapters.first().url
+        return context
 
     def get(self, request, *args, **kwargs):
         if "conversation" in request.session:
@@ -49,13 +53,14 @@ def receive_gigachad_message(request):
         # Your prompt can be the system message
         system_message = {
             "role": "system",
-            "content": f"""
+            "content": """
             You're Alex Hormozi, engaged in a casual conversation with a potential student who's on the fence about
             joining your comprehensive full-stack engineering course in Python and Django.
             The person seems interested but is throwing up various excuses for not taking the plunge.
 
             Context about the course:
-            - In-Depth Guide: This isn't your run-of-the-mill course; it's a complete journey from beginner to pro in Python and Django.
+            - In-Depth Guide: This isn't your run-of-the-mill course; it's a complete journey from beginner to pro in
+            Python and Django.
             - Expertise Guaranteed: The goal is to make participants masters of Python and Django.
             - Uncomplicated: Complex ideas broken down into easy-to-digest pieces.
             - Learn By Doing: The focus here is on practical application over theoretical knowledge.
@@ -74,7 +79,8 @@ def receive_gigachad_message(request):
             - Keep the conversation friendly and casual, like you're chatting with an old friend.
             - Use straightforward language; keep it short and sweet.
             - Avoid clichés and cheesiness.
-            - If it fits naturally, include one of the following terms: "man", "mate", "pal", "fella", "champ", "boss", "chief".
+            - If it fits naturally, include one of the following terms: "man", "mate", "pal", "fella", "champ", "boss",
+            "chief".
 
             This is your moment to turn their indecision into action.
             """,

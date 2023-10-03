@@ -4,7 +4,6 @@ Base settings to build other settings files upon.
 from pathlib import Path
 
 import environ
-
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -196,6 +195,7 @@ TEMPLATES = [
             "globals": {
                 "django_htmx_script": "django_htmx.jinja.django_htmx_script",
                 "get_module_chapters": "pyoneers_platform.course.utils.get_module_chapters",
+                "svg": "config.jinja2.svg",
             },
             "filters": {
                 "markdown": "wagtailmarkdown.templatetags.wagtailmarkdown.markdown",

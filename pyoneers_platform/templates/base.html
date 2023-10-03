@@ -5,7 +5,7 @@
 {% from 'macros/user_macros.jinja' import avatar %}
 
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark" style="color-scheme: dark">
+<html lang="en" class="scroll-smooth dark" style="color-scheme: dark" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <title>
@@ -31,6 +31,7 @@
   {# HTMX #}
   <script defer src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
   <script defer src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
+  <script defer src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js"></script>
 
   {# Django HTMX #}
   {{ django_htmx_script() }}
@@ -39,10 +40,7 @@
   <script defer src="https://unpkg.com/hyperscript.org@0.9.11"></script>
 
   {# TailwindCSS #}
-  <link rel="stylesheet" type="text/css" href="{{ static('css/output.min.css') }}">
-
-  {# Typewriter Caret Effect #}
-  <link rel="stylesheet" type="text/css" href="{{ static('css/typewriter.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ static('css/output.css') }}">
 
   {# Google Fonts #}
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&display=swap" rel="stylesheet">
@@ -56,16 +54,70 @@
 <body class="bg-custom-gradient bg-fixed min-h-screen antialiased transition ease-in-out duration-200 {% block body_class %}{% endblock %}"
       hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
       hx-boost="true"
-      hx-ext="preload">
+      hx-ext="preload,multi-swap">
 
 {# Bottom right Wagtail userbar #}
 {{ wagtailuserbar() }}
 
 {# Site navigation #}
-<nav id="navbar" class="sticky-navbar flex justify-between">
-  {% block navigation_items %}
-    {% include '_logo.html' %}
-    {% include '_user_or_login_button.html' %}
+<nav id="navbar" class="sticky-navbar bg-custom-gradient bg-opacity-90 bg-fixed backdrop-blur border-b border-base-100 flex justify-between">
+  {% block top_navbar %}
+    <!-- Site Logo -->
+    <a id="logo"
+       class="btn btn-ghost lowercase text-lg font-bold"
+       href="{{ url('home') }}"
+       hx-swap="multi:#content"
+       hx-boost="false"
+       preload>
+      ~/pyoneers.dev/
+    </a>
+
+    <div class="flex justify-end items-center">
+      <!-- Top nav Discord Invite -->
+      <a id="discord-invite-top-nav"
+         class="discord-logo-container btn max-lg:btn-circle btn-ghost hover:bg-[#3a45b7] text-base-content hover:text-white me-2"
+         href="https://discord.gg/TSMacaF9SG"
+         target="_blank"
+         _="init if screen.width < 1024px repeat forever toggle .animated wait 2s">
+        <span class="flex justify-center items-center flex-nowrap">
+          {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
+          {{ discord_animated_svg(size=35) }}
+          <span class="ml-2 hidden lg:flex">Discord Server</span>
+        </span>
+      </a>
+      {% if user.is_authenticated %}
+        <!-- Logged-in User's Avatar -->
+        <div id="user-avatar" class="flex flex-col justify-center items-center">
+          <div id="avatar-wrapper" class="avatar online block mb-1">
+            <div class="rounded-full w-10">
+              <a hx-get="{{ url('users:detail', pk=user.pk) }}"
+                 hx-target="#modal-content"
+                 preload
+                 class="cursor-pointer"
+                {# This is to wait for the modal content to be replaced by HTMX before showing it.#}
+                 _="on click wait for htmx:afterSettle from body then call modal_dialog.showModal()">
+                <img id="avatar" src="{{ avatar(user) }}"/>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <!-- Login Button -->
+        <a id="login-button"
+           hx-get="{{ url('account_login') }}"
+           hx-target="#modal-content"
+           preload
+           class="btn btn-ghost max-lg:btn-circle"
+           _="on click wait for htmx:afterSettle from body then call modal_dialog.showModal()">
+          <!-- Login Icon -->
+          {{ svg('login', css_classes='w-5 h-5 lg:me-3') }}
+          <!-- Login Text (Desktop) -->
+          <span class="hidden lg:inline-block">
+            Login
+          </span>
+        </a>
+      {% endif %}
+    </div>
   {% endblock %}
 </nav>
 
@@ -84,28 +136,24 @@
   </form>
 </dialog>
 
-<footer class="container mx-auto text-center p-8 text-gray-400">
-  <div class="mx-auto w-24 h-1 my-8 bg-gradient-to-r from-gray-500 to-gray-600 rounded-full"></div>
+<footer class="container mx-auto text-base-content text-center p-8">
 
-  <a id="discord-invite"
-     class="hidden lg:inline-flex btn bg-[#4752C5] hover:bg-[#3a45b7] text-slate-100 discord-logo-container mb-3"
-     href="https://discord.gg/bXxa6nHd"
-     target="_blank">
-    <span class="flex justify-center items-center flex-nowrap">
-      Join Discord
-      {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
-      {{ discord_animated_svg(size=35) }}
-    </span>
-  </a>
+  <!-- Footer Divider -->
+  <div class="mx-auto w-24 h-[2px] my-6 bg-base-content/20 rounded-full"></div>
+
+  <!-- Useful Links -->
   <div class="flex justify-center items-center pt-3">
+
+    <!-- Github -->
     <a href="https://github.com/scriptogre" target="_blank" class="group">
-      <i class="w-6 inline-block mx-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
-          <path fill="currentColor" class="group-hover:fill-gray-100" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path>
-        </svg>
+      <i class="w-6 inline-block mx-2"
+      _="init immediately add .group-hover:fill-gray-100 to <path/> in me">
+        {{ svg('github') }}
       </i>
     </a>
+
   </div>
+
   <div class="text-xs pt-3">
     Copyright ©  2023 Scriptogre LLC <br>
   </div>

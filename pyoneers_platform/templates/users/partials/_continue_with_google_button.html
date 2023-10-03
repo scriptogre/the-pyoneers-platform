@@ -1,10 +1,7 @@
 <a id="google-button"
-   href="{{ provider_login_url('google') }}"
+   href="{{ provider_login_url("google") }}"
    hx-boost="false"
    class="btn bg-white hover:bg-transparent text-black hover:text-white hover:border-white w-full mb-5">
-    <img class="w-6 h-6"
-         src="{{ static('img/google-icon.svg') }}"
-         loading="lazy"
-         alt="google logo">
-    <span>Continue with Google</span>
+  {{ svg('google', css_classes='w-6 h-6') }}
+  <span>Continue with Google</span>
 </a>

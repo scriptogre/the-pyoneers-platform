@@ -1,24 +1,26 @@
 <div id="chat-container" class="flex flex-wrap items-start justify-start w-full max-lg:min-h-[20rem] max-lg:max-h-[35rem] lg:h-[20rem] p-8 mb-3 lg:mt-12 gap-4 overflow-y-auto rounded-l-box rounded-tr-box max-lg:rounded-r-box bg-base-100/40 border border-base-100 relative"
      _="init
-          set my scrollTop to 0 end
+          set my scrollTop to 0
+        end
         on intersection
           transition #initial-message-giga-chad's opacity to 1
-          then transition #initial-message-user's opacity to 1
-          then transition #chat-response-buttons's opacity to 1
-          then transition #excuses-container's opacity to 1">
+          transition #initial-message-user's opacity to 1
+          transition #chat-response-buttons's opacity to 1
+          transition #excuses-container's opacity to 1
+        end">
   {# Interactive Chat Box #}
-  <div id="chat-interaction" class="w-full"
-       hx-get="{{ url('receive_gigachad_message') }}"
+  <div id="chat-interaction"
+       class="w-full"
+       hx-get="{{ url("receive_gigachad_message") }}"
        hx-target="#gigachad-message-to-replace"
        hx-trigger="requestGigaChadResponse"
        hx-vals="js:{'message_content': $userMessage}"
        hx-swap="outerHTML scroll:#chat-container:bottom">
-
     {# Chat messages #}
     <div id="initial-message-giga-chad" class="chat chat-start" style="opacity:0">
       <div class="chat-image avatar">
         <div class="w-10 rounded-full">
-          <img src="{{ static('img/avatar-10x-giga-chad.webp') }}"  alt="Giga Chad"/>
+          <img src="{{ static("img/avatar-10x-giga-chad.webp") }}"  alt="Giga Chad" />
         </div>
       </div>
       <div class="chat-bubble chat-bubble-warning">
@@ -41,74 +43,74 @@
 </div>
 
 {# Chat box input #}
-<div id="chat-response-buttons" class="flex w-full justify-center lg:justify-end" style="opacity:0"
+<div id="chat-response-buttons" class="flex w-full gap-0.5 justify-center lg:justify-end" style="opacity:0"
      _="on htmx:afterSettle(detail) from #chat-interaction
-                    if detail.pathInfo.requestPath contains '{{ url('receive_gigachad_message') }}'
-                        for button in my children remove @disabled from button">
+          if detail.pathInfo.requestPath contains '{{ url('receive_gigachad_message') }}'
+              for button in my children remove @disabled from button">
 
   {# Behavior to process user's response #}
   <script type="text/hyperscript">
     behavior processResponseBehavior(userMessageValue)
       on click
           // Disable all buttons to prevent user from sending multiple requests at once
-          set <#chat-response-buttons > button/>'s @disabled to true then
+          set <#chat-response-buttons > button/>'s @disabled to true
 
           // Update the global user message
-          set $userMessage to userMessageValue then
+          set $userMessage to userMessageValue
 
           // Initiate the sequence to display user's chat bubble in the UI
-          trigger sendUserResponse then
+          trigger sendUserResponse
 
           // Ensure target element is stable in DOM before proceeding to the next action
-          wait for htmx:afterSettle from body then
+          wait for htmx:afterSettle from body
 
           // Request GigaChad's response, which will involve a backend call to OpenAI
-          send requestGigaChadResponse to #chat-interaction then
+          send requestGigaChadResponse to #chat-interaction
 
           // Remove this button from the DOM
-          remove me then
+          remove me
 
           // Reduce the count of available excuses after each interaction
-          decrement $remainingExcuses then
+          decrement $remainingExcuses
 
           // Adjust displayed excuse count or notify user when they're out of excuses
           if $remainingExcuses == 0
               put '📸 🤨 No excuses left' into #excuses
           else
               put `Excuses ` + it + `/3` into #excuses
-          end then
+          end
       end
     end
   </script>
-  <button class="btn bg-base-100 md:me-1"
-          hx-post="{{ url('send_user_message') }}"
+  <button class="btn bg-base-100"
+          hx-post="{{ url("send_user_message") }}"
           hx-vals="js:{message_content: $userMessage}"
           hx-trigger="sendUserResponse"
           hx-target="#chat-interaction"
           hx-swap="beforeend scroll:#chat-container:bottom"
           _="install processResponseBehavior(userMessageValue:'I dont have any money')">
     No Money
-    <span id="money-emoji">💰</span>
+    <span id="money-emoji" class="hidden lg:flex">💰</span>
   </button>
-  <button class="btn bg-base-100 md:me-1"
-          hx-post="{{ url('send_user_message') }}"
+  <button class="btn bg-base-100"
+          hx-post="{{ url("send_user_message") }}"
           hx-vals="js:{message_content: $userMessage}"
           hx-trigger="sendUserResponse"
           hx-target="#chat-interaction"
           hx-swap="beforeend scroll:#chat-container:bottom"
           _="install processResponseBehavior(userMessageValue:'I dont have any time')">
     No Time
-    <span id="clock-emoji">🕐</span>
+    <span id="clock-emoji" class="hidden lg:flex">🕐</span>
   </button>
-  <button class="btn bg-base-100 md:me-1"
-          hx-post="{{ url('send_user_message') }}"
+  <button class="btn bg-base-100"
+          hx-post="{{ url("send_user_message") }}"
           hx-vals="js:{message_content: $userMessage}"
           hx-trigger="sendUserResponse"
           hx-target="#chat-interaction"
           hx-swap="beforeend scroll:#chat-container:bottom"
           _="install processResponseBehavior(userMessageValue:'I dont have any talent')">
     No Talent
-    <span id="none-emoji">🚫</span>
+    <span id="none-emoji" class="hidden lg:flex">🚫</span>
   </button>
 </div>
 
