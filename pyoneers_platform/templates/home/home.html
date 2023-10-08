@@ -19,21 +19,11 @@
       </p>
 
       <span class="sm:mt-3 mb-3">You won't get these tips from ChatGPT</span>
-      <a id="cta-button"
-         class="btn btn-warning btn-wide btn-lg text-black hover:border-transparent hover:bg-amber-100 hover:bg-opacity-90 hover:shadow-golden group mb-3"
-         href="#news-section">
-        <span class="group-hover:hidden">
-          Are You All In?
-        </span>
-        <span class="hidden group-hover:block">
-          Hell yea!!! <span id="fire-emoji">🔥</span>
-        </span>
-      </a>
-      <span class="countdown text-lg">
-        <span class="days-left" style="--value:0;"></span>:
-        <span class="hours-left" style="--value:0;"></span>:
-        <span class="minutes-left" style="--value:0;"></span>:
-        <span class="seconds-left" style="--value:0;"></span>
+      <div class="flex items-center justify-around mt-3">
+        {% include 'home/partials/_obnoxious_button.html' %}
+      </div>
+      <span id="hidden-message" class="mt-3" style="opacity: 0">
+        I want to work with persistent people like you.
       </span>
     </div>
 
@@ -43,43 +33,22 @@
   </div>
 
   <a href="#news-section" class="flex flex-col justify-center items-center mt-8 animate-bounce">
-    <h2 class="text-2xl md:text-3xl mb-6 md:mb-8">
+    <h2 class="text-xl md:text-2xl mb-4 md:mb-6">
       Huge news! 🙏
     </h2>
-    {{ svg('double_chevron_down', css_classes='w-5 h-5 md:w-8 md:h-8') }}
+    {{ svg('double_chevron_down', css_classes='w-5 h-5 md:w-6 md:h-6') }}
   </a>
 
   <div id="news-section" class="h-screen grid place-content-center text-center py-6">
-    {% if module_released %}
-      <h2 class="text-3xl md:text-4xl lg:text-5xl mb-4">
-        The first module is finally here! 🔥
-      </h2>
-      <span class="text-lg md:text-xl lg:text-2xl mb-4 lg:mb-8 prose">
-        Press the golden card to check it out!
-      </span>
-      <div class="flex justify-center mb-4 lg:mb-8">
-        {{ svg('long_arrow_down', css_classes='w-6 h-6') }}
-      </div>
-      <a href="{{ first_chapter_url }}"
-         class="hover:scale-105 transition-transform ease-in-out duration-500"
-         hx-swap="multi:#content"
-         preload
-         _="on mouseover add .shadow-inner-golden to <body/> end
-          on mouseout or htmx:afterOnLoad remove .shadow-inner-golden from <body/> end">
-        {% include 'home/partials/_golden_card.html' %}
-      </a>
-      <p class="mt-6 md:mt-8 lg:mt-12">
-        <i>Note: It also contains some <b class="text-warning">free bonuses</b>. Don't miss them!</i>
-      </p>
+    {% if not course_released %}
 
-    {% else %}
-      <div class="flex flex-col justify-center items-center my-4">
-        <h2 class="text-3xl md:text-4xl lg:text-5xl">
-          The first module is coming soon.
+      <div class="flex flex-col justify-center items-center">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl mb-12">
+          The first module is coming soon. 😎
         </h2>
-        <div id="countdown" class="grid grid-flow-col gap-6 text-center auto-cols-max my-12"
+        <div id="countdown" class="grid grid-flow-col gap-6 text-center auto-cols-max mb-12"
              _="init immediately
-                  make Date from 'Oct 22, 2023 18:00:00' called launch_date
+                  make Date from '{{ launch_date }}' called launch_date
                   make Date called now
 
                   set distance to launch_date.getTime() - now.getTime()
@@ -144,32 +113,34 @@
             sec
           </div>
         </div>
-        <span>
-          Join the Discord server to get notified when it's out!
-        </span>
-        <a id="discord-invite"
-           class="btn btn-wide btn-lg bg-[#4752C5] hover:bg-[#3a45b7] text-slate-100 my-3 discord-logo-container"
-           href="https://discord.gg/TSMacaF9SG"
-           target="_blank">
-          <span class="flex justify-center items-center flex-nowrap">
-            {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
-            {{ discord_animated_svg(size=45) }}
-            Discord Server
-          </span>
-        </a>
-        <div id="discord-members-group"
-             class="avatar-group -space-x-6"
-             hx-get="{{ url("get_discord_members") }}"
-             hx-swap="innerHTML"
-             hx-trigger="load"
-             style="opacity:0"
-             _="init transition my opacity to 1">
-          <div class="avatar placeholder">
-            {#     This section is automatically populated by `home/htmx_partials/latest_discord_members.html`#}
-            <div class="w-12 bg-neutral-focus text-neutral-content"></div>
-          </div>
-        </div>
+        <p class="text-lg italic">
+          First 10 to join get a <b class="text-amber-400">Golden Card</b> with free bonuses.
+        </p>
       </div>
+
+    {% else %}
+
+      <h2 class="text-3xl md:text-4xl lg:text-5xl mb-4">
+        The first module is finally here! 🔥
+      </h2>
+      <span class="text-lg md:text-xl lg:text-2xl mb-4 lg:mb-8 prose">
+        Press the golden card to check it out!
+      </span>
+      <div class="flex justify-center mb-4 lg:mb-8">
+        {{ svg('long_arrow_down', css_classes='w-6 h-6') }}
+      </div>
+      <a href="{{ first_chapter_url }}"
+         class="hover:scale-105 transition-transform ease-in-out duration-500"
+         hx-swap="multi:#content"
+         preload
+         _="on mouseover add .shadow-inner-golden to <body/> end
+          on mouseout or htmx:afterOnLoad remove .shadow-inner-golden from <body/> end">
+        {% include 'home/partials/_golden_card.html' %}
+      </a>
+      <p class="mt-6 md:mt-8 lg:mt-12">
+        <i>Note: It also contains some <b class="text-warning">free bonuses</b>. Don't miss them!</i>
+      </p>
+
     {% endif %}
   </div>
 {% endblock %}

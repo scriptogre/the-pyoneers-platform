@@ -73,7 +73,15 @@
     </a>
 
     <div class="flex justify-end items-center">
-      <!-- Top nav Discord Invite -->
+      <!-- Discord Members -->
+      <div id="discord-members-group"
+           class="avatar-group -space-x-6 me-2"
+           hx-get="{{ url("get_discord_members") }}"
+           hx-swap="innerHTML"
+           hx-trigger="load">
+        {#     This section is automatically populated by `home/htmx_partials/latest_discord_members.html`#}
+      </div>
+      <!-- Discord Invite -->
       <a id="discord-invite-top-nav"
          class="discord-logo-container btn max-lg:btn-circle btn-ghost hover:bg-[#3a45b7] text-base-content hover:text-white me-2"
          href="https://discord.gg/TSMacaF9SG"
@@ -139,7 +147,7 @@
 <footer class="container mx-auto text-base-content text-center p-8">
 
   <!-- Footer Divider -->
-  <div class="mx-auto w-24 h-[2px] my-6 bg-base-content/20 rounded-full"></div>
+  <div class="mx-auto w-36 h-[1px] my-6 bg-base-content/20"></div>
 
   <!-- Useful Links -->
   <div class="flex justify-center items-center pt-3">
@@ -147,7 +155,7 @@
     <!-- Github -->
     <a href="https://github.com/scriptogre" target="_blank" class="group">
       <i class="w-6 inline-block mx-2"
-      _="init immediately add .group-hover:fill-gray-100 to <path/> in me">
+         _="init immediately add .group-hover:fill-gray-100 to <path/> in me">
         {{ svg('github') }}
       </i>
     </a>

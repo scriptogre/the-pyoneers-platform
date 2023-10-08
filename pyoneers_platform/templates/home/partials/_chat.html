@@ -23,7 +23,7 @@
           <img src="{{ static("img/avatar-10x-giga-chad.webp") }}"  alt="Giga Chad" />
         </div>
       </div>
-      <div class="chat-bubble chat-bubble-warning">
+      <div class="chat-bubble bg-base-100/60">
         Hey chief. I'm here to help you become a 10x engineer.
       </div>
     </div>
@@ -35,7 +35,7 @@
           <img src="{{ avatar(user) }}"  alt="User Avatar"/>
         </div>
       </div>
-      <div class="chat-bubble">
+      <div class="chat-bubble bg-base-100/60">
         I'm not ready to become a 10x engineer...
       </div>
     </div>
@@ -82,7 +82,7 @@
       end
     end
   </script>
-  <button class="btn bg-base-100"
+  <button class="btn bg-base-100/40 border border-base-100"
           hx-post="{{ url("send_user_message") }}"
           hx-vals="js:{message_content: $userMessage}"
           hx-trigger="sendUserResponse"
@@ -92,7 +92,7 @@
     No Money
     <span id="money-emoji" class="hidden lg:flex">💰</span>
   </button>
-  <button class="btn bg-base-100"
+  <button class="btn bg-base-100/40 border border-base-100"
           hx-post="{{ url("send_user_message") }}"
           hx-vals="js:{message_content: $userMessage}"
           hx-trigger="sendUserResponse"
@@ -102,7 +102,7 @@
     No Time
     <span id="clock-emoji" class="hidden lg:flex">🕐</span>
   </button>
-  <button class="btn bg-base-100"
+  <button class="btn bg-base-100/40 border border-base-100"
           hx-post="{{ url("send_user_message") }}"
           hx-vals="js:{message_content: $userMessage}"
           hx-trigger="sendUserResponse"

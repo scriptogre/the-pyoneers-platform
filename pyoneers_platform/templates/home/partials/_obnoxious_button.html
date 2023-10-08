@@ -1,0 +1,52 @@
+<button id="obnoxious-button" class="rounded-md bg-black">
+  <span class="block text-black bg-amber-400 -translate-x-2 -translate-y-2 rounded-md border-2 border-black p-4 text-2xl transition-all hover:-translate-y-3 active:translate-x-0 active:translate-y-0"
+        _="init
+             set :finished to false
+             set my clickCount to 0
+           end
+
+           on click
+             increment my clickCount
+
+             if not :finished
+               if my clickCount > 0
+                 put 'HOW DARE YOU?' into me
+               end
+               if my clickCount > 5
+                 put 'PERSISTENT, AREN\'T WE?' into me
+               end
+               if my clickCount > 10
+                 put 'OH, COME ON NOW!' into me
+               end
+               if my clickCount > 15
+                 put 'REALLY? STILL CLICKING?' into me
+               end
+               if my clickCount == 20
+                 put 'You are a true Pyoneer!' into me
+                 transition #hidden-message's opacity to 100
+                 set :finished to true
+               end
+             else
+               if my clickCount == 25
+                 put 'That\'s enough, buddy...' into me
+               end
+             end
+           end
+
+           on mouseout
+             if not :finished
+               if my clickCount > 0
+                 put 'THAT ALL YOU GOT?' into me
+               end
+               if my clickCount > 5
+                 put 'RUNNING AWAY, EH?' into me
+               end
+               if my clickCount > 10
+                 put 'YOU\'LL BE BACK!' into me
+               end
+               if my clickCount > 15
+                 put 'HAD ENOUGH FUN YET?' into me
+               end">
+    DON'T PRESS ME
+  </span>
+</button>

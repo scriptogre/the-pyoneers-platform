@@ -12,7 +12,10 @@ from pyoneers_platform.course.models import Module
 
 class HomeView(TemplateView):
     template_name = "home/home.html"
-    extra_context = {"module_released": False}
+    extra_context = {
+        "launch_date": "Oct 22, 2023 18:00:00",
+        "course_released": False,
+    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -113,33 +116,36 @@ def receive_gigachad_message(request):
     return HttpResponseBadRequest()
 
 
-def get_latest_discord_members(request):
+def fetch_latest_discord_avatars(request):
     if not request.htmx:
         return HttpResponseBadRequest()
 
-    url = f"https://discord.com/api/v10/guilds/{DISCORD_GUILD_ID}/members?limit=1000"
+    discord_api_url = f"https://discord.com/api/v10/guilds/{DISCORD_GUILD_ID}/members?limit=1000"
     headers = {"Authorization": f"Bot {DISCORD_BOT_TOKEN}"}
-    response = requests.get(url, headers=headers)
+    response = requests.get(discord_api_url, headers=headers)
 
     if response.status_code != 200:
         return HttpResponseBadRequest()
 
-    guild_members = response.json()
+    all_members = response.json()
 
+    # Function to parse the joined date-time of a member
     def parse_datetime(member):
         return datetime.strptime(member["joined_at"], "%Y-%m-%dT%H:%M:%S.%f000+00:00")
 
-    sorted_members = sorted(guild_members, key=parse_datetime, reverse=True)
+    # Sorting members by their joined date
+    recently_joined_members = sorted(all_members, key=parse_datetime, reverse=True)
 
-    latest_members_with_avatars = [
-        (m["user"]["id"], m["user"]["avatar"])
-        for m in sorted_members
-        if m["user"].get("avatar") and not m["user"].get("bot")
-    ][:4]
+    # Extracting the latest three members with avatars who aren't bots
+    avatar_info_list = [
+        (member["user"]["id"], member["user"]["avatar"])
+        for member in recently_joined_members
+        if member["user"].get("avatar") and not member["user"].get("bot")
+    ][:3]
 
     context = {
-        "number_of_members": len(guild_members),
-        "latest_members_with_avatars": latest_members_with_avatars,
+        "total_members": len(all_members),
+        "avatar_info_list": avatar_info_list,
     }
 
-    return render(request, "home/htmx_partials/_latest_discord_members.html", context)
+    return render(request, "home/htmx_partials/_latest_discord_avatars.html", context)
