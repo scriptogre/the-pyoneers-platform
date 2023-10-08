@@ -12,6 +12,7 @@ from pyoneers_platform.course.models import Module
 
 class HomeView(TemplateView):
     template_name = "home/home.html"
+    extra_context = {"module_released": False}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

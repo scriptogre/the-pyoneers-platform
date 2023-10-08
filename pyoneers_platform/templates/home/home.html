@@ -3,11 +3,42 @@
 {% block content %}
   <div class="flex flex-col lg:flex-row items-center justify-center lg:mt-24">
     <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto mb-6 sm:mb-0 p-6 text-center prose">
-      {% include 'home/sections/_hero_section.html' %}
+      <div class="flex flex-col items-center sm:flex-row sm:mb-3">
+        <img src="{{ static('img/python-logo.webp') }}" alt="Python Logo" class="w-16 h-16 mb-3 m-0 sm:mb-0 sm:me-4">
+
+        <div class="flex flex-col justify-start">
+          <h1 class="text-5xl text-gray-300 font-mono tracking-wider mb-0">
+            The Pyoneer Project
+          </h1>
+          <span class="text-xl text-center sm:text-start">For the ambitious, by the ambitious</span>
+        </div>
+      </div>
+
+      <p class="text-2xl text-gray-300 2xl:my-6">
+        Learn Full-Stack Python & Django the way I wish I had.
+      </p>
+
+      <span class="sm:mt-3 mb-3">You won't get these tips from ChatGPT</span>
+      <a id="cta-button"
+         class="btn btn-warning btn-wide btn-lg text-black hover:border-transparent hover:bg-amber-100 hover:bg-opacity-90 hover:shadow-golden group mb-3"
+         href="#news-section">
+        <span class="group-hover:hidden">
+          Are You All In?
+        </span>
+        <span class="hidden group-hover:block">
+          Hell yea!!! <span id="fire-emoji">🔥</span>
+        </span>
+      </a>
+      <span class="countdown text-lg">
+        <span class="days-left" style="--value:0;"></span>:
+        <span class="hours-left" style="--value:0;"></span>:
+        <span class="minutes-left" style="--value:0;"></span>:
+        <span class="seconds-left" style="--value:0;"></span>
+      </span>
     </div>
 
     <div id="chat-section" class="flex flex-col justify-center items-start p-6">
-      {% include 'home/sections/_chat_section.html' %}
+      {% include 'home/partials/_chat.html' %}
     </div>
   </div>
 
@@ -19,6 +50,126 @@
   </a>
 
   <div id="news-section" class="h-screen grid place-content-center text-center py-6">
-    {% include 'home/sections/_news_section.html' %}
+    {% if module_released %}
+      <h2 class="text-3xl md:text-4xl lg:text-5xl mb-4">
+        The first module is finally here! 🔥
+      </h2>
+      <span class="text-lg md:text-xl lg:text-2xl mb-4 lg:mb-8 prose">
+        Press the golden card to check it out!
+      </span>
+      <div class="flex justify-center mb-4 lg:mb-8">
+        {{ svg('long_arrow_down', css_classes='w-6 h-6') }}
+      </div>
+      <a href="{{ first_chapter_url }}"
+         class="hover:scale-105 transition-transform ease-in-out duration-500"
+         hx-swap="multi:#content"
+         preload
+         _="on mouseover add .shadow-inner-golden to <body/> end
+          on mouseout or htmx:afterOnLoad remove .shadow-inner-golden from <body/> end">
+        {% include 'home/partials/_golden_card.html' %}
+      </a>
+      <p class="mt-6 md:mt-8 lg:mt-12">
+        <i>Note: It also contains some <b class="text-warning">free bonuses</b>. Don't miss them!</i>
+      </p>
+
+    {% else %}
+      <div class="flex flex-col justify-center items-center my-4">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl">
+          The first module is coming soon.
+        </h2>
+        <div id="countdown" class="grid grid-flow-col gap-6 text-center auto-cols-max my-12"
+             _="init immediately
+                  make Date from 'Oct 22, 2023 18:00:00' called launch_date
+                  make Date called now
+
+                  set distance to launch_date.getTime() - now.getTime()
+                  js(distance)
+                    return {
+                      days_left: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                      hours_left: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                      minutes_left: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                      seconds_left: Math.floor((distance % (1000 * 60)) / 1000)
+                    }
+                  end
+                  set $days_left to it's days_left
+                  set $hours_left to it's hours_left
+                  set $minutes_left to it's minutes_left
+                  set $seconds_left to it's seconds_left
+
+                  repeat forever
+                    wait 1s
+                    decrement $seconds_left
+                    if $seconds_left == -1
+                      set $seconds_left to 59
+                      decrement $minutes_left
+                    end
+                    if $minutes_left == -1
+                      set $minutes_left to 59
+                      decrement $hours_left
+                    end
+                    if $hours_left == -1
+                      set $hours_left to 23
+                      decrement $days_left
+                    end
+                    if $days_left < 0
+                      break
+                    end
+                    set .days-left.style to `--value: ${$days_left};`
+                    set .hours-left.style to `--value: ${$hours_left};`
+                    set .minutes-left.style to `--value: ${$minutes_left};`
+                    set .seconds-left.style to `--value: ${$seconds_left};`
+                  end">
+          <div class="flex flex-col p-2 bg-base-100/40 border border-base-100 rounded-box text-neutral-content">
+            <span class="countdown text-5xl">
+              <span class="days-left" style="--value:0;"></span>
+            </span>
+            days
+          </div>
+          <div class="flex flex-col p-2 bg-base-100/40 border border-base-100 rounded-box text-neutral-content">
+            <span class="countdown text-5xl">
+              <span class="hours-left" style="--value:0;"></span>
+            </span>
+            hours
+          </div>
+          <div class="flex flex-col p-2 bg-base-100/40 border border-base-100 rounded-box text-neutral-content">
+            <span class="countdown text-5xl">
+              <span class="minutes-left" style="--value:0;"></span>
+            </span>
+            min
+          </div>
+          <div class="flex flex-col p-2 bg-base-100/40 border border-base-100 rounded-box text-neutral-content">
+            <span class="countdown text-5xl">
+              <span class="seconds-left" style="--value:0;"></span>
+            </span>
+            sec
+          </div>
+        </div>
+        <span>
+          Join the Discord server to get notified when it's out!
+        </span>
+        <a id="discord-invite"
+           class="btn btn-wide btn-lg bg-[#4752C5] hover:bg-[#3a45b7] text-slate-100 my-3 discord-logo-container"
+           href="https://discord.gg/TSMacaF9SG"
+           target="_blank">
+          <span class="flex justify-center items-center flex-nowrap">
+            {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
+            {{ discord_animated_svg(size=45) }}
+            Discord Server
+          </span>
+        </a>
+        <div id="discord-members-group"
+             class="avatar-group -space-x-6"
+             hx-get="{{ url("get_discord_members") }}"
+             hx-swap="innerHTML"
+             hx-trigger="load"
+             style="opacity:0"
+             _="init transition my opacity to 1">
+          <div class="avatar placeholder">
+            {#     This section is automatically populated by `home/htmx_partials/latest_discord_members.html`#}
+            <div class="w-12 bg-neutral-focus text-neutral-content"></div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
