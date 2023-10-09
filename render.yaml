@@ -41,6 +41,8 @@ services:
     dockerCommand: /start-celeryworker
     autoDeploy: false
     envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
       - fromGroup: env-group
       - key: CELERY_BROKER_URL
         fromService:
