@@ -1,12 +1,33 @@
-# TODO: Implement sentry integration
-# import sentry_sdk
-# from sentry_sdk.integrations.celery import CeleryIntegration
-# from sentry_sdk.integrations.django import DjangoIntegration
-# from sentry_sdk.integrations.loguru import LoggingLevels, LoguruIntegration
-# from sentry_sdk.integrations.redis import RedisIntegration
+import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.loguru import LoggingLevels, LoguruIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 from .base import *  # noqa
 from .base import env
+
+# Sentry
+# ------------------------------------------------------------------------------
+SENTRY_DSN = env("SENTRY_DSN")
+SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", LoggingLevels.INFO.value)
+
+sentry_logging = LoguruIntegration(
+    level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
+    event_level=LoggingLevels.ERROR.value,  # Send errors as events
+)
+integrations = [
+    sentry_logging,
+    DjangoIntegration(),
+    CeleryIntegration(),
+    RedisIntegration(),
+]
+sentry_sdk.init(
+    dsn=SENTRY_DSN,
+    integrations=integrations,
+    environment=env("SENTRY_ENVIRONMENT", default="production"),
+    traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),
+)
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -56,7 +77,14 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", def
 
 # STATIC
 # ------------------------
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -110,70 +138,42 @@ COMPRESS_FILTERS = {
 
 # LOGGING
 # ------------------------------------------------------------------------------
-# TODO: Implement logging integration
-# # https://docs.djangoproject.com/en/dev/ref/settings/#logging
-# # See https://docs.djangoproject.com/en/dev/topics/logging for
-# # more details on how to customize your logging configuration.
-#
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": True,
-#     "formatters": {
-#         "verbose": {
-#             "format": "%(levelname)s %(asctime)s %(module)s "
-#             "%(process)d %(thread)d %(message)s"
-#         }
-#     },
-#     "handlers": {
-#         "console": {
-#             "level": "DEBUG",
-#             "class": "logging.StreamHandler",
-#             "formatter": "verbose",
-#         }
-#     },
-#     "root": {"level": "INFO", "handlers": ["console"]},
-#     "loggers": {
-#         "django": {
-#             "level": "INFO",
-#             "handlers": ["console"],
-#         },
-#         "django.db.backends": {
-#             "level": "ERROR",
-#             "handlers": ["console"],
-#             "propagate": False,
-#         },
-#         # Errors logged by the SDK itself
-#         "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
-#         "django.security.DisallowedHost": {
-#             "level": "ERROR",
-#             "handlers": ["console"],
-#             "propagate": False,
-#         },
-#     },
-# }
-
-# Sentry
-# ------------------------------------------------------------------------------
-# TODO: Implement sentry integration
-# SENTRY_DSN = env("SENTRY_DSN")
-# SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", LoggingLevels.INFO.value)
-#
-# sentry_logging = LoguruIntegration(
-#     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
-#     event_level=LoggingLevels.ERROR.value,  # Send errors as events
-# )
-# integrations = [
-#     sentry_logging,
-#     DjangoIntegration(),
-#     CeleryIntegration(),
-#     RedisIntegration(),
-# ]
-# sentry_sdk.init(
-#     dsn=SENTRY_DSN,
-#     integrations=integrations,
-#     environment=env("SENTRY_ENVIRONMENT", default="production"),
-#     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),
-# )
+# https://docs.djangoproject.com/en/dev/ref/settings/#logging
+# See https://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": True,
+    "formatters": {
+        "verbose": {"format": "%(levelname)s %(asctime)s %(module)s " "%(process)d %(thread)d %(message)s"}
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        "django": {
+            "level": "INFO",
+            "handlers": ["console"],
+        },
+        "django.db.backends": {
+            "level": "ERROR",
+            "handlers": ["console"],
+            "propagate": False,
+        },
+        # Errors logged by the SDK itself
+        "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
+        "django.security.DisallowedHost": {
+            "level": "ERROR",
+            "handlers": ["console"],
+            "propagate": False,
+        },
+    },
+}
 
 # wagtail
 # ------------------------------------------------------------------------------

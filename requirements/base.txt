@@ -8,6 +8,7 @@ celery  # https://github.com/celery/celery
 django-celery-beat  # https://github.com/celery/django-celery-beat
 flower  # https://github.com/mher/flower
 fontawesomefree  # https://fontawesome.com/docs/web/use-with/python-django#using-font-awesome-free-with-django
+loguru  # https://github.com/Delgan/loguru
 
 # Django
 # ------------------------------------------------------------------------------
