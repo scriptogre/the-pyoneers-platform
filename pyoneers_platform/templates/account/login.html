@@ -7,25 +7,21 @@
       {#
       This setup allows for two behaviors:
       1. If the login form has errors, HTMX will render them inline within the hx-target.
-      2. If login is successful, a full-page refresh occurs.
-
-      To redirect after login, use the ?next= URL parameter or set LOGIN_REDIRECT_URL in settings.py.
-      If no ?next= is set, the latter is used.
+      2. If login is successful, a full-page refresh occurs and the user is redirected to the '/' path.
 
       We listen to the htmx:afterOnLoad event.
-      If the response path matches next_url, a full-page reload is triggered using hyperscript,
+      If the response path matches '/' (the home page), a full-page reload is triggered using hyperscript,
       avoiding the need to override the login view.
       #}
-      {% set next_url = url('home') %}
-      hx-post="{{ url("account_login") }}?next={{ next_url }}"
+      hx-post="{{ url("account_login") }}"
       hx-target="#modal-content"
       _="on htmx:beforeSwap from body
-             if event.detail.pathInfo.responsePath is '{{ next_url }}'
-                 set event.detail.shouldSwap to false
-                 set the location of the window to '{{ next_url }}'
-             end">
+           if event.detail.pathInfo.responsePath is '/'
+             set event.detail.shouldSwap to false
+             set the location of the window to '/'
+           end">
   {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
-  {# Include the form errors at the top of the form. #}
+  {# Render any form errors. #}
   {{ render_form_errors(form) }}
   {# Render the form fields. #}
   {{ render_field(form['login'], class='input input-bordered w-full mb-3', error_class='input-error') }}
