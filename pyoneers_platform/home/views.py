@@ -12,20 +12,27 @@ from pyoneers_platform.course.models import Module
 
 class HomeView(TemplateView):
     template_name = "home/home.html"
-    extra_context = {
-        "launch_date": "Oct 22, 2023 18:00:00",
-        "course_released": False,
-    }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["first_chapter_url"] = Module.objects.first().chapters.first().url
+
+        launch_date = datetime(year=2023, month=10, day=22, hour=18, minute=0, second=0)
+        context["launch_date"] = launch_date.strftime("%b %d, %Y %H:%M:%S")
+        context["is_course_released"] = datetime.now() >= launch_date
+
+        # Default first chapter URL
+        context["first_chapter_url"] = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+        if context["is_course_released"] and Module.objects.exists():
+            first_module = Module.objects.first()
+            if first_module and first_module.chapters.exists():
+                context["first_chapter_url"] = first_module.chapters.first().url
+
         return context
 
     def get(self, request, *args, **kwargs):
-        if "conversation" in request.session:
-            del request.session["conversation"]
-
+        # Clear the conversation from any previous session
+        request.session.pop("conversation", None)
         return super().get(request, *args, **kwargs)
 
 

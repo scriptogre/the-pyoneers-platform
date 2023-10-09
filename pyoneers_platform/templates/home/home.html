@@ -33,14 +33,47 @@
   </div>
 
   <a href="#news-section" class="flex flex-col justify-center items-center mt-8 animate-bounce">
-    <h2 class="text-xl md:text-2xl mb-4 md:mb-6">
-      Huge news! 🙏
-    </h2>
-    {{ svg('double_chevron_down', css_classes='w-5 h-5 md:w-6 md:h-6') }}
+    {% if is_course_released %}
+
+      <h2 class="text-xl md:text-2xl mb-4 md:mb-6">
+        Huge news! 🙏
+      </h2>
+
+    {% else %}
+
+      <h2 class="text-xl md:text-2xl mb-4 md:mb-6">
+        Guess what? 🤔
+      </h2>
+
+    {% endif %}
+    {{ svg('chevron_down', css_classes='w-5 h-5 md:w-6 md:h-6') }}
   </a>
 
   <div id="news-section" class="h-screen grid place-content-center text-center py-6">
-    {% if not course_released %}
+    {% if is_course_released %}
+
+      <h2 class="text-3xl md:text-4xl lg:text-5xl mb-4">
+        The first module is finally here! 🔥
+      </h2>
+      <span class="text-lg md:text-xl lg:text-2xl mb-4 lg:mb-8 prose">
+        Press the golden card to check it out!
+      </span>
+      <div class="flex justify-center mb-4 lg:mb-8">
+        {{ svg('long_arrow_down', css_classes='w-6 h-6') }}
+      </div>
+      <a href="{{ first_chapter_url }}"
+         class="hover:scale-105 transition-transform ease-in-out duration-500"
+         hx-swap="multi:#content"
+         preload
+         _="on mouseover add .shadow-inner-golden to <body/> end
+          on mouseout or htmx:afterOnLoad remove .shadow-inner-golden from <body/> end">
+        {% include 'home/partials/_golden_card.html' %}
+      </a>
+      <p class="mt-6 md:mt-8 lg:mt-12">
+        <i>Note: It also contains some <b class="text-warning">free bonuses</b>. Don't miss them!</i>
+      </p>
+
+    {% else %}
 
       <div class="flex flex-col justify-center items-center">
         <h2 class="text-3xl md:text-4xl lg:text-5xl mb-12">
@@ -117,29 +150,6 @@
           First 10 to join get a <b class="text-amber-400">Golden Card</b> with free bonuses.
         </p>
       </div>
-
-    {% else %}
-
-      <h2 class="text-3xl md:text-4xl lg:text-5xl mb-4">
-        The first module is finally here! 🔥
-      </h2>
-      <span class="text-lg md:text-xl lg:text-2xl mb-4 lg:mb-8 prose">
-        Press the golden card to check it out!
-      </span>
-      <div class="flex justify-center mb-4 lg:mb-8">
-        {{ svg('long_arrow_down', css_classes='w-6 h-6') }}
-      </div>
-      <a href="{{ first_chapter_url }}"
-         class="hover:scale-105 transition-transform ease-in-out duration-500"
-         hx-swap="multi:#content"
-         preload
-         _="on mouseover add .shadow-inner-golden to <body/> end
-          on mouseout or htmx:afterOnLoad remove .shadow-inner-golden from <body/> end">
-        {% include 'home/partials/_golden_card.html' %}
-      </a>
-      <p class="mt-6 md:mt-8 lg:mt-12">
-        <i>Note: It also contains some <b class="text-warning">free bonuses</b>. Don't miss them!</i>
-      </p>
 
     {% endif %}
   </div>
