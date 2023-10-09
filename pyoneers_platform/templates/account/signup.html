@@ -1,23 +1,31 @@
 <h3 id="signup-title" class="font-bold text-xl">Create your account</h3>
+
 <form id="signup-form"
       class="space pt-6 pb-4"
-      {% set next_url = url('home') %}
-      hx-post="{{ url("account_signup") }}?next={{ next_url }}"
+      hx-post="{{ url("account_signup") }}"
       hx-target="#modal-content"
-      _="on htmx:beforeSwap from body if event.detail.pathInfo.responsePath is '{{ next_url }}' set event.detail.shouldSwap to false set the location of the window to '{{ next_url }}' end">
-  {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
-  {{ render_form_errors(form) }}
-  {{ render_field(form['email'], class='input input-bordered w-full mb-3', error_class='input-error') }}
-  {{ render_field(form['password1'], class='input input-bordered w-full mb-3', error_class='input-error') }}
-  {{ render_field(form['password2'], class='input input-bordered w-full mb-3', error_class='input-error') }}
-  <div class="flex justify-between align-middle mb-5">
-    <a id="already-have-account-link"
-       href="{{ url("account_login") }}"
-       hx-target="#modal-content"
-       class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
-      Already have an account?
-    </a>
-  </div>
+      _="on htmx:beforeSwap from body
+           if event.detail.pathInfo.responsePath is '/'
+             set event.detail.shouldSwap to false
+             set the location of the window to '/'
+           end">
+
+      {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
+      {# Render any form errors. #}
+      {{ render_form_errors(form) }}
+      {# Render the form fields. #}
+      {{ render_field(form['email'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+      {{ render_field(form['password1'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+      {{ render_field(form['password2'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+
+      <div class="flex justify-between align-middle mb-5">
+        <a id="already-have-account-link"
+           href="{{ url("account_login") }}"
+           hx-target="#modal-content"
+           class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
+          Already have an account?
+        </a>
+      </div>
   <button id="signup-button" type="submit" class="btn btn-warning w-full mb-5">Sign Up</button>
   <p class="text-sm font-light text-primary-600 dark:text-primary-500">
     By signing up, you agree to our
