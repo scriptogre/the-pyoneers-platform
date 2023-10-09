@@ -22,6 +22,7 @@
                  put 'REALLY? STILL CLICKING?' into me
                end
                if my clickCount == 20
+                 add @onclick='confetti({ particleCount: 100, spread: 360, decay: 0.94, gravity: 0, origin: {x: Math.random(), y: Math.random()}, shapes:[\'star\'], colors: [\'FFE400\', \'FFBD00\', \'E89400\', \'FFCA6C\', \'FDFFB8\'] })' to #obnoxious-button
                  put 'You are a true Pyoneer!' into me
                  transition #hidden-message's opacity to 100
                  set :finished to true
@@ -46,7 +47,10 @@
                end
                if my clickCount > 15
                  put 'HAD ENOUGH FUN YET?' into me
-               end">
+               end
+             end
+           end">
     DON'T PRESS ME
   </span>
 </button>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.0/dist/confetti.browser.min.js"></script>
