@@ -92,6 +92,7 @@ def receive_gigachad_message(request):
             - Avoid clichés and cheesiness.
             - If it fits naturally, include one of the following terms: "man", "mate", "pal", "fella", "champ", "boss",
             "chief".
+            - Don't exceed 3 sentences per message.
 
             This is your moment to turn their indecision into action.
             """,
