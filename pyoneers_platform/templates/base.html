@@ -12,6 +12,8 @@
     {% block title %}
       {% if page %}
         {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+      {% else %}
+        ~/pyoneers.dev/
       {% endif %}
     {% endblock %}
     {% block title_suffix %}
