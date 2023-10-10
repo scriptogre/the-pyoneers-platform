@@ -1,42 +1,48 @@
-<h3 id="signup-title" class="font-bold text-xl">Create your account</h3>
+{% extends 'modal_dialog.html' %}
 
-<form id="signup-form"
-      class="space pt-6 pb-4"
-      hx-post="{{ url("account_signup") }}"
-      hx-target="#modal-content"
-      _="on htmx:beforeSwap from body
+{% block modal_content %}
+  <h3 id="signup-title" class="font-bold text-xl">
+    Create your account
+  </h3>
+
+  <form id="signup-form" class="space pt-6 pb-4"
+        hx-post="{{ url("account_signup") }}"
+        hx-target="body"
+        hx-swap="beforeend"
+        _="on htmx:beforeSwap from body
            if event.detail.pathInfo.responsePath is '/'
-             set event.detail.shouldSwap to false
-             set the location of the window to '/'
+             set event.detail.shouldSwap to false then go to '/'
            end">
 
-      {% from 'macros/form_macros.jinja' import render_field, render_form_errors %}
-      {# Render any form errors. #}
-      {{ render_form_errors(form) }}
-      {# Render the form fields. #}
-      {{ render_field(form['email'], class='input input-bordered w-full mb-3', error_class='input-error') }}
-      {{ render_field(form['password1'], class='input input-bordered w-full mb-3', error_class='input-error') }}
-      {{ render_field(form['password2'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+    {% from 'macros.jinja' import render_field, render_form_errors %}
+    {# Render any form errors. #}
+    {{ render_form_errors(form) }}
+    {# Render the form fields. #}
+    {{ render_field(form['email'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+    {{ render_field(form['password1'], class='input input-bordered w-full mb-3', error_class='input-error') }}
+    {{ render_field(form['password2'], class='input input-bordered w-full mb-3', error_class='input-error') }}
 
-      <div class="flex justify-between align-middle mb-5">
-        <a id="already-have-account-link"
-           href="{{ url("account_login") }}"
-           hx-target="#modal-content"
-           class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
-          Already have an account?
-        </a>
-      </div>
-  <button id="signup-button" type="submit" class="btn btn-warning w-full mb-5">Sign Up</button>
-  <p class="text-sm font-light text-primary-600 dark:text-primary-500">
-    By signing up, you agree to our
-    <a id="terms-link"
-       href="#"
-       class="font-medium text-primary-content hover:underline">Terms</a> and
-    <a id="privacy-policy-link"
-       href="#"
-       class="font-medium text-primary-content hover:underline">Privacy Policy</a>.
-  </p>
-  <div class="divider">OR</div>
-  {% include 'users/partials/_continue_with_google_button.html' %}
-  {% include 'users/partials/_continue_with_discord_button.html' %}
-</form>
+    <div class="flex justify-between align-middle mb-5">
+      <a id="already-have-account-link"
+         href="{{ url("account_login") }}"
+         hx-target="body"
+         hx-swap="beforeend"
+         class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">
+        Already have an account?
+      </a>
+    </div>
+    <button id="signup-button" type="submit" class="btn btn-warning w-full mb-5">Sign Up</button>
+    <p class="text-sm font-light text-primary-600 dark:text-primary-500">
+      By signing up, you agree to our
+      <a id="terms-link"
+         href="#"
+         class="font-medium text-primary-content hover:underline">Terms</a> and
+      <a id="privacy-policy-link"
+         href="#"
+         class="font-medium text-primary-content hover:underline">Privacy Policy</a>.
+    </p>
+    <div class="divider">OR</div>
+    {% include 'users/partials/_continue_with_google_button.html' %}
+    {% include 'users/partials/_continue_with_discord_button.html' %}
+  </form>
+{% endblock %}

@@ -101,12 +101,11 @@
           <div id="avatar-wrapper" class="avatar online block mb-1">
             <div class="rounded-full w-10">
               <a hx-get="{{ url('users:detail', pk=user.pk) }}"
-                 hx-target="#modal-content"
+                 hx-target="body"
+                 hx-swap="beforeend"
                  preload
-                 class="cursor-pointer"
-                {# This is to wait for the modal content to be replaced by HTMX before showing it.#}
-                 _="on click wait for htmx:afterSettle from body then call modal_dialog.showModal()">
-                <img id="avatar" src="{{ avatar(user) }}"/>
+                 class="cursor-pointer">
+                <img id="avatar" src="{{ avatar_url(user) }}"/>
               </a>
             </div>
           </div>
@@ -114,11 +113,11 @@
       {% else %}
         <!-- Login Button -->
         <a id="login-button"
-           hx-get="{{ url('account_login') }}"
-           hx-target="#modal-content"
+           href="{{ url('account_login') }}"
+           hx-target="body"
+           hx-swap="beforeend"
            preload
-           class="btn btn-ghost max-lg:btn-circle"
-           _="on click wait for htmx:afterSettle from body then call modal_dialog.showModal()">
+           class="btn btn-ghost max-lg:btn-circle">
           <!-- Login Icon -->
           {{ svg('login', css_classes='w-5 h-5 lg:me-3') }}
           <!-- Login Text (Desktop) -->
@@ -135,16 +134,6 @@
   {% block content %}
   {% endblock %}
 </main>
-
-<dialog id="modal_dialog" class="modal">
-  <div id="modal-content" class="modal-box">
-    {# HTMX content goes here #}
-  </div>
-  <!-- To close when pressing outside the dialog -->
-  <form method="dialog" hx-boost="false" class="modal-backdrop">
-    <button>Close modal</button>
-  </form>
-</dialog>
 
 <footer class="container mx-auto text-base-content text-center p-8">
 

@@ -1,0 +1,38 @@
+{#
+'modal_dialog.html' is a reusable HTML template for creating interactive modals using Hyperscript and htmx.
+It's structured to dynamically show content for different views within a dialog box.
+
+How It Works:
+- The modal automatically displays upon page load due to Hyperscript's 'showModal()' method.
+- It listens for a 'close' event to remove itself, ensuring a clean DOM.
+- It self-removes if it detects another modal dialog in the 'htmx:afterSettle' event to prevent overlap.
+- The inner content is customizable through the 'modal_content' block.
+
+Usage:
+- Views meant for modal display should extend this template and populate the 'modal_content' block.
+- Triggering elements (like buttons) should use these attributes:
+  - 'hx-get=PATH': Fetches the modal content via AJAX.
+  - 'hx-target="body"': Places the response within the <body> element.
+  - 'hx-swap="beforeend"': Inserts the content at the end of the target container.
+
+Example:
+<button hx-get="/modal-content-url" hx-target="body" hx-swap="beforeend">Open Modal</button>
+
+This setup allows for a dynamic, self-managing modal suitable for various content, without the need for additional JavaScript.
+#}
+
+<dialog id="modal_dialog" class="modal"
+        _="init call me.showModal() end
+           on close remove me end
+           on htmx:afterSettle from body
+             if event.detail.xhr.response contains '<dialog/>' and event.detail.requestConfig.path is not '{{ request.path }}'
+               remove me">
+  <div id="modal-content" class="modal-box">
+    {% block modal_content %}
+    {% endblock %}
+  </div>
+
+  <form method="dialog" hx-boost="false" class="modal-backdrop">
+    <button>Close modal</button>
+  </form>
+</dialog>

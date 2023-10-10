@@ -1,45 +1,52 @@
-{% if user.is_authenticated and get_social_accounts(user) %}
-  {% set social_account = get_social_accounts(user)|first %}
-{% endif %}
-<h3 id="profile-title" class="font-bold text-xl">Your profile</h3>
-<div class="space-y-6 pt-6 pb-4">
-  <div class="flex flex-col justify-center items-center text-center space-y-1">
-    <div class="avatar">
-      <div class="w-24 h-24 mb-3">
-        <img id="user-avatar"
-             {% from 'macros/user_macros.jinja' import avatar %}
-             src="{{ avatar(user) }}"
-             alt="User's Avatar"
-             class="rounded-full" />
+{% extends 'modal_dialog.html' %}
+
+{% block modal_content %}
+  {% if user.is_authenticated and get_social_accounts(user) %}
+    {% set social_account = get_social_accounts(user)|first %}
+  {% endif %}
+
+  <h3 id="profile-title" class="font-bold text-xl">
+    Your profile
+  </h3>
+
+  <div class="space-y-6 pt-6 pb-4">
+    <div class="flex flex-col justify-center items-center text-center space-y-1">
+      <div class="avatar">
+        <div class="w-24 h-24 mb-3">
+          <img id="user-avatar"
+               src="{{ avatar_url(user) }}"
+               alt="User's Avatar"
+               class="rounded-full" />
+        </div>
       </div>
+      <h1 id="user-name"
+          class="text-2xl text-gray-300 font-mono tracking-wider">
+        Logged in as
+        {% if social_account is defined %}
+          {{ social_account }}
+        {% else %}
+          {{ user }}
+        {% endif %}
+      </h1>
+      <span id="join-date">Joined: {{ user.date_joined.strftime("%B %d, %Y") }}</span>
     </div>
-    <h1 id="user-name"
-        class="text-2xl text-gray-300 font-mono tracking-wider">
-      Logged in as
+    <div class="flex">
       {% if social_account is defined %}
-        {{ social_account }}
-      {% else %}
-        {{ user }}
+        {% if social_account.provider == "google" %}
+          {% include 'users/partials/_google_connected_alert.html' %}
+        {% endif %}
+        {% if social_account.provider == "discord" %}
+          {% include 'users/partials/_discord_connected_alert.html' %}
+        {% endif %}
       {% endif %}
-    </h1>
-    <span id="join-date">Joined: {{ user.date_joined.strftime("%B %d, %Y") }}</span>
+    </div>
   </div>
-  <div class="flex">
-    {% if social_account is defined %}
-      {% if social_account.provider == "google" %}
-        {% include 'users/partials/_google_connected_alert.html' %}
-      {% endif %}
-      {% if social_account.provider == "discord" %}
-        {% include 'users/partials/_discord_connected_alert.html' %}
-      {% endif %}
-    {% endif %}
+  <div class="flex justify-center">
+    <a id="logout-button"
+       href="{{ url("account_logout") }}"
+       class="btn btn-outline border-none">
+      {{ svg('logout', css_classes='w-6 h-6') }}
+      Logout
+    </a>
   </div>
-</div>
-<div class="flex justify-center">
-  <a id="logout-button"
-     href="{{ url("account_logout") }}"
-     class="btn btn-outline border-none">
-    {{ svg('logout', css_classes='w-6 h-6') }}
-    Logout
-  </a>
-</div>
+{% endblock %}
