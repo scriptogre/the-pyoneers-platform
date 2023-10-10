@@ -196,6 +196,7 @@ TEMPLATES = [
                 "django_htmx_script": "django_htmx.jinja.django_htmx_script",
                 "get_module_chapters": "pyoneers_platform.course.utils.get_module_chapters",
                 "svg": "config.jinja2.svg",
+                "avatar_url": "config.jinja2.avatar_url",
             },
             "filters": {
                 "markdown": "wagtailmarkdown.templatetags.wagtailmarkdown.markdown",

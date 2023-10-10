@@ -1,22 +1,21 @@
 import os
 
+from allauth.socialaccount import providers
+from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.templatetags.socialaccount import get_adapter
+from allauth.utils import get_request_param
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.templatetags.static import static
 from jinja2 import pass_context
 from jinja2.ext import Extension
-from allauth.socialaccount.models import SocialAccount
-from allauth.socialaccount import providers
-from allauth.socialaccount.templatetags.socialaccount import (
-    get_adapter,
-)
-from allauth.utils import get_request_param
 from markupsafe import Markup
 
 
 class AllAuthExtension(Extension):
     def __init__(self, environment):
-        super(AllAuthExtension, self).__init__(environment)
+        super().__init__(environment)
         environment.globals.update(
             {
                 "provider_login_url": self.provider_login_url,
@@ -75,10 +74,10 @@ def svg(filename, css_classes=None):
     Exception: If the SVG file is not found and settings.DEBUG is True.
     """
 
-    path = finders.find(os.path.join("svg", "{filename}.svg".format(filename=filename)), all=True)
+    path = finders.find(os.path.join("svg", f"{filename}.svg"), all=True)
 
     if not path:
-        message = "SVG '{filename}.svg' not found".format(filename=filename)
+        message = f"SVG '{filename}.svg' not found"
 
         # Raise exception if DEBUG is True
         if settings.DEBUG:
@@ -107,3 +106,11 @@ def svg(filename, css_classes=None):
             svg_content = str(soup)
 
     return Markup(svg_content)
+
+
+def avatar_url(user):
+    if user.is_authenticated:
+        social_account = SocialAccount.objects.filter(user=user).first()
+        if social_account:
+            return social_account.get_avatar_url()
+    return static("img/avatar-default.webp")

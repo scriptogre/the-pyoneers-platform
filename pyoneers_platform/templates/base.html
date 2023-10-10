@@ -2,8 +2,6 @@
   {% set social_account = get_social_accounts(user)|first %}
 {% endif %}
 
-{% from 'macros/user_macros.jinja' import avatar %}
-
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth dark" style="color-scheme: dark" data-theme="dark">
 <head>
@@ -78,10 +76,9 @@
       <!-- Discord Members -->
       <div id="discord-members-group"
            class="avatar-group -space-x-6 me-2"
-           hx-get="{{ url("get_discord_members") }}"
+           hx-get="{{ url("fetch_discord_members") }}"
            hx-swap="innerHTML"
            hx-trigger="load">
-        {#     This section is automatically populated by `home/htmx_partials/latest_discord_members.html`#}
       </div>
       <!-- Discord Invite -->
       <a id="discord-invite-top-nav"
@@ -90,7 +87,7 @@
          target="_blank"
          _="init if screen.width < 1024px repeat forever toggle .animated wait 2s">
         <span class="flex justify-center items-center flex-nowrap">
-          {% from 'macros/discord_macro.jinja' import discord_animated_svg %}
+          {% from 'macros.jinja' import discord_animated_svg %}
           {{ discord_animated_svg(size=35) }}
           <span class="ml-2 hidden lg:flex">Discord Server</span>
         </span>

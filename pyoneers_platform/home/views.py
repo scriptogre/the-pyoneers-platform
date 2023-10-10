@@ -4,14 +4,22 @@ import openai
 import requests
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
+from django.templatetags.static import static
 from django.views.generic import TemplateView
 
 from config.settings.base import DISCORD_BOT_TOKEN, DISCORD_GUILD_ID
 from pyoneers_platform.course.models import Module
 
+CHAT_OPTIONS = [
+    {"label": "No Money", "icon": "💰", "content": "I dont have any money"},
+    {"label": "No Time", "icon": "🕐", "content": "I dont have any time"},
+    {"label": "No Talent", "icon": "🚫", "content": "I dont have any talent"},
+]
+
 
 class HomeView(TemplateView):
     template_name = "home/home.html"
+    extra_context = {"chat_options": CHAT_OPTIONS}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,27 +44,27 @@ class HomeView(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
-def send_user_message(request):
-    if request.htmx:
-        message_content = request.POST.get("message_content")
-        return render(
-            request,
-            "home/htmx_partials/_user_message.html",
-            {
-                "message_content": message_content,
-            },
-        )
-
-    return HttpResponseBadRequest()
-
-
-def receive_gigachad_message(request):
+def fetch_gigachad_gpt_response(request):
     if request.htmx:
         message = request.GET.get("message_content")
 
         # Check if the conversation already exists in the session
         if "conversation" not in request.session:
             request.session["conversation"] = []
+
+        # Check if message not in CHAT_OPTIONS (to avoid prompt injections)
+        if not any(option["content"] == message for option in CHAT_OPTIONS):
+            return render(
+                request,
+                "home/partials/_chat_message.html",
+                {
+                    "message": "Nice try, champ. Did you really believe you can prompt inject the Giga Chad?",
+                    "img_src": static("img/avatar-10x-giga-chad.webp"),
+                    "side": "start",
+                },
+            )
+
+        # If the message is in CHAT_OPTIONS, proceed as normal
 
         # Append the user message to the session
         request.session["conversation"].append({"role": "user", "content": message})
@@ -117,8 +125,12 @@ def receive_gigachad_message(request):
 
         return render(
             request,
-            "home/htmx_partials/_gigachad_message.html",
-            {"message_content": bot_response_text},
+            "home/partials/_chat_message.html",
+            {
+                "message": bot_response_text,
+                "img_src": static("img/avatar-10x-giga-chad.webp"),
+                "side": "start",
+            },
         )
 
     return HttpResponseBadRequest()
@@ -156,4 +168,4 @@ def fetch_latest_discord_avatars(request):
         "avatar_info_list": avatar_info_list,
     }
 
-    return render(request, "home/htmx_partials/_latest_discord_avatars.html", context)
+    return render(request, "partials/_discord_members.html", context)

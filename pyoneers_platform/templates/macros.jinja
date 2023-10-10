@@ -1,3 +1,9 @@
+{# ===================== Discord Animated SVG Macro ===================== #}
+{#
+    Macro for rendering the Discord icon as a svg.
+    Includes CSS for the smooth rotating animation
+    :param size: The size (width/height) of the svg.
+#}
 {% macro discord_animated_svg(size=50) %}
     <svg
             color="currentColor"
@@ -86,7 +92,6 @@
         </g>
         <!----> <!---->
     </svg>
-
     <style>
         .discord-logo {
             transform: scale(0.7);
@@ -126,24 +131,127 @@
             transition-delay: 0ms;
         }
     </style>
-    {##}
-    {#    <script>#}
-    {#        document.addEventListener("DOMContentLoaded", function () {#}
-    {#            // Reference to the container#}
-    {#            const container = document.querySelector('.discord-logo-container');#}
-    {##}
-    {#            // Detect mobile#}
-    {#            const isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;#}
-    {##}
-    {#            if (isMobile) {#}
-    {#                // Handle mobile devices#}
-    {#                setInterval(() => {#}
-    {#                    container.classList.add('animated');#}
-    {##}
-    {#                    // Remove the class after animation duration to reset the state#}
-    {#                    setTimeout(() => container.classList.remove('animated'), 1000);#}
-    {#                }, 4000);#}
-    {#            }#}
-    {#        });#}
-    {#    </script>#}
 {% endmacro %}
+
+
+{# ===================== Field Rendering Macros ===================== #}
+{#
+    Macro for rendering form fields with additional attributes.
+    This is the equivalent of django-widget-tweaks' `render_field` tag but as a jinja macro.
+    :param field: The form field to render
+    :param class: The CSS class to add
+    :param placeholder: The placeholder text
+    :param type: The input type (e.g., 'text', 'password')
+    :param required: Whether the field is required
+    :param error_class: The CSS class to add if the field has errors
+    :param required_class: The CSS class to add if the field is required
+#}
+{% macro render_field(field, class=None, placeholder=None, type=None, required=False, error_class=None, required_class=None) %}
+    {% if field is defined and field.field.widget is defined %}
+        {# Get the field's attributes #}
+        {% set field_attrs = field.field.widget.attrs %}
+
+        {# Handle the default class attribute #}
+        {% if class %}
+            {% set _ = field_attrs.update({"class": class}) %}
+        {% endif %}
+
+        {# Append the error_class if the field has errors #}
+        {% if field.errors and error_class %}
+            {% set _ = field_attrs.update({"class": field_attrs.class ~ ' ' ~ error_class}) %}
+        {% endif %}
+
+        {# Append the required_class if the field is required #}
+        {% if field.field.required and required_class %}
+            {% set _ = field_attrs.update({"class": field_attrs.class ~ ' ' ~ required_class}) %}
+        {% endif %}
+
+        {# Handle other attributes #}
+        {% if placeholder %}
+            {% set _ = field_attrs.update({"placeholder": placeholder}) %}
+        {% endif %}
+        {% if type %}
+            {% set _ = field_attrs.update({"type": type}) %}
+        {% endif %}
+        {% if required %}
+            {% set _ = field_attrs.update({"required": "required"}) %}
+        {% endif %}
+
+        {{ field }}
+    {% else %}
+        <!-- Log an error or render the field as is -->
+        {{ field }}
+    {% endif %}
+{% endmacro %}
+
+{# ===================== Form Error Rendering Macro ===================== #}
+{#
+    Macro for rendering form errors.
+    :param form: The Django form instance
+#}
+{% macro render_form_errors(form) %}
+    {% if form.errors %}
+        <div class="flex mb-3">
+            <div class="text-error">
+                <ul role="list" class="list-disc pl-5 space-y-1">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if form.non_field_errors() %}
+                        {% for error in form.non_field_errors() %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endmacro %}
+
+
+{#
+    ===================== Chat Message Macro =====================
+    Renders a chat message in a conversation UI.
+    :param message: The chat message content as a string.
+    :param img_src: URL for the avatar's image source.
+    :param side: Determines the position of the chat bubble ('start' or 'end').
+    :param id: Optional unique identifier for the chat element.
+    :param style: Optional inline CSS styles for the chat element.
+#}
+{% macro chat_message(message, img_src, side='start', id=None, style=None) -%}
+<div class="chat chat-{{ side }}" {% if id %}id="{{ id }}"{% endif %} {% if style %}style="{{ style }}"{% endif %}>
+  <div class="chat-image avatar">
+    <div class="w-10 rounded-full">
+      <img src="{{ img_src }}" alt="{{ side|capitalize }} Avatar" />
+    </div>
+  </div>
+  <div class="chat-bubble{% if side == 'start' %} bg-base-100/60{% endif %}">
+    {{ message }}
+  </div>
+</div>
+{%- endmacro %}
+
+{#
+    ===================== Chat Loading Macro =====================
+    Renders a loading indicator within a chat conversation UI.
+    :param img_src: URL for the avatar's image source.
+    :param side: Determines the position of the chat bubble ('start' or 'end').
+    :param id: Optional unique identifier for the chat element.
+#}
+{% macro chat_loading(img_src, side='start', id=None) -%}
+<div class="chat chat-{{ side }}"
+     {% if id %}id="{{ id }}"{% endif %}>
+  <div class="chat-image avatar">
+    <div class="w-10 rounded-full">
+      <img src="{{ img_src }}" alt="{{ side|capitalize }} Avatar" />
+    </div>
+  </div>
+  <div class="chat-bubble bg-base-100/60 flex justify-center items-center">
+    <span class="loading loading-dots loading-sm"></span>
+  </div>
+</div>
+{%- endmacro %}
