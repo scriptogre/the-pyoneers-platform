@@ -138,6 +138,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
+    "config.middleware.DirectToModalRedirectionMiddleware",
 ]
 
 # STATIC

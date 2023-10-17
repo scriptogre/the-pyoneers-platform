@@ -158,5 +158,31 @@
     Copyright ©  2023 Scriptogre LLC <br>
   </div>
 </footer>
+
+
+<dialog id="modal-loader-from-url-params"
+        _="init
+             {# Get the url query parameters #}
+             make URLSearchParams from window.location.search called params
+
+             if params.has('modal_url')
+               {# Save the value of the `modal_url` parameter #}
+               set modal_url to params.get('modal_url')
+
+               {# Remove `modal_url` query parameter from the URL #}
+               call params.delete('modal_url')
+
+               {# Construct the new URL #}
+               make URL from window.location called newUrl
+               set newUrl.search to params
+
+               {# Replace the current URL with the new URL #}
+               call history.replaceState({}, '', newUrl.toString())
+
+               {# Make a htmx request to get the modal content #}
+               call htmx.ajax('GET', modal_url, {swap: 'outerHTML', target: me})
+             end
+             remove me">
+</dialog>
 </body>
 </html>
