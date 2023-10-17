@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block sidebar_content %}
-  <article id="section" class="prose prose-sm lg:prose-lg lg:min-w-[580px]">
+  <article id="section">
     <div id="section-header" class="flex flex-col justify-between items-center w-full">
       <div class="flex justify-between align-center w-full mt-4 lg:mt-8">
         <div>
@@ -39,7 +39,7 @@
           </div>
 
           <!-- Section Title -->
-          <span id="section-title" class="text-4xl text-base-content">{{ current_section.title }}</span>
+          <span id="section-title" class="text-4xl">{{ current_section.title }}</span>
         </div>
 
         <!-- Top Navigation (Desktop) -->
@@ -51,8 +51,10 @@
       </div>
     </div>
 
+    <hr class="my-8">
+
     <!-- Markdown Content -->
-    <div id="section-content" class="text-base-content/80">
+    <div id="section-content" class="prose lg:prose-lg lg:min-w-[580px] text-base-content">
       {{ current_section.content|markdown }}
     </div>
 
@@ -69,15 +71,15 @@
   <button id="back-to-top"
           class="btn btn-ghost btn-circle !fixed bottom-20 right-4 md:right-12 xl:right-24 2xl:right-48 animate-fade-up animate-once animate-ease-in-out animate-duration-500 hidden"
           _="init
-                 set :lastScrollTop to window.scrollY
+                set :lastScrollTop to window.scrollY
              end
              on load or scroll from window
-                 if :lastScrollTop > window.scrollY and window.scrollY > window.innerHeight
-                     remove .hidden
-                 else
-                     add .hidden
-                 end
-                 set :lastScrollTop to window.scrollY
+                if :lastScrollTop > window.scrollY and window.scrollY > window.innerHeight
+                    remove .hidden
+                else
+                    add .hidden
+                end
+                set :lastScrollTop to window.scrollY
              end
              on click
                  add .hidden then go to the top of the window

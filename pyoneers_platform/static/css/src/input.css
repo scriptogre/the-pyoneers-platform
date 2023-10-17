@@ -6,6 +6,9 @@
   main {
     @apply container mx-auto px-12 mt-2 md:mt-4 lg:mt-6
   }
+  hr, .prose:where(hr) {
+    @apply border-base-100 !important
+  }
 }
 
 @layer components {
