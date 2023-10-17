@@ -6,18 +6,13 @@
   </h3>
 
   <form id="login-form" class="space pt-6 pb-4"
-    {#
-          This setup allows for two behaviors:
-          1. If the login form has errors, HTMX will render them inline within the hx-target.
-          2. If login is successful, a full-page refresh occurs and the user is redirected to the '/' path.
-
-          We listen to the htmx:afterOnLoad event.
-          If the response path matches '/' (the home page), a full-page reload is triggered using hyperscript,
-          avoiding the need to override the login view.
-          #}
         hx-post="{{ url("account_login") }}"
         hx-target="body"
         hx-swap="beforeend"
+        {#
+          If the login form has errors, HTMX will render them in a new modal dialog.
+          Otherwise, if login is successful, hyperscript will reload the page.
+        #}
         _="on htmx:beforeSwap from body
            if event.detail.pathInfo.responsePath is '/'
              set event.detail.shouldSwap to false
