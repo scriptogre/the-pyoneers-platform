@@ -11,9 +11,9 @@
         hx-swap="beforeend"
         _="on htmx:beforeSwap from body
            if event.detail.pathInfo.responsePath is '/'
-             set event.detail.shouldSwap to false then go to '/'
+             set event.detail.shouldSwap to false
+             reload() the location of the window
            end">
-
     {% from 'macros.jinja' import render_field, render_form_errors %}
     {# Render any form errors. #}
     {{ render_form_errors(form) }}
@@ -24,7 +24,7 @@
 
     <div class="flex justify-between align-middle mb-5">
       <a id="already-have-account-link"
-         href="{{ url("account_login") }}"
+         hx-get="{{ url("account_login") }}"
          hx-target="body"
          hx-swap="beforeend"
          class="text-sm font-medium text-primary-content hover:underline hover:cursor-pointer">

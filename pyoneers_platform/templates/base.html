@@ -110,7 +110,7 @@
       {% else %}
         <!-- Login Button -->
         <a id="login-button"
-           href="{{ url('account_login') }}"
+           hx-get="{{ url('account_login') }}"
            hx-target="body"
            hx-swap="beforeend"
            preload

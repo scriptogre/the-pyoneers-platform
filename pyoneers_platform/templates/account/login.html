@@ -21,7 +21,7 @@
         _="on htmx:beforeSwap from body
            if event.detail.pathInfo.responsePath is '/'
              set event.detail.shouldSwap to false
-             go to '/'
+             reload() the location of the window
            end">
     {% from 'macros.jinja' import render_field, render_form_errors %}
     {# Render any form errors. #}
