@@ -24,7 +24,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        launch_date = datetime(year=2023, month=10, day=22, hour=18, minute=0, second=0)
+        launch_date = datetime(year=2023, month=10, day=24, hour=18, minute=0, second=0)
         context["launch_date"] = launch_date.strftime("%b %d, %Y %H:%M:%S")
         context["is_course_released"] = datetime.now() >= launch_date
 
