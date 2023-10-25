@@ -9,6 +9,9 @@
   hr, .prose:where(hr) {
     @apply border-base-100 !important
   }
+  .prose img {
+    @apply rounded-3xl
+  }
 }
 
 @layer components {
