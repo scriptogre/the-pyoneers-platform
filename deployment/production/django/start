@@ -12,4 +12,6 @@ python manage.py createsuperuser --noinput || echo "Warning: Superuser could not
 set -o errexit
 python /app/manage.py setup_social_apps
 
+chown -R django:django ${APP_HOME}/pyoneers_platform/media
+
 exec /usr/local/bin/gunicorn config.wsgi --bind 0.0.0.0:6000 --chdir=/app --timeout 600 --log-level debug
