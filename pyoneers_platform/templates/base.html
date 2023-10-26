@@ -34,15 +34,15 @@
   {% endif %}
 
   {# HTMX #}
-  <script defer src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
-  <script defer src="https://unpkg.com/htmx.org/dist/ext/preload.js"></script>
-  <script defer src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js"></script>
+  <script defer src="{{ static('js/htmx.min.js') }}"></script>
+  <script defer src="{{ static('js/preload.js') }}"></script>
+  <script defer src="{{ static('js/multi-swap.js') }}"></script>
 
   {# Django HTMX #}
   {{ django_htmx_script() }}
 
   {# Hyperscript #}
-  <script defer src="https://unpkg.com/hyperscript.org@0.9.11"></script>
+  <script defer src="{{ static('js/_hyperscript.min.js') }}"></script>
 
   {# TailwindCSS #}
   <link rel="stylesheet" type="text/css" href="{{ static('css/output.css') }}">
@@ -60,7 +60,7 @@
       hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
       hx-boost="true"
       hx-ext="preload,multi-swap"
-      {# This makes sure that modal dialogs never overlap #}
+  {# This makes sure that modal dialogs never overlap #}
       _="on mutation
           if <dialog.modal/>'s length is greater than 1
             remove first from <dialog.modal/>">
