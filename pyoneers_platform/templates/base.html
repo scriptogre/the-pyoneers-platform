@@ -6,16 +6,21 @@
 <html lang="en" class="scroll-smooth dark" style="color-scheme: dark" data-theme="dark">
 <head>
   <meta charset="utf-8" />
+  <link rel="icon" href="{{ static('img/favicon.webp') }}">
   <title>
     {% block title %}
       {% if page %}
-        {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
+        {% if page.seo_title %}
+          {{ page.seo_title }}
+        {% else %}
+          {{ page.title }}
+        {% endif %}
       {% else %}
-        Pyoneers - Your Path to Become a 10x Engineer
+        Your Path to Full Stack Python
       {% endif %}
     {% endblock %}
     {% block title_suffix %}
-      {% if wagtail_site() and wagtail_site().site_name %}- {{ wagtail_site().site_name }}{% endif %}
+      | The Pyoneer Project
     {% endblock %}
   </title>
   {% if page and page.search_description %}
