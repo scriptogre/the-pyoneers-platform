@@ -371,3 +371,17 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
 # https://discord.com/developers/docs/resources/guild
 DISCORD_GUILD_ID = env("DISCORD_GUILD_ID")
+
+# DirectToModalRedirectionMiddleware settings
+# List of views that should be displayed in modals
+MODAL_VIEWS = [
+    "account_login",
+    "account_signup",
+    "account_reset_password",
+    "account_reset_password_from_key",
+    "account_confirm_email",
+    "account_change_password",
+    "account_set_password",
+    "account_email",
+    "account_logout",
+]
