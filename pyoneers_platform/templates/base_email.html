@@ -6,12 +6,6 @@
     :root {
       color: hsl(220 13% 69% / 1);
     }
-    body {
-      font-family: Barlow, Arial, sans-serif;
-      background-image: linear-gradient(176deg, rgb(18, 24, 27) 50%, rgb(32, 39, 55) 100%);
-      background-attachment: fixed;
-      background-color: rgba(0, 0, 0, 0.3);
-    }
     h1 {
       margin: 0;
     }
@@ -36,116 +30,37 @@
     a:hover {
       text-decoration: underline;
     }
-    .center-block {
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .modal-box {
-      padding: 24px;
-      max-height: calc(100vh - 5em);
-      grid-column-start: 1;
-      grid-row-start: 1;
-      width: 91.666667%;
-      max-width: 512px;
-      box-shadow: rgba(0, 0, 0, 0.25) 0 25px 50px -12px;
-      overflow-y: auto;
-      overscroll-behavior: contain;
-      background-color: hsl(212 18% 14% / 1);
-      border-radius: 16px;
-      margin: auto;
-    }
-    .modal-content {
-      padding-top: 24px;
-      padding-bottom: 16px;
-    }
-    .modal-footer {
-      font-weight: 300;
-      font-size: 14px;
-      line-height: 20px;
-      justify-content: center;
-    }
-    .header-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 16px;
-      justify-content: center;
-      padding-top: 80px;
-    }
-    .logo-image {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 16px;
-      margin-right: 0;
-    }
-    .header-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-    }
-    .main-title {
-      font-size: 36px;
-      font-family: "Bebas Neue", monospace;
-      margin-bottom: 0;
-      text-align: center;
-      text-transform: uppercase;
-      color: rgb(209 213 219 / 1);
-      letter-spacing: -0.025em;
-    }
-    .sub-title {
-      color: hsl(220 13% 69% / 0.8);
-      font-size: 20px;
-      text-align: center;
-    }
-
-    /* Responsive styles */
-    @media (min-width: 640px) {
-      .header-container {
-        flex-direction: row;
-      }
-      .logo-image {
-        margin-bottom: 0;
-        margin-right: 16px;
-      }
-      .header-text {
-        align-items: flex-start;
-      }
-      .sub-title {
-        text-align: start;
-      }
-    }
   </style>
 </head>
-<body>
-<div class="header-container">
-  <img src="https://{{ request.get_host() }}{{ static('img/python-logo.webp') }}" alt="Python Logo" class="logo-image">
-  <div class="header-text">
-    <h1 class="main-title">
+<body style="font-family: Barlow, Arial, sans-serif; background-image: linear-gradient(176deg, rgb(18, 24, 27) 50%, rgb(32, 39, 55) 100%); background-attachment: fixed; background-color: rgba(0, 0, 0, 0.3);">
+<div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; justify-content: center; padding-top: 80px;">
+  <img src="https://{{ request.get_host() }}{{ static('img/python-logo.webp') }}" alt="Python Logo" style="width: 64px; height: 64px; margin-bottom: 16px; margin-right: 0;">
+  <div style="display: flex; flex-direction: column; justify-content: flex-start; align-items: center;">
+    <h1 style="margin: 0; font-size: 36px; font-family: 'Bebas Neue', monospace; text-align: center; text-transform: uppercase; color: rgb(209 213 219 / 1); letter-spacing: -0.025em;">
       The Pyoneer Project
     </h1>
-    <span class="sub-title" style="margin-left: 2px">
+    <span style="color: hsl(220 13% 69% / 0.8); font-size: 20px; text-align: center;">
       For the ambitious, by the ambitious
     </span>
   </div>
 </div>
 
-<table width="100%" cellpadding="0" cellspacing="0">
+<table width="100%" cellpadding="0" cellspacing="0" style="color: hsl(220 13% 69% / 1);">
   <tr>
     <td style="padding-top: 40px; padding-bottom: 80px;">
-      <table class="center-block">
+      <table style="margin-left: auto; margin-right: auto;">
         <tr>
           <td>
-            <div class="modal-box">
-              <h3>
+            <div style="padding: 24px; max-height: calc(100vh - 5em); width: 91.666667%; max-width: 512px; box-shadow: rgba(0, 0, 0, 0.25) 0 25px 50px -12px; overflow-y: auto; overscroll-behavior: contain; background-color: hsl(212 18% 14% / 1); border-radius: 16px; margin: auto;">
+              <h3 style="margin: 0; font-weight: 700; font-size: 20px; line-height: 28px;">
                 {% block heading %}{% endblock %}
               </h3>
 
-              <div class="modal-content">
+              <div style="padding-top: 24px; padding-bottom: 16px;">
                 {% block content %}{% endblock %}
               </div>
 
-              <div class="modal-footer">
+              <div style="font-weight: 300; font-size: 14px; line-height: 20px; justify-content: center;">
                 Stay passionate,<br>
                 <strong>The Script Ogre</strong> 😎
               </div>
