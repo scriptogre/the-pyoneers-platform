@@ -1,0 +1,10 @@
+{% extends "base_email.html" %}
+
+{% block heading %}
+  {% include "account/email/email_confirmation_subject.txt" %}
+{% endblock %}
+
+{% block content %}
+  <p>You're receiving this email because an user used your email address to register an account on {{ current_site.domain }}.</p>
+  <p>To confirm this is correct, <a href="{{ activate_url }}">press here</a>.</p>
+{% endblock content %}

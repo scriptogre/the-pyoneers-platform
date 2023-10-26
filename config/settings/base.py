@@ -198,6 +198,7 @@ TEMPLATES = [
                 "get_module_chapters": "pyoneers_platform.course.utils.get_module_chapters",
                 "svg": "config.jinja2.svg",
                 "avatar_url": "config.jinja2.avatar_url",
+                "user_display": "allauth.account.utils.user_display",
             },
             "filters": {
                 "markdown": "wagtailmarkdown.templatetags.wagtailmarkdown.markdown",

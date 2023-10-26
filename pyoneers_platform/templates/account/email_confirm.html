@@ -1,0 +1,47 @@
+{% extends 'modal_dialog.html' %}
+
+{% block modal_content %}
+  <h3 id="email-confirmation-title" class="font-bold text-xl">
+    {% if confirmation %}
+      Confirm Email Address
+    {% else %}
+      Invalid or Expired Link
+    {% endif %}
+  </h3>
+
+  {% if confirmation %}
+    {% if can_confirm %}
+      <div id="email-confirmation-content" class="pt-6 pb-4">
+        <p>
+          {% set email = confirmation.email_address.email %}
+          Please confirm that
+          <a href="mailto:{{ email }}" class="font-medium text-primary-content hover:underline hover:cursor-pointer">
+            {{ email }}
+          </a>
+          is your email address.
+        </p>
+        <button id="confirm-button"
+                class="btn btn-warning w-full mt-5"
+                hx-post="{{ url('account_confirm_email', confirmation.key) }}"
+                hx-target="body"
+                hx-swap="beforeend">
+          Confirm
+        </button>
+      </div>
+    {% else %}
+      <p>Unable to confirm {{ email }} because it is already confirmed by a different account.</p>
+    {% endif %}
+  {% else %}
+    <div id="invalid-link-content" class="pt-6 pb-4">
+      <p>
+        This email confirmation link expired or is invalid.
+      </p>
+      <p>
+        Press here to
+        <a href="{{ url('account_email') }}" hx-boost="false" class="font-medium text-primary-content hover:underline hover:cursor-pointer">
+          issue a new email confirmation request
+        </a>.
+      </p>
+    </div>
+  {% endif %}
+{% endblock %}
