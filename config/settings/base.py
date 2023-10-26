@@ -186,8 +186,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             # https://niwi.nz/django-jinja/latest/#_add_additional_extensions
-            "extensions": DEFAULT_EXTENSIONS
-            + [
+            "extensions": DEFAULT_EXTENSIONS + [
                 "wagtail.jinja2tags.core",
                 "wagtail.admin.jinja2tags.userbar",
                 "wagtail.images.jinja2tags.images",

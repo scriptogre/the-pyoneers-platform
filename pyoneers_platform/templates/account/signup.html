@@ -5,7 +5,8 @@
     Create your account
   </h3>
 
-  <form id="signup-form" class="space pt-6 pb-4"
+  <form id="signup-form"
+        class="pt-6 pb-4"
         hx-post="{{ url("account_signup") }}"
         hx-target="body"
         hx-swap="beforeend"
@@ -32,7 +33,7 @@
       </a>
     </div>
     <button id="signup-button" type="submit" class="btn btn-warning w-full mb-5">Sign Up</button>
-    <p class="text-sm font-light text-primary-600 dark:text-primary-500">
+    <p class="text-sm font-light">
       By signing up, you agree to our
       <a id="terms-link"
          href="#"
