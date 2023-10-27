@@ -109,11 +109,22 @@ def fetch_gigachad_gpt_response(request):
         # Include the system message and the entire conversation in the API call
         messages_to_send = [system_message] + request.session["conversation"]
 
-        response = openai.ChatCompletion.create(
-            model="ft:gpt-3.5-turbo-0613:personal::7teyZSgg",
-            messages=messages_to_send,
-            temperature=1,
-        )
+        try:
+            response = openai.ChatCompletion.create(
+                model="ft:gpt-3.5-turbo-0613:personal::7teyZSgg",
+                messages=messages_to_send,
+                temperature=1,
+            )
+        except openai.error.ServiceUnavailableError:
+            return render(
+                request,
+                "home/partials/_chat_message.html",
+                {
+                    "message": "Sorry, the Giga Chad is busy right now. Try again later.",
+                    "img_src": static("img/avatar-10x-giga-chad.webp"),
+                    "side": "start",
+                },
+            )
 
         bot_response_text = response.choices[0].message.content
 
