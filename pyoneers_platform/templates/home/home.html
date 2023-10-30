@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="flex flex-col lg:flex-row items-center justify-center lg:mt-24">
+  <div class="flex flex-col lg:flex-row items-center justify-center mt-8 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-32">
     <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto mb-6 sm:mb-0 p-6 text-center prose">
       <div class="flex flex-col items-center sm:flex-row sm:mb-3">
         <img src="{{ static('img/python-logo.webp') }}" alt="Python Logo" class="w-16 h-16 mb-3 m-0 sm:mb-0 sm:me-4">
 
         <div class="flex flex-col justify-start">
-          <h1 class="text-5xl text-gray-300 font-mono tracking-wider mb-0">
+          <h1 class="text-5xl text-gray-300 font-mono tracking-wide xl:tracking-wider mb-0 lg:whitespace-nowrap">
             The Pyoneer Project
           </h1>
           <span class="text-xl text-center sm:text-start">For the ambitious, by the ambitious</span>
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <a href="#news-section" class="flex flex-col justify-center items-center mt-8 animate-bounce">
+  <a href="#news-section" class="flex flex-col justify-center items-center mt-20 xl:mt-32 animate-bounce">
     {% if is_course_released %}
 
       <h2 class="text-xl md:text-2xl mb-4 md:mb-6">
