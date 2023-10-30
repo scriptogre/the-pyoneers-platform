@@ -1,46 +1,52 @@
 {# Iterate over the latest members with avatars and display their avatars #}
 {% for user_id, avatar_hash in avatar_info_list %}
-  <div class="avatar border-[3px] lg:border-[3px]" style="opacity: 0" _="init wait {{ loop.index / 4 }}s then transition opacity to 100">
+  <div class="avatar border-[3px] lg:border-[3px]"
+       style="opacity: 0"
+       _="init wait {{ loop.index / 4 }}s then transition opacity to 100">
     <div class="w-8 h-8">
       <img class="m-0" src="https://cdn.discordapp.com/avatars/{{ user_id }}/{{ avatar_hash }}.png" />
     </div>
   </div>
 {% endfor %}
 
-<div class="avatar placeholder border-[3px] lg:border-[3px]" style="opacity: 0" _="init wait 1s then transition opacity to 100">
+<div class="avatar placeholder border-[3px] lg:border-[3px]"
+     style="opacity: 0"
+     _="init wait 1s then transition opacity to 100">
   <div id="avatar-count-wrapper" class="w-8 h-8 bg-neutral-focus text-neutral-content">
     <span id="members-counter" class="text-xs font-semibold"></span>
 
     <script>
-      function easeInOutQuad(x) {
-        return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
-      }
-
-      let startTime;
-      const duration = 2000;  // 2 seconds
-      const startValue = 0;
-      const endValue = {{ total_members - avatar_info_list|length }};
-      let currentValue = startValue;
-
-      function animate(time) {
-        if (!startTime) startTime = time;
-
-        const timeElapsed = time - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const easedProgress = easeInOutQuad(progress);
-
-        currentValue = Math.floor(startValue + easedProgress * (endValue - startValue));
-
-        document.getElementById('members-counter').innerText = `+${currentValue}`;
-
-        if (currentValue < endValue) {
-          requestAnimationFrame(animate);
+      (function() {
+        function easeInOutQuad(x) {
+          return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
         }
-      }
-      setTimeout(function() {
-        requestAnimationFrame(animate);
-      }, 1000);
 
+        let startTime;
+        const duration = 2000;  // 2 seconds
+        const startValue = 0;
+        const endValue = {{ total_members - avatar_info_list|length }};
+        let currentValue = startValue;
+
+        function animate(time) {
+          if (!startTime) startTime = time;
+
+          const timeElapsed = time - startTime;
+          const progress = Math.min(timeElapsed / duration, 1);
+          const easedProgress = easeInOutQuad(progress);
+
+          currentValue = Math.floor(startValue + easedProgress * (endValue - startValue));
+
+          document.getElementById('members-counter').innerText = `+${currentValue}`;
+
+          if (currentValue < endValue) {
+            requestAnimationFrame(animate);
+          }
+        }
+        setTimeout(function() {
+          requestAnimationFrame(animate);
+        }, 1000);
+      })();
     </script>
+
   </div>
 </div>
