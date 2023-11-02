@@ -3,6 +3,7 @@
 Werkzeug  # https://github.com/pallets/werkzeug
 psycopg[c]  # https://github.com/psycopg/psycopg
 watchfiles  # https://github.com/samuelcolvin/watchfiles
+pyngrok  # https://github.com/alexdlaird/pyngrok
 
 # Code quality
 # ------------------------------------------------------------------------------

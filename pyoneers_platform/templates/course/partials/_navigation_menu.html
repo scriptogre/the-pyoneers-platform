@@ -1,0 +1,41 @@
+{% set current_url = request.get_full_path() %}
+{% set is_chapter_active = False %}
+{% set is_section_active = False %}
+
+<ul id="navigation-menu" class="menu h-screen w-full bg-base-100/60 text-base-content border backdrop-blur border-base-100 lg:h-auto lg:bg-base-100/40 lg:w-80 lg:card mt-16 lg:mt-8">
+
+  {# Iterating through each chapter #}
+  {% for chapter in all_chapters %}
+
+    {% set is_chapter_active = chapter.url in current_url %}
+
+    <li>
+      {# Chapter Toggle Button #}
+      <div class="menu-dropdown-toggle text-xl py-1 xl:py-2{% if is_chapter_active %} menu-dropdown-show{% endif %}"
+           _="on click toggle .menu-dropdown-show on me then toggle .menu-dropdown-show on the next <ul.menu-dropdown/>">
+        <div class="flex justify-between">
+          <span class="font-bold tracking-wider">{{ chapter.order|to_roman }}. {{ chapter.title }}</span>
+          {#          <span class="ms-2">{{ chapter_obj.icon }}</span>#}
+        </div>
+      </div>
+      {# Sections Dropdown #}
+      <ul class="menu-dropdown{% if is_chapter_active %} menu-dropdown-show{% endif %}">
+        {% for section in chapter.sections.all() %}
+
+          {% set is_section_active = section.url in current_url %}
+
+          <li class="text-lg py-0.5 xl:py-1">
+            <a href="{{ section.url }}"
+              {% if is_section_active %} class="active" {% endif %}
+               hx-swap="multi:#content,#progress-bar:outerHTML"
+               preload>
+              <span>{{ section.order }}. {{ section.title }}</span>
+            </a>
+          </li>
+
+        {% endfor %}
+      </ul>
+    </li>
+
+  {% endfor %}
+</ul>

@@ -1,19 +1,14 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import include, path
 from django.contrib import admin
+from django.urls import include, path
 from django.views import defaults as default_views
 
-from wagtail.admin import urls as wagtailadmin_urls
-from wagtail import urls as wagtail_urls
-from wagtail.documents import urls as wagtaildocs_urls
-
 urlpatterns = [
-    path("django-admin/", admin.site.urls),
-    path("admin/", include(wagtailadmin_urls)),
-    path("documents/", include(wagtaildocs_urls)),
-    path("users/", include("pyoneers_platform.users.urls", namespace="users")),
     path("", include("pyoneers_platform.home.urls")),
+    path("admin/", admin.site.urls),
+    path("users/", include("pyoneers_platform.users.urls", namespace="users")),
+    path("course/", include("pyoneers_platform.course.urls", namespace="course")),
     path("", include("allauth.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -48,13 +43,3 @@ if settings.DEBUG:
     #     urlpatterns = [
     #         path("__reload__/", include("django_browser_reload.urls"))
     #     ] + urlpatterns
-
-urlpatterns = urlpatterns + [
-    # For anything not caught by a more specific rule above, hand over to
-    # Wagtail's page serving mechanism. This should be the last pattern in
-    # the list:
-    path("", include(wagtail_urls)),
-    # Alternatively, if you want Wagtail pages to be served from a subpath
-    # of your site, rather than the site root:
-    #    path("pages/", include(wagtail_urls)),
-]

@@ -1,0 +1,26 @@
+<a class="{{ classes }}"
+  {% if section.previous %}
+   href="{{ section.previous.url }}"
+  {% elif section.chapter.previous %}
+   href="{{ section.chapter.previous.get_last_section().url }}"
+  {% else %}
+   disabled
+  {% endif %}
+   hx-swap="multi:#content,#progress-bar:outerHTML"
+   preload>
+  {{ svg('svg/chevron_left.svg', css_classes="w-6 h-6") }}
+  {% if include_labels %}Previous{% endif %}
+</a>
+<a class="{{ classes }}"
+  {% if section.next %}
+   href="{{ section.next.url }}"
+  {% elif section.chapter.next %}
+   href="{{ section.chapter.next.url }}"
+  {% else %}
+   disabled
+  {% endif %}
+   hx-swap="multi:#content,#progress-bar:outerHTML"
+   preload>
+  {% if include_labels %}Next{% endif %}
+  {{ svg('svg/chevron_right.svg', css_classes="w-6 h-6") }}
+</a>

@@ -8,7 +8,7 @@ from django.templatetags.static import static
 from django.views.generic import TemplateView
 
 from config.settings.base import DISCORD_BOT_TOKEN, DISCORD_GUILD_ID
-from pyoneers_platform.course.models import Module
+from pyoneers_platform.course.models import Chapter
 
 CHAT_OPTIONS = [
     {"label": "No Money", "icon": "💰", "content": "I dont have any money"},
@@ -31,10 +31,9 @@ class HomeView(TemplateView):
         # Default first chapter URL
         context["first_chapter_url"] = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
-        if context["is_course_released"] and Module.objects.exists():
-            first_module = Module.objects.first()
-            if first_module and first_module.chapters.exists():
-                context["first_chapter_url"] = first_module.chapters.first().url
+        if context["is_course_released"] and Chapter.objects.exists():
+            first_chapter = Chapter.objects.first()
+            context["first_chapter_url"] = first_chapter.get_absolute_url()
 
         return context
 

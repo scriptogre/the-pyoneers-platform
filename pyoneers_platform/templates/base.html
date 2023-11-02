@@ -75,9 +75,6 @@
           if <dialog.modal/>'s length is greater than 1
             remove first from <dialog.modal/>">
 
-{# Bottom right Wagtail userbar #}
-{{ wagtailuserbar() }}
-
 {# Site navigation #}
 <nav id="navbar" class="sticky-navbar bg-custom-gradient bg-opacity-90 bg-fixed backdrop-blur border-b border-base-100 flex justify-between">
   {% block top_navbar %}
@@ -94,7 +91,7 @@
     <div class="flex justify-end items-center">
       <!-- Discord Members -->
       <div id="discord-members-group"
-           class="avatar-group -space-x-6 me-2"
+           class="avatar-group -space-x-6 me-2 min-w-[80px]"
            hx-get="{{ url("fetch_discord_members") }}"
            hx-swap="innerHTML"
            hx-trigger="load">
@@ -135,7 +132,7 @@
            preload
            class="btn btn-ghost max-lg:btn-circle">
           <!-- Login Icon -->
-          {{ svg('login', css_classes='w-5 h-5 lg:me-3') }}
+          {{ svg('svg/login.svg', css_classes='w-5 h-5 lg:me-3') }}
           <!-- Login Text (Desktop) -->
           <span class="hidden lg:inline-block">
             Login
@@ -151,11 +148,7 @@
   {% endblock %}
 </main>
 
-<footer class="container mx-auto text-base-content text-center p-8">
-
-  <!-- Footer Divider -->
-  <div class="mx-auto w-36 h-[1px] my-6 bg-base-content/20"></div>
-
+<footer id="footer" class="container mx-auto text-base-content text-center p-8 mt-12">
   <!-- Useful Links -->
   <div class="flex justify-center items-center pt-3">
 
@@ -163,7 +156,7 @@
     <a href="https://github.com/scriptogre" target="_blank" class="group">
       <i class="w-5 inline-block mx-2"
          _="init immediately add .group-hover:fill-gray-100 to <path/> in me">
-        {{ svg('github') }}
+        {{ svg('svg/github.svg') }}
       </i>
     </a>
 
@@ -171,7 +164,7 @@
     <a href="https://www.linkedin.com/in/christian-tanul-94333a17a/" target="_blank" class="group">
       <i class="w-5 inline-block mx-2"
          _="init immediately add .group-hover:fill-gray-100 to <path/> in me">
-        {{ svg('linkedin') }}
+        {{ svg('svg/linkedin.svg') }}
       </i>
     </a>
 

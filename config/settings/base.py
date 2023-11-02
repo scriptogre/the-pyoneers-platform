@@ -1,10 +1,13 @@
 """
 Base settings to build other settings files upon.
 """
+import logging
+import sys
 from pathlib import Path
 
 import environ
 from django_jinja.builtins import DEFAULT_EXTENSIONS
+from loguru import logger
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # pyoneers_platform/
@@ -57,20 +60,6 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 THIRD_PARTY_APPS = [
-    "wagtail.contrib.forms",
-    "wagtail.contrib.redirects",
-    "wagtail.embeds",
-    "wagtail.sites",
-    "wagtail.users",
-    "wagtail.snippets",
-    "wagtail.documents",
-    "wagtail.images",
-    "wagtail.search",
-    "wagtail.admin",
-    "wagtail",
-    "wagtailmarkdown",
-    "modelcluster",
-    "taggit",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -78,7 +67,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.discord",
     "django_celery_beat",
     "django_htmx",
-    "fontawesomefree",
 ]
 LOCAL_APPS = [
     "pyoneers_platform",
@@ -136,7 +124,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "config.middleware.DirectToModalRedirectionMiddleware",
 ]
@@ -186,25 +173,22 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
             ],
             # https://niwi.nz/django-jinja/latest/#_add_additional_extensions
-            "extensions": DEFAULT_EXTENSIONS + [
-                "wagtail.jinja2tags.core",
-                "wagtail.admin.jinja2tags.userbar",
-                "wagtail.images.jinja2tags.images",
+            "extensions": DEFAULT_EXTENSIONS
+            + [
                 "config.jinja2.AllAuthExtension",
             ],
             "globals": {
                 "django_htmx_script": "django_htmx.jinja.django_htmx_script",
-                "get_module_chapters": "pyoneers_platform.course.utils.get_module_chapters",
-                "svg": "config.jinja2.svg",
+                "svg": "config.jinja2.render_svg",
                 "avatar_url": "config.jinja2.avatar_url",
                 "user_display": "allauth.account.utils.user_display",
             },
             "filters": {
-                "markdown": "wagtailmarkdown.templatetags.wagtailmarkdown.markdown",
+                "to_roman": "config.jinja2.to_roman",
             },
             # https://niwi.nz/django-jinja/latest/#_advanced_template_pattern_matching
             "match_extension": ".html",
-            "match_regex": r"^(?!.*wagtail|admin/|debug_toolbar/|socialaccount/).*",
+            "match_regex": r"^(?!.*admin/|debug_toolbar/|socialaccount/).*",
         },
     },
     # Including Django's default backend is still necessary for admin templates which still use the DTE.
@@ -269,6 +253,20 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
+
+# Loguru configuration
+logger.remove()
+logger.add(sys.stdout, level="DEBUG")
+
+
+# Make Loguru catch logs from Django
+class InterceptHandler(logging.Handler):
+    def emit(self, record):
+        logger_opt = logger.opt(depth=6, exception=record.exc_info)
+        logger_opt.log(record.levelno, record.getMessage())
+
+
+logging.basicConfig(handlers=[InterceptHandler()], level=0)
 
 # Celery
 # ------------------------------------------------------------------------------
@@ -339,26 +337,6 @@ SOCIAL_APPS_CONFIG = {
     },
 }
 
-# wagtail
-# ------------------------------------------------------------------------------
-# https://docs.wagtail.org/en/latest/reference/settings.html#wagtail-site-name
-WAGTAIL_SITE_NAME = "pyoneers_platform"
-
-# wagtail-markdown
-# ------------------------------------------------------------------------------
-# https://github.com/torchbox/wagtail-markdown#configuration
-# WAGTAILMARKDOWN = {
-# "autodownload_fontawesome": False,
-# "allowed_tags": [],  # optional. a list of HTML tags. e.g. ['div', 'p', 'a']
-# "allowed_styles": [],  # optional. a list of styles
-# "allowed_attributes": {},  # optional. a dict with HTML tag as key and a list of attributes as value
-# "allowed_settings_mode": "extend",  # optional. Possible values: "extend" or "override". Defaults to "extend".
-# "extensions": [],  # optional. a list of python-markdown supported extensions
-# "extension_configs": {},  # optional. a dictionary with the extension name as key, and its configuration as value
-# "extensions_settings_mode": "extend",  # optional. Possible values: "extend" or "override". Defaults to "extend".
-# }
-
-
 # django-compressor
 # ------------------------------------------------------------------------------
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
@@ -371,6 +349,8 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 DISCORD_BOT_TOKEN = env("DISCORD_BOT_TOKEN")
 # https://discord.com/developers/docs/resources/guild
 DISCORD_GUILD_ID = env("DISCORD_GUILD_ID")
+
+GITHUB_SECRET = env("GITHUB_SECRET")
 
 # DirectToModalRedirectionMiddleware settings
 # List of views that should be displayed in modals
@@ -385,3 +365,7 @@ MODAL_VIEWS = [
     "account_email",
     "account_logout",
 ]
+
+# python-markdown2 settings
+# ------------------------------------------------------------------------------
+MARKDOWN_EXTENSIONS = ["metadata"]

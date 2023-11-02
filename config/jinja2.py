@@ -1,10 +1,7 @@
-import os
-
 from allauth.socialaccount import providers
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.templatetags.socialaccount import get_adapter
 from allauth.utils import get_request_param
-from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.templatetags.static import static
@@ -59,33 +56,29 @@ class AllAuthExtension(Extension):
         return providers.registry.get_class_list()
 
 
-def svg(filename, css_classes=None):
+def render_svg(filepath, css_classes=None):
     """
-    Retrieve an SVG file from the specified path and optionally add a CSS class to it.
+    Render SVG by relative filepath from the static folder and add optional CSS classes.
 
-    Parameters:
-    filename (str): The name of the SVG file without the file extension.
-    css_classes (str, optional): A CSS class to add to the SVG. Defaults to None.
+    Args:
+    filepath (str): Relative path to SVG file within the static folder (e.g., 'svg/chevron.svg').
+    css_classes (str, optional): Classes to add to SVG's 'class' attribute.
 
     Returns:
-    jinja2.Markup: The SVG content marked as safe HTML, or an empty string if the file is not found.
+    jinja2.Markup: Safe HTML of the SVG or an empty string if not found.
 
     Raises:
-    Exception: If the SVG file is not found and settings.DEBUG is True.
+    Exception: If SVG file is not found and settings.DEBUG is True.
     """
-
-    path = finders.find(os.path.join("svg", f"{filename}.svg"), all=True)
+    path = finders.find(filepath, all=True)
 
     if not path:
-        message = f"SVG '{filename}.svg' not found"
-
-        # Raise exception if DEBUG is True
+        message = f"SVG '{filepath}' not found"
         if settings.DEBUG:
-            raise Exception(message)  # Exception name adjusted
+            raise Exception(message)
         else:
             return ""
 
-    # Sometimes path can be a list/tuple if there's more than one file found
     if isinstance(path, (list, tuple)):
         path = path[0]
 
@@ -93,17 +86,12 @@ def svg(filename, css_classes=None):
         svg_content = svg_file.read()
 
     if css_classes:
-        soup = BeautifulSoup(svg_content, "html.parser")
-        svg_tag = soup.find("svg")
-        if svg_tag:
-            existing_classes = svg_tag.get("class", [])
-            # Ensure existing_classes is a list
-            if not isinstance(existing_classes, list):
-                existing_classes = [existing_classes]
-            # Append the new class
-            existing_classes.append(css_classes)
-            svg_tag["class"] = " ".join(existing_classes)
-            svg_content = str(soup)
+        if 'class="' in svg_content:
+            new_class = f'class="{css_classes} '
+            svg_content = svg_content.replace('class="', new_class)
+        else:
+            new_class = f' class="{css_classes}"'
+            svg_content = svg_content.replace("<svg ", f"<svg {new_class} ")
 
     return Markup(svg_content)
 
@@ -114,3 +102,24 @@ def avatar_url(user):
         if social_account:
             return social_account.get_avatar_url()
     return static("img/avatar-default.webp")
+
+
+def to_roman(value: int) -> str:
+    """
+    Convert an integer to a Roman numeral.
+
+    Usage: {{ 42|to_roman }}
+    """
+    if not (0 < value < 4000):
+        raise ValueError("Value must be between 1 and 3999")
+
+    int_vals = (1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    rom_syms = ("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+
+    roman_numeral = ""
+    for i, v in enumerate(int_vals):
+        while value >= v:
+            value -= v
+            roman_numeral += rom_syms[i]
+
+    return roman_numeral

@@ -1,0 +1,117 @@
+{% extends 'course/base.html' %}
+
+{% block top_navbar %}
+  {# Hamburger Button (Mobile) #}
+  <label for="my-drawer"
+         class="btn btn-circle btn-ghost swap swap-rotate lg:hidden"
+         _="init immediately
+              if #my-drawer's checked toggle .swap-active
+            end
+            on change from #my-drawer toggle .swap-active">
+    {{ svg('svg/hamburger.svg', css_classes="swap-off") }}
+    {{ svg('svg/close.svg', css_classes="swap-on") }}
+  </label>
+
+  {{ super() }}
+
+  {% block progress_bar %}
+    {% set progress = (section.order - 1) * 100 / section.chapter.sections.count() %}
+
+    <div id="progress-bar" class="border-section-progress"
+         style="width: {{ progress|int }}%"></div>
+  {% endblock progress_bar %}
+{% endblock %}
+
+{% block sidebar %}
+  <!-- Sidebar Menu -->
+  {% include 'course/partials/_navigation_menu.html' %}
+
+  <div id="desktop-navigation-arrows"
+       class="max-lg:hidden flex justify-between items-center mt-6">
+    {% with classes="btn btn-ghost", include_labels=True %}
+      {% include 'course/partials/_navigation_arrows.html' %}
+    {% endwith %}
+  </div>
+
+{% endblock %}
+
+{% block sidebar_content %}
+  <article id="section">
+    <div id="section-header" class="flex flex-col justify-between items-center w-full">
+      <div class="flex justify-between align-center w-full mt-4 lg:mt-8">
+        <div>
+          <!-- Breadcrumbs (Mobile) -->
+          <div id="breadcrumbs" class="breadcrumbs text-sm w-full not-prose mb-1 md:mb-2 lg:mb-3">
+            <ul>
+              <li>{{ section.chapter.title }}</li>
+              <li></li>
+            </ul>
+          </div>
+
+          <!-- Section Title -->
+          <span id="section-title" class="text-4xl">{{ section.title }}</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-8">
+
+    <!-- Markdown Content -->
+    <div id="section-content" class="prose text-base-content lg:min-w-[580px]">
+      {{ section.content|safe }}
+    </div>
+  </article>
+
+  {% if section.next or section.chapter.next %}
+    <!-- Next Button -->
+    <a id="next-button"
+      {% if section.next %}
+       href="{{ section.next.url }}"
+      {% elif section.chapter.next %}
+       href="{{ section.chapter.next.url }}"
+      {% endif %}
+       class="max-lg:hidden hidden btn btn-glassy max-lg:btn-circle !fixed bottom-[9.5rem] right-4 md:right-12 xl:right-24 2xl:right-40 animate-fade-left animate-once animate-ease-in-out animate-duration-500"
+       _="on intersection(intersecting) from #footer
+              if intersecting remove .hidden
+              else add .hidden
+          end">
+      Next
+      {{ svg("svg/chevron_right.svg") }}
+    </a>
+  {% endif %}
+
+  <!-- Back to Top Button -->
+  <button id="back-to-top"
+          class="btn btn-glassy max-lg:btn-circle !fixed bottom-24 right-4 md:right-12 xl:right-24 2xl:right-40 animate-fade-up animate-once animate-ease-in-out animate-duration-500 hidden"
+          _="init
+                set :lastScrollTop to window.scrollY
+             end
+             on load or scroll from window
+                if :lastScrollTop > window.scrollY and window.scrollY > window.innerHeight
+                    remove .hidden
+                else
+                    add .hidden
+                end
+                set :lastScrollTop to window.scrollY
+             end
+             on click
+                add .hidden
+                go to the top of the window
+             end">
+    <span class="hidden lg:inline-block">
+      Back To Top
+    </span>
+    {{ svg("svg/chevron_up.svg") }}
+  </button>
+
+  <!-- Bottom Navigation (Mobile) -->
+  <div id="bottom-navigation-mobile"
+       class="lg:hidden btm-nav btm-nav-sm bg-custom-gradient bg-opacity-50 bg-fixed border-t border-gray-700 border-opacity-80 z-50">
+    {% with classes="btn-ghost" %}
+      {% include 'course/partials/_navigation_arrows.html' %}
+    {% endwith %}
+  </div>
+{% endblock %}
+
+{# Offset to compensate for the bottom navigation on mobiles #}
+{% block body_class %}max-lg:mb-12{% endblock %}

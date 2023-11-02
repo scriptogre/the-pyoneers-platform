@@ -24,6 +24,9 @@
   .steps .step::after {
     @apply w-4 h-4
   }
+  .btn-glassy {
+    @apply bg-base-100/70 backdrop-blur border border-gray-700 hover:bg-base-content/10 hover:border-gray-500
+  }
 }
 
 @layer utilities {

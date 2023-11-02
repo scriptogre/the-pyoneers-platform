@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="flex flex-col lg:flex-row items-center justify-center mt-8 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-32">
+  <div class="flex flex-col lg:flex-row items-center justify-center mt-8 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28">
     <div id="hero-section" class="flex flex-col items-center justify-center min-w-[50%] flex-grow lg:h-auto mb-6 sm:mb-0 p-6 text-center prose">
       <div class="flex flex-col items-center sm:flex-row sm:mb-3">
         <img src="{{ static('img/python-logo.webp') }}" alt="Python Logo" class="w-16 h-16 mb-3 m-0 sm:mb-0 sm:me-4">
@@ -46,7 +46,7 @@
       </h2>
 
     {% endif %}
-    {{ svg('chevron_down', css_classes='w-5 h-5 md:w-6 md:h-6') }}
+    {{ svg('svg/chevron_down.svg', css_classes='w-5 h-5 md:w-6 md:h-6') }}
   </a>
 
   <div id="news-section" class="h-screen grid place-content-center text-center py-6">
@@ -59,7 +59,7 @@
         Press the golden card to check it out!
       </span>
       <div class="flex justify-center mb-4 lg:mb-8">
-        {{ svg('long_arrow_down', css_classes='w-6 h-6') }}
+        {{ svg('svg/long_arrow_down.svg', css_classes='w-6 h-6') }}
       </div>
       <a href="{{ first_chapter_url }}"
          class="hover:scale-105 transition-transform ease-in-out duration-500"

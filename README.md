@@ -11,7 +11,6 @@ The live platform is accessible at [pyoneers.dev](https://pyoneers.dev).
 ## Technologies Used
 
 - **Backend**: Django
-- **CMS**: Wagtail
 - **Frontend**: TailwindCSS, HTMX, Hyperscript
 - **Templating**: Jinja2
 - **Authentication**: django-allauth (Google and Discord SSO included)
@@ -19,7 +18,6 @@ The live platform is accessible at [pyoneers.dev](https://pyoneers.dev).
 ## Features
 
 - Dynamic Course Creation and Management
-- Rich Text Editing with Wagtail CMS
 - User Authentication including Social Login (Google and Discord)
 - Interactive and Responsive UI with TailwindCSS and HTMX
 - Extensible with Hyperscript
@@ -46,7 +44,7 @@ The live platform is accessible at [pyoneers.dev](https://pyoneers.dev).
     python manage.py migrate
     ```
 
-5. Create a superuser to manage the Wagtail admin:
+5. Create a superuser:
     ```bash
     python manage.py createsuperuser
     ```
@@ -70,13 +68,6 @@ We use TailwindCSS CLI for building the CSS. The command below compiles and watc
 ```bash
 npx tailwindcss -i pyoneers_platform/static/css/src/input.css -o pyoneers_platform/static/css/output.css --watch --minify
 ```
-
-
-## Usage
-
-1. Access Wagtail Admin by going to `http://localhost:8000/admin` and login with the superuser credentials created earlier.
-2. Create and manage courses, lessons and other content from the Wagtail Admin.
-3. Users can sign up/login and start enrolling in courses.
 
 ## License
 

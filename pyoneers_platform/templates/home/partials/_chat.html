@@ -22,14 +22,14 @@
 </div>
 
 {# Chat box input #}
-<div id="chat-response-buttons-container" class="flex w-full gap-0.5 justify-center lg:justify-end" style="opacity:0"
+<div id="chat-response-buttons-container" class="flex w-full gap-0.5 justify-center" style="opacity:0"
      _="on htmx:afterSettle(detail) from #chat-interaction
           if detail.pathInfo.requestPath contains '{{ url('fetch_gigachad_gpt_response') }}'
               for button in my children remove @disabled from button">
 
   {# Iterate over the chat_options from the context #}
   {% for option in chat_options %}
-    <button class="btn bg-base-100/40 border border-base-100"
+    <button class="btn btn-ghost"
             _="on click
                  set <#chat-response-buttons-container > button/>'s @disabled to true
                  append `{{ chat_message(option.content, avatar_url(user), side='end')|forceescape }}` to #chat-interaction
@@ -52,16 +52,16 @@
             hx-trigger="requestGigaChadResponse"
             hx-vals="js:{message_content: '{{ option.content }}'}"
             hx-swap="outerHTML scroll:#chat-container:bottom">
-      <span class="hidden lg:flex">{{ option.icon }}</span>
+      <span>{{ option.icon }}</span>
       {{ option.label }}
     </button>
   {% endfor %}
 </div>
 
 {# Excuses #}
-<div id="excuses-container" class="flex w-full mt-3 justify-center lg:justify-end" style="opacity:0">
+<div id="excuses-container" class="flex w-full mt-3 justify-center" style="opacity:0">
   <p id="excuses"
-     class="text-2xl text-gray-300"
+     class="text-lg text-gray-400"
      _="init set $remainingExcuses to 3">
     Excuses 3/3
   </p>

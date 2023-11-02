@@ -7,8 +7,6 @@ psycopg2  # https://github.com/psycopg/psycopg2
 celery  # https://github.com/celery/celery
 django-celery-beat  # https://github.com/celery/django-celery-beat
 flower  # https://github.com/mher/flower
-fontawesomefree  # https://fontawesome.com/docs/web/use-with/python-django#using-font-awesome-free-with-django
-loguru  # https://github.com/Delgan/loguru
 
 # Django
 # ------------------------------------------------------------------------------
@@ -24,7 +22,8 @@ django-extensions  # https://github.com/django-extensions/django-extensions
 # Custom
 # ------------------------------------------------------------------------------
 jinja2  # https://github.com/pallets/jinja
-wagtail  # https://github.com/wagtail/wagtail
 django-htmx  # https://github.com/adamchainz/django-htmx
 openai  # https://github.com/openai/openai-python
-wagtail-markdown  # https://github.com/torchbox/wagtail-markdown
+GitPython  # https://github.com/gitpython-developers/GitPython
+markdown2  # https://github.com/trentm/python-markdown2
+loguru  # https://github.com/Delgan/loguru
